@@ -1,0 +1,29 @@
+name: "Plan & Apply Terraform (all)"
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      apply: 
+        description: 'Apply Terraform'
+        type: boolean
+        default: false
+
+jobs:
+  terraform-apply-all:
+    if: github.ref == 'refs/heads/main'
+    name: "Terraform Plan & Apply All"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component: [mgmt]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run Terraform Action on ${{ matrix.component }}
+        uses: ObamaFoundation/actions/terraform-plan-apply@v1
+        with:
+          component: ${{ matrix.component }}
+          apply: ${{ github.event.inputs.apply }}

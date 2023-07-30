@@ -1,0 +1,55 @@
+name: "TF Plan"
+
+on:
+  pull_request:
+
+jobs:
+  terraform-plan-all:
+    name: "PR Plan"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component: [mgmt]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v2
+        name: Plan on ${{ matrix.component }}
+      # We always run init.
+      - name: Terraform init
+        id: init
+        shell: bash
+        run: terraform -chdir=${{ matrix.component }} init
+  
+      - name: Terraform validate
+        id: validate
+        shell: bash
+        run: terraform -chdir=${{ matrix.component }} validate
+  
+      - name: Terraform plan
+        id: plan
+        shell: bash
+        run: terraform -chdir=${{ matrix.component }} plan -no-color
+
+      - uses: actions/github-script@v6
+        name: Comment PR
+        env:
+          PLAN: ${{ steps.plan.outputs.stdout }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+  
+            <details><summary>Show Plan</summary>
+  
+            \`\`\`terraform\n${process.env.PLAN}
+            \`\`\`
+  
+            </details>`
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })

@@ -1,0 +1,29 @@
+name: "Plan & Apply Terraform (one)"
+
+on:
+  workflow_dispatch:
+    inputs:
+      component:
+        description: "Component to run Terraform against"
+        type: choice
+        options: 
+          - "mgmt"
+        default: "mgmt"
+      apply: 
+        description: 'Apply Terraform'
+        type: boolean
+        default: false
+
+jobs:
+  terraform-apply-one:
+    if: github.ref == 'refs/heads/main'
+    name: "Terraform Plan & Apply"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run Terraform Action on ${{ github.event.inputs.component }}
+        uses: ObamaFoundation/actions/terraform-plan-apply@v1
+        with:
+          component: ${{ github.event.inputs.component }}
+          apply: ${{ github.event.inputs.apply }}
