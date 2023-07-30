@@ -11,6 +11,10 @@ on:
         type: boolean
         default: false
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   terraform-apply-all:
     if: github.ref == 'refs/heads/main'
@@ -22,6 +26,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Auth with AWS
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::325498355308:role/GithubActionsRole
+          aws-region: 'us-east-1'
       - name: Run Terraform Action on ${{ matrix.component }}
         uses: './.github/actions/tf-plan-apply'
         with:
