@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Run Terraform Action on ${{ github.event.inputs.component }}
-        uses: './.github/actions/tf-plan-apply.yml@main'
+        uses: './.github/actions/tf-plan-apply@main'
         with:
           component: ${{ github.event.inputs.component }}
           apply: ${{ github.event.inputs.apply }}
