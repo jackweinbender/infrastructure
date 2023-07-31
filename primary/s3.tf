@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "bdb_data" {
   provider = aws.usw2
-  bucket = "bdb-data"
+  bucket   = "bdb-data"
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -50,7 +50,7 @@ resource "aws_s3_bucket" "iiif_cache" {
 
 resource "aws_s3_bucket" "weinbender_icloud_photos" {
   provider = aws.usw2
-  bucket = "weinbender-icloud-photos"
+  bucket   = "weinbender-icloud-photos"
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -60,14 +60,14 @@ resource "aws_s3_bucket" "weinbender_icloud_photos" {
     }
   }
   lifecycle_rule {
-    abort_incomplete_multipart_upload_days = 0 
-    enabled                                = true 
-    id                                     = "7 Days Intelegent Tiering" 
-    tags                                   = {} 
+    abort_incomplete_multipart_upload_days = 0
+    enabled                                = true
+    id                                     = "7 Days Intelegent Tiering"
+    tags                                   = {}
     transition {
-        days          = 7 
-        storage_class = "INTELLIGENT_TIERING" 
-      }
+      days          = 7
+      storage_class = "INTELLIGENT_TIERING"
+    }
   }
   tags = {
     Project = "infrastructure/primary"
