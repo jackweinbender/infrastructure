@@ -8,7 +8,8 @@ on:
         type: choice
         options: 
           - "mgmt"
-        default: "mgmt"
+          - "primary"
+        default: "primary"
       apply: 
         description: 'Apply Terraform'
         type: boolean

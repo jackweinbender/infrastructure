@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        component: [mgmt]
+        component: [mgmt, primary]
     steps:
       - uses: actions/checkout@v3
       - name: Auth with AWS
