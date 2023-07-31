@@ -29,8 +29,9 @@ jobs:
       - name: Auth with AWS
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::325498355308:role/GithubActionsRole
           aws-region: 'us-east-1'
+          role-to-assume: arn:aws:iam::325498355308:role/GithubActionsRole
+          role-session-name: GithubActionsRole
       - name: Run Terraform Action on ${{ matrix.component }}
         uses: './.github/actions/tf-plan-apply'
         with:

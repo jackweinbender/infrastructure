@@ -19,8 +19,9 @@ jobs:
       - name: Auth with AWS
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::325498355308:role/GithubActionsRole
           aws-region: 'us-east-1'
+          role-to-assume: arn:aws:iam::325498355308:role/GithubActionsRole
+          role-session-name: GithubActionsRole
       - uses: hashicorp/setup-terraform@v2
         name: Plan on ${{ matrix.component }}
       # We always run init.
