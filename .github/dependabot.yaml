@@ -1,0 +1,10 @@
+version: 2
+updates:
+  - package-ecosystem: "terraform"
+    directory: "/mgmt"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "terraform"
+    directory: "/primary"
+    schedule:
+      interval: "monthly"
