@@ -19,7 +19,7 @@ jobs:
       - name: Auth with AWS
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-region: 'us-east-1'
+          aws-region: "us-east-1"
           role-to-assume: arn:aws:iam::325498355308:role/GithubActionsRole
           role-session-name: GithubActionsRole
       - uses: hashicorp/setup-terraform@v2
@@ -29,37 +29,13 @@ jobs:
         id: init
         shell: bash
         run: terraform -chdir=${{ matrix.component }} init
-  
+
       - name: Terraform validate
         id: validate
         shell: bash
         run: terraform -chdir=${{ matrix.component }} validate
-  
+
       - name: Terraform plan
         id: plan
         shell: bash
         run: terraform -chdir=${{ matrix.component }} plan -no-color
-
-      - uses: actions/github-script@v6
-        name: Comment PR
-        env:
-          PLAN: ${{ steps.plan.outputs.stdout }}
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const output = `
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-  
-            <details><summary>Show Plan</summary>
-  
-            \`\`\`terraform\n${process.env.PLAN}
-            \`\`\`
-  
-            </details>`
-            
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
