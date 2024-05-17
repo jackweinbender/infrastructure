@@ -40,7 +40,7 @@ resource "aws_s3_bucket" "weinbender_icloud_photos" {
 resource "aws_s3_bucket_lifecycle_configuration" "weinbender-icloud-photos" {
   bucket = aws_s3_bucket.weinbender_icloud_photos
   rule {
-    status = "enabled"
+    status = "Enabled"
     id     = "7 Days Intelegent Tiering"
     transition {
       days          = 7
