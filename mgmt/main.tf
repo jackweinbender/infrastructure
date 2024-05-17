@@ -10,8 +10,3 @@ resource "aws_s3_bucket" "aws-backend-bucket" {
     Project = "infrastructure/mgmt"
   }
 }
-
-resource "aws_s3_bucket_acl" "aws-backend-bucket" {
-  bucket = aws_s3_bucket.aws-backend-bucket.id
-  acl    = "private"
-}
