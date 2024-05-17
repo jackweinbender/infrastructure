@@ -6,6 +6,7 @@ resource "aws_s3_bucket" "bdb_data" {
   }
 }
 resource "aws_s3_bucket_website_configuration" "example" {
+  provider = aws.usw2
   bucket = aws_s3_bucket.bdb_data.id
   index_document {
     suffix = "index.html"
@@ -38,6 +39,7 @@ resource "aws_s3_bucket" "weinbender_icloud_photos" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "weinbender-icloud-photos" {
+  provider = aws.usw2
   bucket = aws_s3_bucket.weinbender_icloud_photos.id
   rule {
     status = "Enabled"
