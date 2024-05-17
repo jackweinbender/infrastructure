@@ -49,7 +49,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "weinbender-icloud-photos" {
       storage_class = "INTELLIGENT_TIERING"
     }
     abort_incomplete_multipart_upload {
-      days_after_initiation = 0
+      days_after_initiation = 1
     }
   }
 }
