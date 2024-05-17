@@ -6,16 +6,12 @@ resource "random_string" "storage_key" {
 
 resource "aws_s3_bucket" "aws-backend-bucket" {
   bucket = "tf-backend-${random_string.storage_key.id}"
-  acl    = "private"
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-      bucket_key_enabled = false
-    }
-  }
   tags = {
     Project = "infrastructure/mgmt"
   }
+}
+
+resource "aws_s3_bucket_acl" "aws-backend-bucket" {
+  bucket = aws_s3_bucket.aws-backend-bucket.id
+  acl    = "private"
 }
