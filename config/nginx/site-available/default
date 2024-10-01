@@ -1,0 +1,10 @@
+server {
+    listen 80 default_server;
+    listen 443 default_server ssl;
+
+    return 444;
+
+    ssl_ciphers aNULL;
+    ssl_certificate     /etc/letsencrypt/live/home.weinbender.io/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/home.weinbender.io/privkey.pem;
+}
