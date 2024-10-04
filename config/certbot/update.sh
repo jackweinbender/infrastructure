@@ -1,8 +1,10 @@
 # Script to update the certbot config and run the certbot
 # cert ACME challenge stuff
-
 THIS_CONFIG_DIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
 CERTBOT_CONFIG_DIR="/etc/certbot"
+
+# Make the Op Service Account Token available
+export OP_SERVICE_ACCOUNT_TOKEN=$(cat ~/.op_token)
 
 # Gotta make sure the directory exists
 sudo mkdir -p $CERTBOT_CONFIG_DIR
