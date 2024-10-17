@@ -1,0 +1,19 @@
+- name: Install nginx
+  become: true
+  apt:
+    name: nginx
+    update_cache: yes
+    state: latest
+- name: Enable nginx service
+  become: true
+  service:
+    name: nginx
+    state: started
+    enabled: true
+- name: update nginx configs
+  become: true
+  copy:
+    src: sites-enabled/
+    dest: /etc/nginx/sites-enabled
+    follow: yes
+  notify: restart-service

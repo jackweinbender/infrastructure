@@ -1,0 +1,6 @@
+---
+- name: Web Server Configuration
+  hosts: webservers
+  roles:
+    - nginx
+    - 1password
