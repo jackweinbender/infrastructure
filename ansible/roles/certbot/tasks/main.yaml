@@ -1,0 +1,8 @@
+- name: install certbot
+  become: true
+  apt:
+    name:
+      - python3-certbot
+      - python3-certbot-dns-cloudflare
+    state: latest
+    cache_valid_time: 3600

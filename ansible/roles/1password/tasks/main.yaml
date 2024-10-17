@@ -3,9 +3,6 @@
     - name: Set architecture specific variables
       set_fact:
         arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
-    - name: Print all available facts
-      debug:
-        var: arch
     - name: get signing key
       become: true
       get_url:
@@ -19,22 +16,9 @@
         repo: "deb [arch={{ arch }} signed-by=/etc/apt/keyrings/1password.asc] https://downloads.1password.com/linux/debian/{{ arch }} stable main"
         filename: 1password
         state: present
-
-    - name: install cli
-      become: true
-      apt:
-        name: 1password-cli
-        state: latest
-        update_cache: true
-# From https://developer.1password.com/docs/cli/get-started/#install
-# curl -sS https://downloads.1password.com/linux/keys/1password.asc |
-#   sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
-# echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" |
-#   sudo tee /etc/apt/sources.list.d/1password.list
-# sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
-# curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol |
-#   sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
-# sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
-# curl -sS https://downloads.1password.com/linux/keys/1password.asc |
-#   sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
-# sudo apt update && sudo apt install 1password-cli
+- name: install cli
+  become: true
+  apt:
+    name: 1password-cli
+    state: latest
+    cache_valid_time: 3600

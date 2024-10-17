@@ -2,8 +2,8 @@
   become: true
   apt:
     name: nginx
-    update_cache: yes
     state: latest
+    cache_valid_time: 3600
 - name: Enable nginx service
   become: true
   service:

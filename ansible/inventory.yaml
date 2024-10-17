@@ -1,4 +1,17 @@
+pve:
+  hosts:
+    ada:
+      ansible_host: ada-host.weinbender.io
+    caba:
+      ansible_host: caba-host.weinbender.io
+    gog:
+      ansible_host: gog-host.weinbender.io
+    magog:
+      ansible_host: magog-host.weinbender.io
 webservers:
   hosts:
     pi-scale:
+      vars:
+        apt_distro: raspian
+        apt_release: bookworm
       ansible_host: pi-scale.tortoise-noodlefish.ts.net
