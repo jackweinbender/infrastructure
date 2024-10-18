@@ -1,0 +1,6 @@
+---
+- name: Ingress Configuration
+  hosts: ingress
+  roles:
+    - common
+    - ingress

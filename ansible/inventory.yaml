@@ -8,10 +8,8 @@ pve:
       ansible_host: gog-host.weinbender.io
     magog:
       ansible_host: magog-host.weinbender.io
-webservers:
+
+ingress:
   hosts:
     pi-scale:
-      vars:
-        apt_distro: raspian
-        apt_release: bookworm
       ansible_host: pi-scale.tortoise-noodlefish.ts.net
