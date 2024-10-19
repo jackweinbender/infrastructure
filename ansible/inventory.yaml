@@ -1,15 +1,14 @@
-pve:
-  hosts:
-    ada:
-      ansible_host: ada-host.weinbender.io
-    caba:
-      ansible_host: caba-host.weinbender.io
-    gog:
-      ansible_host: gog-host.weinbender.io
-    magog:
-      ansible_host: magog-host.weinbender.io
+all:
+  vars:
+    ansible_user: ansible
 
+bootstrap:
+  hosts:
+    # new:
+    #   ansible_host: pi-scale.tortoise-noodlefish.ts.net
 ingress:
   hosts:
     pi-scale:
       ansible_host: pi-scale.tortoise-noodlefish.ts.net
+    lxc:
+      ansible_host: 192.168.1.179
