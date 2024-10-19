@@ -1,6 +1,8 @@
+# Playbook for configuring edge ingress device and webserver
 ---
 - name: Ingress Configuration
   hosts: ingress
+  become: true
   roles:
     - common
     - ingress

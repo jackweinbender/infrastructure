@@ -1,21 +1,18 @@
-- name: add apt repo
+- name: add tailscale apt repo
   block:
     - name: get signing key
-      become: true
       get_url:
         url: https://pkgs.tailscale.com/stable/{{ ansible_distribution|lower}}/{{ ansible_distribution_release }}.asc
         dest: /etc/apt/keyrings/tailscale.asc
         mode: "0644"
         force: true
     - name: add apt repo
-      become: true
       apt_repository:
         repo: "deb [signed-by=/etc/apt/keyrings/tailscale.asc] https://pkgs.tailscale.com/stable/{{ ansible_distribution|lower}} {{ ansible_distribution_release }} main"
         filename: tailscale
         state: present
 
-- name: install cli
-  become: true
+- name: install tailscale cli
   apt:
     name: tailscale
     state: latest

@@ -1,5 +1,4 @@
 - name: install certbot
-  become: true
   apt:
     name:
       - python3-certbot

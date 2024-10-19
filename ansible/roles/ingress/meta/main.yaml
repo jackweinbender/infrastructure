@@ -1,3 +1,0 @@
-dependencies:
-  - role: ingress-certbot
-  - role: ingress-nginx

@@ -1,17 +1,14 @@
 - name: install nginx
-  become: true
   apt:
     name: nginx
     state: latest
     cache_valid_time: 3600
 - name: update nginx configs
-  become: true
   synchronize:
     src: sites-enabled/
     dest: /etc/nginx/sites-enabled
     delete: true
 - name: enable nginx service
-  become: true
   service:
     name: nginx
     state: started

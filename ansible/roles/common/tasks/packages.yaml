@@ -1,0 +1,6 @@
+- name: install core packages
+  ansible.builtin.package:
+    state: latest
+    name:
+      - sudo
+      - rsync

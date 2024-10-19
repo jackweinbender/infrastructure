@@ -1,0 +1,14 @@
+---
+- name: Bootstrap
+  hosts: bootstrap
+  become: true
+  tasks:
+    - name: install core packages
+      ansible.builtin.import_role:
+        name: common
+        tasks_from: packages.yaml
+    - name: create ansible user
+      ansible.builtin.import_role:
+        name: ansible-user
+    - name: reboot
+      ansible.builtin.reboot:
