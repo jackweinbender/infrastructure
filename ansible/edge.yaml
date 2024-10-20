@@ -4,5 +4,7 @@
   hosts: ingress
   become: true
   roles:
-    - common
+    - core
+    - 1password
+    - tailscale
     - ingress
