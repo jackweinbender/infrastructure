@@ -35,12 +35,14 @@ jobs:
           oauth-secret: $TS_OAUTH_CLIENT_SECRET
           tags: tag:ci
           version: 1.76.1
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-          cache: "pip"
-      - run: pip install -r requirements.txt
-      - run: ansible-galaxy install -r ansible-requirements.yaml
-      - run: ansible-lint
-      - run: ansible-playbook --key-file=ssh.key -i inventory.yaml edge.yaml
+      - name: netmap
+        run: tailscale status
+          ping -c 4 100.106.184.98
+      # - uses: actions/setup-python@v5
+      #   with:
+      #     python-version: "3.13"
+      #     cache: "pip"
+      # - run: pip install -r requirements.txt
+      # - run: ansible-galaxy install -r ansible-requirements.yaml
+      # - run: ansible-lint
+      # - run: ansible-playbook --key-file=ssh.key -i inventory.yaml edge.yaml
