@@ -5,6 +5,10 @@ on:
     paths:
       - "ansible/**"
 
+defaults:
+  run:
+    working-directory: ./ansible
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -17,13 +21,13 @@ jobs:
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.ONE_PASSWORD_SA_TOKEN }}
           VAULT_PASSWORD: op://network/AnsibleVault/password
-      - name: Print masked secret
-        run: echo $VAULT_PASSWORD > 'ansible/vault-password.secret'
+      - name: Set vault password file
+        run: echo $VAULT_PASSWORD > 'vault-password.secret'
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
           cache: "pip"
-      - run: pip install -r ansible/requirements.txt
-      - run: ansible-galaxy install -r ansible/ansible-requirements.yaml
-      - run: ansible-lint ansible/
-      - run: ansible-playbook -i ansible/inventory.yaml ansible/edge.yaml
+      - run: pip install -r requirements.txt
+      - run: ansible-galaxy install -r ansible-requirements.yaml
+      - run: ansible-lint
+      - run: ansible-playbook -i inventory.yaml edge.yaml
