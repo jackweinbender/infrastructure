@@ -13,5 +13,3 @@ jobs:
         uses: ansible/ansible-lint@main
         with:
           working_directory: ansible
-      - name: Ansible
-        uses: actions/ansible
