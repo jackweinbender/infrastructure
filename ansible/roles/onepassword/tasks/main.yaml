@@ -12,7 +12,7 @@
     - name: Add 1password apt repo
       ansible.builtin.apt_repository:
         repo: >
-          deb [arch={{ arch }} signed-by=/etc/apt/keyrings/1password.asc] 
+          deb [arch={{ arch }} signed-by=/etc/apt/keyrings/1password.asc]
           https://downloads.1password.com/linux/debian/{{ arch }} stable main"
         filename: 1password
         state: present
