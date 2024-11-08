@@ -37,7 +37,7 @@ jobs:
           version: 1.76.1
       - name: netmap
         run: tailscale status
-          ping -c 4 100.106.184.98
+      - run: ping -c 4 100.106.184.98
       # - uses: actions/setup-python@v5
       #   with:
       #     python-version: "3.13"
