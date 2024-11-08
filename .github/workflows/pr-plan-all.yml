@@ -2,6 +2,10 @@ name: "TF Plan"
 
 on:
   pull_request:
+    paths:
+      - "mgmt/**"
+      - "primary/**"
+      - "proxmox/**"
 
 permissions:
   id-token: write
