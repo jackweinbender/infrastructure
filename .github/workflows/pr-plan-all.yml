@@ -2,6 +2,8 @@ name: "TF Plan"
 
 on:
   pull_request:
+    paths:
+      - "terraform/**"
 
 permissions:
   id-token: write
@@ -28,14 +30,14 @@ jobs:
       - name: Terraform init
         id: init
         shell: bash
-        run: terraform -chdir=${{ matrix.component }} init
+        run: terraform -chdir=terraform/${{ matrix.component }} init
 
       - name: Terraform validate
         id: validate
         shell: bash
-        run: terraform -chdir=${{ matrix.component }} validate
+        run: terraform -chdir=terraform/${{ matrix.component }} validate
 
       - name: Terraform plan
         id: plan
         shell: bash
-        run: terraform -chdir=${{ matrix.component }} plan -no-color
+        run: terraform -chdir=terraform/${{ matrix.component }} plan -no-color
