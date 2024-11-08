@@ -1,10 +1,18 @@
 version: 2
 updates:
   - package-ecosystem: "terraform"
-    directory: "/mgmt"
+    directory: "terraform/mgmt"
     schedule:
       interval: "monthly"
   - package-ecosystem: "terraform"
-    directory: "/primary"
+    directory: "/terraform/primary"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/proxmox"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "terraform"
+    directory: "/terraform/tailscale"
     schedule:
       interval: "monthly"
