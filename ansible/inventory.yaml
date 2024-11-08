@@ -10,5 +10,3 @@ ingress:
   hosts:
     pi-scale:
       ansible_host: pi-scale.tortoise-noodlefish.ts.net
-    lxc:
-      ansible_host: 192.168.1.179

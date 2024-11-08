@@ -1,0 +1,17 @@
+name: "Ansible"
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  edge-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run ansible-lint
+        uses: ansible/ansible-lint@main
+        with:
+          working_directory: ansible
+      - name: Ansible
+        uses: actions/ansible
