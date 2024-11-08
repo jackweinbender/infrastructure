@@ -19,14 +19,10 @@ jobs:
           VAULT_PASSWORD: op://network/AnsibleVault/password
       - name: Print masked secret
         run: echo $VAULT_PASSWORD > 'ansible/vault-password.secret'
-      - uses: actions/cache@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: Run ansible-lint
-        uses: ansible/ansible-lint@main
-        with:
-          working_directory: ansible
-          requirements_file: requirements.yaml
+          python-version: "3.13"
+          cache: "pip" # caching pip dependencies
+      - run: pip install ansible-core
+      - run: ansible-galaxy install -r ansible/requirements.yaml
