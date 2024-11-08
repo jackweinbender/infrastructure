@@ -14,7 +14,7 @@ jobs:
         with:
           export-env: true
         env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.ONE_PASSWORD_SA_TOKEN }}
           VAULT_PASSWORD: op://network/AnsibleVault/password
       - name: Print masked secret
         run: echo $VAULT_PASSWORD > 'ansible/vault-password.secret'
