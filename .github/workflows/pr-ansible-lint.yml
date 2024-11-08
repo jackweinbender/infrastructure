@@ -23,5 +23,6 @@ jobs:
         with:
           python-version: "3.13"
           cache: "pip" # caching pip dependencies
-      - run: pip install ansible-core
-      - run: ansible-galaxy install -r ansible/requirements.yaml
+      - run: ansible-galaxy install -r ansible/ansible-requirements.yaml
+      - run: ansible-lint
+      - run: ansible-playbook -i ansible/inventory.yaml ansible/edge.yaml
