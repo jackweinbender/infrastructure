@@ -3,15 +3,14 @@ name: "TF Plan"
 on:
   pull_request:
     paths:
-      - "mgmt/**"
-      - "primary/**"
-      - "proxmox/**"
+      - "terraform/**"
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
+  
   terraform-plan-all:
     name: "PR Plan"
     runs-on: ubuntu-latest
