@@ -20,6 +20,7 @@ jobs:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_CLIENT_SECRET }}
           tags: tag:ci
+          version: 1.76.1
       - name: Load secret
         uses: 1password/load-secrets-action@v2
         with:
