@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: "3.13"
           cache: "pip"
-      - run: pip install -r requirements.txt
+      - run: pip install -r ansible/requirements.txt
       - run: ansible-galaxy install -r ansible/ansible-requirements.yaml
       - run: ansible-lint
       - run: ansible-playbook -i ansible/inventory.yaml ansible/edge.yaml
