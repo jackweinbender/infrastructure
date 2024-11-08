@@ -19,7 +19,6 @@ jobs:
           VAULT_PASSWORD: op://network/AnsibleVault/password
       - name: Print masked secret
         run: echo $VAULT_PASSWORD > 'ansible/vault-password.secret'
-      - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
