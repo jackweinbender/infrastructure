@@ -1,15 +1,15 @@
-- name: allow sudo group to run any commands
+- name: Allow sudo group to run any commands
   community.general.sudoers:
     commands: ALL
     group: sudo
     state: present
     name: sudoers
-- name: create ansible user
+- name: Create ansible user
   ansible.builtin.user:
     groups:
       - sudo
     name: ansible
-- name: add authorized keys from github
+- name: Add authorized keys from github
   ansible.posix.authorized_key:
     key: https://github.com/jackweinbender.keys
     exclusive: true

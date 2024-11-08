@@ -1,21 +1,21 @@
-- name: add 1password apt repo
+- name: Add 1password apt repo
   block:
     - name: Set architecture specific variables
-      set_fact:
+      ansible.builtin.set_fact:
         arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
-    - name: get signing key
-      get_url:
+    - name: Get signing key
+      ansible.builtin.get_url:
         url: https://downloads.1password.com/linux/keys/1password.asc
         dest: /etc/apt/keyrings/1password.asc
         mode: "0644"
         force: true
-    - name: add 1password apt repo
-      apt_repository:
+    - name: Add 1password apt repo
+      ansible.builtin.apt_repository:
         repo: "deb [arch={{ arch }} signed-by=/etc/apt/keyrings/1password.asc] https://downloads.1password.com/linux/debian/{{ arch }} stable main"
         filename: 1password
         state: present
-- name: install 1password cli
-  apt:
+- name: Install 1password cli
+  ansible.builtin.apt:
     name: 1password-cli
-    state: latest
+    state: present
     cache_valid_time: 3600

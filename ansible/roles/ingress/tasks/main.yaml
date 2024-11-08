@@ -1,2 +1,4 @@
-- import_tasks: nginx.yaml
-- import_tasks: certbot.yaml
+- name: Import nginx
+  ansible.builtin.import_tasks: nginx.yaml
+- name: Import certbot
+  ansible.builtin.import_tasks: certbot.yaml

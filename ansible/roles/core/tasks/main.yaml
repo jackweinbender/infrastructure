@@ -1,2 +1,4 @@
-- import_tasks: ansible-user.yaml
-- import_tasks: packages.yaml
+- name: Import ansible user
+  ansible.builtin.import_tasks: ansible-user.yaml
+- name: Import packages
+  ansible.builtin.import_tasks: packages.yaml

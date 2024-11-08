@@ -3,8 +3,8 @@
   hosts: bootstrap
   become: true
   tasks:
-    - name: install core packages
+    - name: Install core packages
       ansible.builtin.import_role:
         name: core
-    - name: reboot
+    - name: Reboot
       ansible.builtin.reboot:

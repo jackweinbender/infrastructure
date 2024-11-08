@@ -1,16 +1,16 @@
-- name: install nginx
-  apt:
+- name: Install nginx
+  ansible.builtin.apt:
     name: nginx
-    state: latest
+    state: present
     cache_valid_time: 3600
-- name: update nginx configs
+- name: Update nginx configs
   synchronize:
     src: sites-enabled/
     dest: /etc/nginx/sites-enabled
     delete: true
-- name: enable nginx service
-  service:
+- name: Enable nginx service
+  ansible.builtin.service:
     name: nginx
     state: started
     enabled: true
-  notify: restart nginx
+  notify: Restart nginx
