@@ -1,0 +1,32 @@
+name: "Ansible Lint"
+
+on:
+  pull_request:
+    paths:
+      - ansible
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Load secret
+        uses: 1password/load-secrets-action@v2
+        with:
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.ONE_PASSWORD_SA_TOKEN }}
+          VAULT_PASSWORD: op://network/AnsibleVault/password
+      - name: Print masked secret
+        run: echo $VAULT_PASSWORD > 'ansible/vault-password.secret'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Run ansible-lint
+        uses: ansible/ansible-lint@main
+        with:
+          working_directory: ansible
+          requirements_file: requirements.yaml
