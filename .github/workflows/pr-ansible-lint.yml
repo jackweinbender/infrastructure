@@ -25,5 +25,5 @@ jobs:
           cache: "pip"
       - run: pip install -r ansible/requirements.txt
       - run: ansible-galaxy install -r ansible/ansible-requirements.yaml
-      - run: ansible-lint
+      - run: ansible-lint ansible/
       - run: ansible-playbook -i ansible/inventory.yaml ansible/edge.yaml
