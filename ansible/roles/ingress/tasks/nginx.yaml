@@ -4,7 +4,7 @@
     state: present
     cache_valid_time: 3600
 - name: Update nginx configs
-  synchronize:
+  ansible.posix.synchronize:
     src: sites-enabled/
     dest: /etc/nginx/sites-enabled
     delete: true
