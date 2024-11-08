@@ -38,7 +38,7 @@ jobs:
       - name: netmap
         run: tailscale status
       - run: ping -c 4 pi-scale.tortoise-noodlefish.ts.net
-      - run: echo "testing123" > file.txt && scp file.txt ansible@pi-scale.tortoise-noodlefish.ts.net:/home/ansible/test.txt
+      - run: echo "testing123" > file.txt && scp -o StrictHostKeyChecking=no file.txt ansible@pi-scale.tortoise-noodlefish.ts.net:/home/ansible/test.txt
       # - uses: actions/setup-python@v5
       #   with:
       #     python-version: "3.13"
