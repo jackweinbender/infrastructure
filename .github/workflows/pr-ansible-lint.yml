@@ -32,9 +32,10 @@ jobs:
           oauth-secret: $TS_OAUTH_CLIENT_SECRET
           tags: tag:ci
           version: 1.76.1
-      - uses: LuisEnMarroquin/setup-ssh-action@v2.0.5
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          SSHKEY: ${{ steps.op.outputs.GHA_SSH_KEY }}
+          ssh-private-key: ${{ steps.op.outputs.GHA_SSH_KEY }}
       - run: echo "testing123" > file.txt && scp -o StrictHostKeyChecking=no file.txt ansible@pi-scale.tortoise-noodlefish.ts.net:/home/ansible/test.txt
       # - uses: actions/setup-python@v5
       #   with:
