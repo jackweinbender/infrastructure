@@ -5,6 +5,11 @@ on:
     paths:
       - "ansible/**"
 
+# Cancel in-progress jobs for the current PR / Ref
+concurrency:
+  group: ${{ github.head_ref || github.ref  }}
+  cancel-in-progress: true
+
 defaults:
   run:
     working-directory: ./ansible
