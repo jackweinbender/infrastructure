@@ -15,9 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Load secret
+        id: op
         uses: 1password/load-secrets-action@v2
-        with:
-          export-env: true
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.ONE_PASSWORD_SA_TOKEN }}
           TS_OAUTH_CLIENT_ID: "op://network/TailscaleOAuth/client-id"
@@ -26,13 +25,6 @@ jobs:
           VAULT_PASSWORD: op://network/AnsibleVault/password
       - name: Set vault password file
         run: echo $VAULT_PASSWORD > 'vault-password.secret'
-      - name: Set up ssh
-        run: |
-          mkdir -p ~/.ssh/
-          chmod 0700 ~/.ssh
-          echo "$GHA_SSH_KEY" > ~/.ssh/key
-          chmod 600 ~/.ssh/key
-          eval $(ssh-agent -s)
       - name: Tailscale
         uses: tailscale/github-action@v2
         with:
@@ -40,7 +32,10 @@ jobs:
           oauth-secret: $TS_OAUTH_CLIENT_SECRET
           tags: tag:ci
           version: 1.76.1
-      - run: echo "testing123" > file.txt && scp -i ~/.ssh/key -o StrictHostKeyChecking=no file.txt ansible@pi-scale.tortoise-noodlefish.ts.net:/home/ansible/test.txt
+      - uses: LuisEnMarroquin/setup-ssh-action@v2.0.5
+        with:
+          SSHKEY: ${{ steps.op.outputs.GHA_SSH_KEY }}
+      - run: echo "testing123" > file.txt && scp -o StrictHostKeyChecking=no file.txt ansible@pi-scale.tortoise-noodlefish.ts.net:/home/ansible/test.txt
       # - uses: actions/setup-python@v5
       #   with:
       #     python-version: "3.13"
