@@ -30,8 +30,8 @@ jobs:
         run: |
           mkdir -p ~/.ssh/
           chmod 0700 ~/.ssh
-          eval `ssh-agent -s`
-          ssh-add <(echo "$GHA_SSH_KEY")
+          printf "%s" "$SSH_KEY" > ~/.ssh/key
+          chmod 600 ~/.ssh/key
       - name: Tailscale
         uses: tailscale/github-action@v2
         with:
@@ -42,7 +42,7 @@ jobs:
       - name: netmap
         run: tailscale status
       - run: ping -c 4 pi-scale.tortoise-noodlefish.ts.net
-      - run: echo "testing123" > file.txt && scp -o StrictHostKeyChecking=no file.txt ansible@pi-scale.tortoise-noodlefish.ts.net:/home/ansible/test.txt
+      - run: echo "testing123" > file.txt && scp -i ~/.ssh/key -o StrictHostKeyChecking=no file.txt ansible@pi-scale.tortoise-noodlefish.ts.net:/home/ansible/test.txt
       # - uses: actions/setup-python@v5
       #   with:
       #     python-version: "3.13"
