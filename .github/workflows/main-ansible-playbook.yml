@@ -1,4 +1,4 @@
-name: "Ansible Lint"
+name: "Ansible Playbook"
 
 on:
   schedule:
