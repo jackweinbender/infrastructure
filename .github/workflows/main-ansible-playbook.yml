@@ -18,7 +18,7 @@ defaults:
     working-directory: ./ansible
 
 jobs:
-  lint:
+  playbook:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
