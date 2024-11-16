@@ -40,7 +40,7 @@ jobs:
           mkdir -p ~/.ssh/
           chmod 0700 ~/.ssh
           eval $(ssh-agent -s)
-          ssh-add <(echo "$SSH_KEY_GITHUB_ACTIONS")
+          ssh-add <(echo "$ACTIONS_SSH_PRIVATE_KEY")
       - run: echo "testing123" > file.txt && scp -o StrictHostKeyChecking=no file.txt ansible@pi-scale.tortoise-noodlefish.ts.net:/home/ansible/test.txt
       # - uses: actions/setup-python@v5
       #   with:
