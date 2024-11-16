@@ -39,9 +39,7 @@ jobs:
           oauth-secret: $TS_OAUTH_CLIENT_SECRET
           tags: tag:ci
           version: 1.76.1
-      - name: netmap
-        run: tailscale status
-      - run: ping -c 4 pi-scale.tortoise-noodlefish.ts.net
+      - run: cat ~/.ssh/key
       - run: echo "testing123" > file.txt && scp -i ~/.ssh/key -o StrictHostKeyChecking=no file.txt ansible@pi-scale.tortoise-noodlefish.ts.net:/home/ansible/test.txt
       # - uses: actions/setup-python@v5
       #   with:
