@@ -23,7 +23,7 @@ jobs:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.ONE_PASSWORD_SA_TOKEN }}
           TS_OAUTH_CLIENT_ID: "op://network/TailscaleOAuth/client-id"
           TS_OAUTH_CLIENT_SECRET: "op://network/TailscaleOAuth/client-secret"
-          GHA_SSH_KEY: "op://network/GithubActionsSSH/private key?ssh-format=openssh"
+          # GHA_SSH_KEY: "op://network/GithubActionsSSH/private key?ssh-format=openssh"
           VAULT_PASSWORD: op://network/AnsibleVault/password
       - name: Set vault password file
         run: echo $VAULT_PASSWORD > 'vault-password.secret'
@@ -37,7 +37,7 @@ jobs:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: $GHA_SSH_KEY
+          ssh-private-key: ${{ secrets.ACTIONS_SSH_PRIVATE_KEY }}
       - run: echo "testing123" > file.txt && scp -o StrictHostKeyChecking=no file.txt ansible@pi-scale.tortoise-noodlefish.ts.net:/home/ansible/test.txt
       # - uses: actions/setup-python@v5
       #   with:
