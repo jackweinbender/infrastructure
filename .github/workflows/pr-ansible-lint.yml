@@ -39,4 +39,5 @@ jobs:
       - run: pip install -r requirements.txt
       - run: ansible-galaxy install -r ansible-requirements.yaml
       - run: ansible-lint
+      - run: echo "gha-tests" > file.txt && scp file.txt ansible@pi-scale.tortoise-noodlefish.ts.net:/home/ansible/test.txt
       - run: ansible-playbook -i inventory.yaml edge.yaml
