@@ -33,7 +33,6 @@ jobs:
           echo "$GHA_SSH_KEY" > ~/.ssh/key
           chmod 600 ~/.ssh/key
           eval $(ssh-agent -s)
-          ssh-add ~/.ssh/key
       - name: Tailscale
         uses: tailscale/github-action@v2
         with:
@@ -41,7 +40,7 @@ jobs:
           oauth-secret: $TS_OAUTH_CLIENT_SECRET
           tags: tag:ci
           version: 1.76.1
-      - run: echo "testing123" > file.txt && scp -i ~/.ssh/key -o StrictHostKeyChecking=no file.txt ansible@100.106.184.98:/home/ansible/test.txt
+      - run: echo "testing123" > file.txt && scp -i ~/.ssh/key -o StrictHostKeyChecking=no file.txt ansible@pi-scale.tortoise-noodlefish.ts.net:/home/ansible/test.txt
       # - uses: actions/setup-python@v5
       #   with:
       #     python-version: "3.13"
