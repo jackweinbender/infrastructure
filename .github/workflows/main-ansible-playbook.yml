@@ -8,6 +8,11 @@ on:
     branches:
       - "main"
 
+# Only let one of these workflows run at a time
+concurrency:
+  group: main
+  cancel-in-progress: false
+
 defaults:
   run:
     working-directory: ./ansible
