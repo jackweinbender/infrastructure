@@ -22,12 +22,16 @@ jobs:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.ONE_PASSWORD_SA_TOKEN }}
           TS_OAUTH_CLIENT_ID: "op://network/TailscaleOAuth/client-id"
           TS_OAUTH_CLIENT_SECRET: "op://network/TailscaleOAuth/client-secret"
-          SSH_KEY: "op://network/GithubActionsSSH/private key"
+          GHA_SSH_KEY: "op://network/GithubActionsSSH/private key"
           VAULT_PASSWORD: op://network/AnsibleVault/password
       - name: Set vault password file
         run: echo $VAULT_PASSWORD > 'vault-password.secret'
-      - name: Set ssh key
-        run: echo $SSH_KEY > ssh.key
+      - name: Set up ssh
+        run: |
+          mkdir -p ~/.ssh/
+          chmod 0700 ~/.ssh
+          eval $(ssh-agent -s)
+          ssh-add <(echo "$GHA_SSH_KEY")
       - name: Tailscale
         uses: tailscale/github-action@v2
         with:
