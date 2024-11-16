@@ -30,7 +30,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh/
           chmod 0700 ~/.ssh
-          echo "$GHA_SSH_KEY\n" > ~/.ssh/key
+          echo "$GHA_SSH_KEY" > ~/.ssh/key
           chmod 600 ~/.ssh/key
           cat ~/.ssh/key | sed 's/./& /g'
       - name: Tailscale
