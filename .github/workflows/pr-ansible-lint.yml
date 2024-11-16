@@ -32,6 +32,8 @@ jobs:
           chmod 0700 ~/.ssh
           echo "$GHA_SSH_KEY" > ~/.ssh/key
           chmod 600 ~/.ssh/key
+          eval $(ssh-agent -s)
+          ssh-add ~/.ssh/key
       - name: Tailscale
         uses: tailscale/github-action@v2
         with:
