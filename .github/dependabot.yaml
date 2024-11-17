@@ -16,7 +16,7 @@ updates:
     directory: "/terraform/tailscale"
     schedule:
       interval: "weekly"
-  - package-ecosystem: pip
-    directory: "/ansible
+  - package-ecosystem: "pip"
+    directory: "/ansible"
     schedule:
       interval: "weekly"
