@@ -6,8 +6,9 @@ variable "vpc_security_group_ids" {
   type = set(string)
 }
 
-variable "tailscale_auth_key" {
-  type = string
+variable "userdata" {
+  type    = string
+  default = ""
 }
 
 variable "instance_type" {
