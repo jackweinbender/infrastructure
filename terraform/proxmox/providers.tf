@@ -9,7 +9,7 @@ terraform {
 
 provider "proxmox" {
   endpoint = var.virtual_environment_endpoint
-  username = var.virtual_environment_username
+  username = "${var.virtual_environment_username}@pam"
   password = var.virtual_environment_password
   ssh {
     agent = true

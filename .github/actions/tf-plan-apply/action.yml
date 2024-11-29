@@ -32,7 +32,7 @@ runs:
         TF_VAR_tailscale_api_key: "op://network/jug5ho4woduhynu3pilr33kpji/credential"
         TF_VAR_virtual_environment_endpoint: "op://network/tnyuufxc75mep7hfhymhqrv6c4/url"
         TF_VAR_virtual_environment_password: "op://network/tnyuufxc75mep7hfhymhqrv6c4/password"
-        TF_VAR_virtual_environment_username: "op://network/tnyuufxc75mep7hfhymhqrv6c4/username@pam"
+        TF_VAR_virtual_environment_username: "op://network/tnyuufxc75mep7hfhymhqrv6c4/username"
     - uses: hashicorp/setup-terraform@v2
     # We always run init.
     - name: Terraform init
