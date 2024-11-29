@@ -14,6 +14,8 @@ inputs:
   skip_validate:
     description: "Skip terraform validate?"
     default: "false"
+  op_token:
+    description: "One Password Token"
 
 runs:
   using: composite
@@ -22,12 +24,15 @@ runs:
       uses: 1password/load-secrets-action@v2
       with:
         export-env: true
+      # We, rather obnoxiously, have to export all OP variables for all
+      # runs here, cuz we can't run `op inject` like we do locally
       env:
-        OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.ONE_PASSWORD_SA_TOKEN }}
-      run: |
-        op inject \
-          -i terraform/${{ inputs.component }}/terraform.tfvars.tmpl \
-          -o terraform/${{ inputs.component }}/terraform.tfvars
+        OP_SERVICE_ACCOUNT_TOKEN: ${{ inputs.op_token }}
+        TF_VAR_tailscale_auth_key: "op://network/TailscaleAWSUserdata/credential"
+        TF_VAR_tailscale_api_key: "op://network/jug5ho4woduhynu3pilr33kpji/credential"
+        TF_VAR_virtual_environment_endpoint: "op://network/tnyuufxc75mep7hfhymhqrv6c4/url"
+        TF_VAR_virtual_environment_password: "op://network/tnyuufxc75mep7hfhymhqrv6c4/password"
+        TF_VAR_virtual_environment_username: "op://network/tnyuufxc75mep7hfhymhqrv6c4/username@pam"
     - uses: hashicorp/setup-terraform@v2
     # We always run init.
     - name: Terraform init
