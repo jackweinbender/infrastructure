@@ -18,6 +18,16 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Load secret
+      uses: 1password/load-secrets-action@v2
+      with:
+        export-env: true
+      env:
+        OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.ONE_PASSWORD_SA_TOKEN }}
+      run: |
+        op inject \
+          -i terraform/${{ inputs.component }}/terraform.tfvars.tmpl \
+          -o terraform/${{ inputs.component }}/terraform.tfvars
     - uses: hashicorp/setup-terraform@v2
     # We always run init.
     - name: Terraform init
