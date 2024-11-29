@@ -36,5 +36,6 @@ jobs:
       - name: Run Terraform Action on ${{ github.event.inputs.component }}
         uses: "./.github/actions/tf-plan-apply"
         with:
+          op_token: ${{ secrets.ONE_PASSWORD_SA_TOKEN }}
           component: ${{ github.event.inputs.component }}
           apply: ${{ github.event.inputs.apply }}
