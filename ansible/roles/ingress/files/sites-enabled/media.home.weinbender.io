@@ -19,6 +19,6 @@ server {
     proxy_set_header    Connection  "upgrade";
     
     location / {
-            proxy_pass http://192.168.1.109:8096;
+            proxy_pass http://192.168.11.109:8096;
     }
 }
