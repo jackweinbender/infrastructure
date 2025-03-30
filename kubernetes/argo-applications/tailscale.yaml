@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: tailscale
-  namespace: argocd
+  namespace: tailscale
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
