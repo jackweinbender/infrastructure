@@ -16,6 +16,8 @@ spec:
         ingressRoute:
           dashboard:
             enabled: true
+        providers:
+          kubernetesGateway: {}
   destination:
     server: https://kubernetes.default.svc
     namespace: traefik
