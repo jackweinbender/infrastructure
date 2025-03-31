@@ -2,10 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: tailscale
-  namespace: tailscale
-  labels:
-    app.kubernetes.io/name: tailscale
-    app.kubernetes.io/managed-by: ArgoCD
+  namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
