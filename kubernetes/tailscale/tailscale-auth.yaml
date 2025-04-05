@@ -3,5 +3,6 @@ kind: Secret
 metadata:
   name: tailscale-auth
   namespace: tailscale
+type: Opaque
 stringData:
-  TS_AUTHKEY: tskey-0123456789abcdef
+  TS_AUTHKEY: op://microk8s/ts-serviceaccount-key/credential
