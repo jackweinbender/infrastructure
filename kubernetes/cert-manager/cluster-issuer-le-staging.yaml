@@ -12,6 +12,7 @@ spec:
     solvers:
       - dns01:
           cloudflare:
+            email: jack@weinbender.io
             apiTokenSecretRef:
               name: cloudflare-api-token-kubectl
               key: api-token
