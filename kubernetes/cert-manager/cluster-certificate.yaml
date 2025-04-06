@@ -3,16 +3,16 @@ kind: Certificate
 metadata:
   name: wildcard
 spec:
-  secretName: wildcard-tls
+  secretName: cluster-wildcard-tls
   privateKey:
     rotationPolicy: Always
   commonName: wildcard.weinbender.io
   dnsNames:
-    - "*.weinbender.io"
+    - "*.cluster.weinbender.io"
   usages:
     - digital signature
     - key encipherment
     - server auth
   issuerRef:
-    name: selfsigned
+    name: letsencrypt-staging
     kind: ClusterIssuer
