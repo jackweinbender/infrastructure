@@ -6,7 +6,7 @@ spec:
   secretName: cluster-wildcard-tls
   privateKey:
     rotationPolicy: Always
-  commonName: wildcard.weinbender.io
+  commonName: cluster.weinbender.io
   dnsNames:
     - "*.cluster.weinbender.io"
   usages:
