@@ -11,5 +11,5 @@ spec:
     - "*.cluster.weinbender.io"
     - cluster.weinbender.io
   issuerRef:
-    name: letsencrypt-staging
+    name: letsencrypt
     kind: ClusterIssuer
