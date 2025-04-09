@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secrets-operator
+  namespace: secrets-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: secrets-operator
+  template:
+    metadata:
+      labels:
+        app: secrets-operator
+    spec:
+      serviceAccountName: secrets-operator-sa
+      containers:
+        - name: secrets-operator
+          image: ghcr.io/jackweinbender/secrets-operator:latest
+          env:
+            - name: OP_SERVICE_ACCOUNT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: op-service-account-token
+                  key: token
