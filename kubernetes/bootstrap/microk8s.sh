@@ -1,3 +1,5 @@
+# Commands to bootstrap microk8s on a new host.
+# These commands are idempotent, so you can run them multiple times without issues.
 alias kubectl='microk8s kubectl'
 
 # DNS is required for most applications to resolve service names within the cluster.
