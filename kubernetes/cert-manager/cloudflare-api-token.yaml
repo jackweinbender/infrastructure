@@ -3,6 +3,8 @@ kind: Secret
 metadata:
   name: cloudflare-api-token
   namespace: cert-manager
+  annotations:
+    secrets-operator.weinbender.io/provider: "op"
+    secrets-operator.weinbender.io/secretDataKey: "api-token"
+    secrets-operator.weinbender.io/ref: "op://microk8s/cloudflare-auth-weinbenderio/credential"
 type: Opaque
-stringData:
-  api-token: op://microk8s/cloudflare-auth-weinbenderio/credential

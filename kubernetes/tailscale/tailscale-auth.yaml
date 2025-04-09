@@ -3,6 +3,8 @@ kind: Secret
 metadata:
   name: tailscale-auth
   namespace: tailscale
+  annotations:
+    secrets-operator.weinbender.io/provider: "op"
+    secrets-operator.weinbender.io/secretDataKey: "api-token"
+    secrets-operator.weinbender.io/ref: "op://microk8s/ts-serviceaccount-key/credential"
 type: Opaque
-stringData:
-  TS_AUTHKEY: op://microk8s/ts-serviceaccount-key/credential
