@@ -40332,7 +40332,7 @@ metadata:
     app.kubernetes.io/version: "latest"
     app.kubernetes.io/managed-by: Helm
   annotations:
-    tailscale.com/expose
+    tailscale.com/expose: "true"
 spec:
   selector:
     control-plane: envoy-gateway
