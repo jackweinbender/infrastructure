@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cert-manager
+  name: envoy-gateway
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -11,7 +11,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: kubernetes/cert-manager
+    path: kubernetes/envoy-gateway
     repoURL: git@github.com:jackweinbender/infrastructure.git
     targetRevision: HEAD
   syncPolicy:
