@@ -40331,6 +40331,8 @@ metadata:
     app.kubernetes.io/instance: eg
     app.kubernetes.io/version: "latest"
     app.kubernetes.io/managed-by: Helm
+  annotations:
+    tailscale.com/expose
 spec:
   selector:
     control-plane: envoy-gateway
