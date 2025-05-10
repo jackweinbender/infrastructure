@@ -8,8 +8,8 @@ spec:
   privateKey:
     rotationPolicy: Always
   dnsNames:
-    - "*.cluster.weinbender.io"
-    - cluster.weinbender.io
+    - "*.k8s.weinbender.io"
+    - k8s.weinbender.io
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer

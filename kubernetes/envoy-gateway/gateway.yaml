@@ -1,0 +1,19 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: cluster-gateway
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    cert-manager.io/common-name: "k8s.weinbender.io"
+spec:
+  gatewayClassName: envoy-gateway-class
+  listeners:
+    - name: https
+      protocol: HTTPS
+      hostname: k8s.weinbender.io
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: cluster-wildcard-tls
