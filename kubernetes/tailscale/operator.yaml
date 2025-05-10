@@ -12,7 +12,7 @@ metadata:
   name: operator-oauth
   namespace: tailscale
 stringData:
-  client_id: "kYehyXNErA21CNTRL" # SET CLIENT ID HERE
+  client_id: "kMYgVLCnPT11CNTRL" # SET CLIENT ID HERE
   client_secret: "tailscale-auth" # SET CLIENT SECRET HERE
 ---
 apiVersion: v1
