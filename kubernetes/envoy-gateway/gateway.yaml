@@ -17,4 +17,4 @@ spec:
         mode: Terminate
         certificateRefs:
           - kind: Secret
-            name: cluster-wildcard-tls
+            name: envoy-wildcard-tls
