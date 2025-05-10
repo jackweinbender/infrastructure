@@ -4,7 +4,7 @@ metadata:
   name: tailscale-auth
   namespace: tailscale
   annotations:
-    secrets-operator.weinbender.io/provider: "op"
-    secrets-operator.weinbender.io/secretDataKey: "TS_AUTHKEY"
-    secrets-operator.weinbender.io/ref: "op://microk8s/ts-serviceaccount-key/credential"
+    "secrets-operator.weinbender.io/provider": "op"
+    "secrets-operator.weinbender.io/secretDataKey": "TS_AUTHKEY"
+    "secrets-operator.weinbender.io/ref": "op://microk8s/ts-serviceaccount-key/credential"
 type: Opaque
