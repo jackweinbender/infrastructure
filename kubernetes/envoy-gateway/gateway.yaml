@@ -2,6 +2,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: cluster-gateway
+  namespace: default
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
     cert-manager.io/common-name: "k8s.weinbender.io"
