@@ -11,9 +11,13 @@ kind: Secret
 metadata:
   name: operator-oauth
   namespace: tailscale
+  annotations:
+    "k8s-secret-sync.weinbender.io/provider": "op"
+    "k8s-secret-sync.weinbender.io/secret-key": "client_secret"
+    "k8s-secret-sync.weinbender.io/ref": "op://microk8s/ts-serviceaccount-key/credential"
 stringData:
   client_id: "kZCr7sLPG921CNTRL" # SET CLIENT ID HERE
-  client_secret: "tailscale-auth" # SET CLIENT SECRET HERE
+  # client_secret: "set with k8s-secrets-sync" # SET CLIENT SECRET HERE
 ---
 apiVersion: v1
 kind: ServiceAccount
