@@ -11,7 +11,7 @@ spec:
   listeners:
     - name: https
       protocol: HTTPS
-      hostname: k8s.weinbender.io
+      hostname: "*.k8s.weinbender.io"
       port: 443
       tls:
         mode: Terminate
