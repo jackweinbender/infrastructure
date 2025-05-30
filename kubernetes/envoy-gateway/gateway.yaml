@@ -11,13 +11,13 @@ spec:
   listeners:
     - name: https
       protocol: HTTPS
-      hostname: "*.k8s.weinbender.io"
-      port: 443
+      # hostname: "*.k8s.weinbender.io"
+      port: 80
       allowedRoutes:
         namespaces:
           from: All
-      tls:
-        mode: Terminate
-        certificateRefs:
-          - kind: Secret
-            name: envoy-wildcard-tls
+      # tls:
+      #   mode: Terminate
+      #   certificateRefs:
+      #     - kind: Secret
+      #       name: envoy-wildcard-tls
