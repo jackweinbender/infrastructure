@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: envoy-wildcard-tls
+  namespace: envoy-gateway-system
+spec:
+  secretName: envoy-wildcard-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: "*.k8s.weinbender.io"
+  dnsNames:
+    - "*.k8s.weinbender.io"
+    - "k8s.weinbender.io"
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
