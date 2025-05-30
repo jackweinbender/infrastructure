@@ -4,20 +4,19 @@ metadata:
   name: cluster-gateway
   namespace: envoy-gateway-system
   annotations:
-    annotations:
     cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   gatewayClassName: envoy-gateway-class
   listeners:
     - name: https
       protocol: HTTPS
-      # hostname: "*.k8s.weinbender.io"
-      port: 80
+      hostname: "*.k8s.weinbender.io"
+      port: 443
       allowedRoutes:
         namespaces:
           from: All
-      # tls:
-      #   mode: Terminate
-      #   certificateRefs:
-      #     - kind: Secret
-      #       name: envoy-wildcard-tls
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: envoy-wildcard-tls
