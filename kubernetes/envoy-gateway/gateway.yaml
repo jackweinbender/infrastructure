@@ -4,8 +4,8 @@ metadata:
   name: cluster-gateway
   namespace: default
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
-    cert-manager.io/common-name: "k8s.weinbender.io"
+    annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   gatewayClassName: envoy-gateway-class
   listeners:
@@ -13,6 +13,9 @@ spec:
       protocol: HTTPS
       hostname: "*.k8s.weinbender.io"
       port: 443
+      allowedRoutes:
+        namespaces:
+          from: All
       tls:
         mode: Terminate
         certificateRefs:
