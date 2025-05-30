@@ -7,7 +7,7 @@ spec:
     - argocd.k8s.weinbender.io
   parentRefs:
     - name: cluster-gateway
-      namespace: default
+      namespace: envoy-gateway-system
   targetRefs:
     - kind: Service
       name: argocd-server
