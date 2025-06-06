@@ -3,5 +3,7 @@ kind: Service
 metadata:
   name: envoy-gateway
   namespace: envoy-gateway-system
+  annotations:
+    metallb.universe.tf/address-pool: default-address-pool
 spec:
   type: LoadBalancer
