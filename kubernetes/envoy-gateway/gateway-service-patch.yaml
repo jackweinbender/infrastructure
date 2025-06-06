@@ -4,6 +4,6 @@ metadata:
   name: envoy-gateway
   namespace: envoy-gateway-system
   annotations:
-    metallb.universe.tf/address-pool: default-address-pool
+    metallb.io/address-pool: envoy-gateway-pool
 spec:
   type: LoadBalancer
