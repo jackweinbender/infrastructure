@@ -1,3 +1,9 @@
+# Jellyfin Reverse Proxy Configuration
+
+# DNS resolution
+resolver 192.168.1.1 valid=30s;
+resolver_timeout 5s;
+
 server {
     listen 80;
     listen [::]:80;
@@ -21,12 +27,11 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/home.weinbender.io/privkey.pem;
     ssl_trusted_certificate /etc/letsencrypt/live/home.weinbender.io/chain.pem;
     
-
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
     # use a variable to store the upstream proxy
-    set $jellyfin 127.0.0.1;
+    set $upstream jellyfin:8096;
 
     # Security / XSS Mitigation Headers
     add_header X-Content-Type-Options "nosniff";
@@ -36,7 +41,7 @@ server {
 
     location / {
         # Proxy main Jellyfin traffic
-        proxy_pass http://$jellyfin:8096;
+        proxy_pass http://$upstream;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -50,7 +55,7 @@ server {
 
     location /socket {
         # Proxy Jellyfin Websockets traffic
-        proxy_pass http://$jellyfin:8096;
+        proxy_pass http://$upstream;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
