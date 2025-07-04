@@ -1,7 +1,7 @@
 server {
     listen 80;
     listen [::]:80;
-    server_name media.home.weinbender.io;
+    server_name homeassistant.home.weinbender.io;
     return 301 https://$host$request_uri;
 }
 
@@ -10,7 +10,7 @@ server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
 
-    server_name media.home.weinbender.io;
+    server_name homeassistant.home.weinbender.io;
 
     client_max_body_size 20M;
 
@@ -22,7 +22,7 @@ server {
     # We can use the hostname resolution of the router to get the IP address
     # of the server. In this case the literal `jellyfin` works.
     resolver 192.168.1.1 valid=30s;
-    set $ip_address jellyfin;
+    set $ip_address homeassistant;
     
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-Content-Type-Options "nosniff";
