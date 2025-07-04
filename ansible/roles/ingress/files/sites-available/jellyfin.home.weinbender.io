@@ -1,23 +1,27 @@
 server {
-    # Nginx versions prior to 1.25
-    #listen 443 ssl http2;
-    #listen [::]:443 ssl http2;
+    listen 80;
+    listen [::]:80;
+    server_name jellyfin.home.weinbender.io;
+    return 301 https://$host$request_uri;
+}
 
-    # Nginx versions 1.25+
+server {
     listen 443 ssl;
     listen [::]:443 ssl;
     http2 on;
 
     server_name jellyfin.home.weinbender.io;
 
-    ## The default `client_max_body_size` is 1M, this might not be enough for some posters, etc.
+    # Set the maximum body size for client requests
     client_max_body_size 20M;
-
-    # Comment next line to allow TLSv1.0 and TLSv1.1 if you have very old clients
+    
+    # SSL Configuration
     ssl_protocols TLSv1.3 TLSv1.2;
     ssl_certificate /etc/letsencrypt/live/home.weinbender.io/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/home.weinbender.io/privkey.pem;
     ssl_trusted_certificate /etc/letsencrypt/live/home.weinbender.io/chain.pem;
+    
+
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
@@ -26,14 +30,8 @@ server {
 
     # Security / XSS Mitigation Headers
     add_header X-Content-Type-Options "nosniff";
-
-    # Permissions policy. May cause issues with some clients
     add_header Permissions-Policy "accelerometer=(), ambient-light-sensor=(), battery=(), bluetooth=(), camera=(), clipboard-read=(), display-capture=(), document-domain=(), encrypted-media=(), gamepad=(), geolocation=(), gyroscope=(), hid=(), idle-detection=(), interest-cohort=(), keyboard-map=(), local-fonts=(), magnetometer=(), microphone=(), payment=(), publickey-credentials-get=(), serial=(), sync-xhr=(), usb=(), xr-spatial-tracking=()" always;
-
     # Content Security Policy
-    # See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
-    # Enforces https content and restricts JS/CSS to origin
-    # External Javascript (such as cast_sender.js for Chromecast) must be whitelisted.
     add_header Content-Security-Policy "default-src https: data: blob: ; img-src 'self' https://* ; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.youtube.com blob:; worker-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'self'; font-src 'self'";
 
     location / {
@@ -63,11 +61,4 @@ server {
         proxy_set_header X-Forwarded-Protocol $scheme;
         proxy_set_header X-Forwarded-Host $http_host;
     }
-}
-
-server {
-    listen 80;
-    listen [::]:80;
-    server_name jellyfin.home.weinbender.io;
-    return 301 https://$host$request_uri;
 }
