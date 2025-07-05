@@ -3,12 +3,20 @@
     - name: Set architecture specific variables
       ansible.builtin.set_fact:
         arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+
+    - name: Ensure /etc/apt/keyrings directory exists
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: "0755"
+
     - name: Get signing key
       ansible.builtin.get_url:
         url: https://downloads.1password.com/linux/keys/1password.asc
         dest: /etc/apt/keyrings/1password.asc
         mode: "0644"
         force: true
+
     - name: Add 1password apt repo
       ansible.builtin.apt_repository:
         repo: >
@@ -16,6 +24,7 @@
           https://downloads.1password.com/linux/debian/{{ arch }} stable main
         filename: 1password
         state: present
+
 - name: Install 1password cli
   ansible.builtin.apt:
     name: 1password-cli
