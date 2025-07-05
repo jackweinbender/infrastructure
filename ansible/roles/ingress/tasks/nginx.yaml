@@ -19,7 +19,6 @@
     owner: root
     group: root
     mode: "0644"
-    remote_src: true
 
 - name: Copy Nginx config snippets
   ansible.builtin.copy:
@@ -28,7 +27,6 @@
     owner: root
     group: root
     mode: "0644"
-    remote_src: true
 
 - name: Enable selected Nginx sites
   ansible.builtin.file:
