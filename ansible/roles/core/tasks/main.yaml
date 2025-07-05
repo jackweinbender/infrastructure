@@ -2,3 +2,23 @@
   ansible.builtin.import_tasks: ansible-user.yaml
 - name: Import packages
   ansible.builtin.import_tasks: packages.yaml
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+- name: Install core packages
+  ansible.builtin.package:
+    name: "{{ core_packages }}"
+    state: present
+- name: Ensure sudo is configured securely
+  ansible.builtin.copy:
+    src: sudoers
+    dest: /etc/sudoers
+    owner: root
+    group: root
+    mode: "0440"
+- name: Ensure rsync service is enabled and running
+  ansible.builtin.service:
+    name: rsync
+    state: started
+    enabled: true
