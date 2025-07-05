@@ -3,8 +3,5 @@ Defaults    env_reset
 Defaults    mail_badpass
 Defaults    secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-# Allow members of group sudo to execute any command
-%sudo   ALL=(ALL:ALL) ALL
-
-# Allow the Ansible user to run commands without a password
-ansible ALL=(ALL) NOPASSWD: ALL
+# Allow members of group sudo to execute any command without a password
+%sudo   ALL=(ALL:ALL) NOPASSWD: ALL
