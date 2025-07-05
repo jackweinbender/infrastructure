@@ -12,19 +12,25 @@
     group: root
     mode: "0755"
 
-- name: Update nginx sites-available
-  ansible.posix.synchronize:
-    src: sites-available/
-    dest: /etc/nginx/sites-available
-    delete: true
+- name: Copy Nginx site configurations
+  ansible.builtin.copy:
+    src: "sites-available/"
+    dest: "/etc/nginx/sites-available/"
+    owner: root
+    group: root
+    mode: "0644"
+    remote_src: yes
 
-- name: Update nginx config snippets
-  ansible.posix.synchronize:
-    src: snippets/
-    dest: /etc/nginx/snippets
-    delete: true
+- name: Copy Nginx config snippets
+  ansible.builtin.copy:
+    src: "snippets/"
+    dest: "/etc/nginx/snippets/"
+    owner: root
+    group: root
+    mode: "0644"
+    remote_src: yes
 
-- name: Symlink sites-enabled to sites-available
+- name: Enable selected Nginx sites
   ansible.builtin.file:
     src: "/etc/nginx/sites-available/{{ item }}"
     dest: "/etc/nginx/sites-enabled/{{ item }}"
@@ -43,10 +49,3 @@
     name: nginx
     state: reloaded
   when: nginx_validate.rc == 0
-
-- name: Enable nginx service
-  ansible.builtin.service:
-    name: nginx
-    state: started
-    enabled: true
-  notify: Reload nginx
