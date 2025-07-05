@@ -1,9 +1,3 @@
-- name: Install nginx
-  ansible.builtin.apt:
-    name: nginx
-    state: present
-    cache_valid_time: 3600
-
 - name: Ensure /etc/nginx/snippets exists
   ansible.builtin.file:
     path: /etc/nginx/snippets
@@ -42,6 +36,12 @@
     owner: root
     group: root
     mode: "0644"
+
+- name: Install nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: latest
+    cache_valid_time: 3600
 
 - name: Validate nginx configuration
   ansible.builtin.command:
