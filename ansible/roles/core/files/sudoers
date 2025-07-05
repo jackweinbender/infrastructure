@@ -6,5 +6,5 @@ Defaults    secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin
 # Allow members of group sudo to execute any command
 %sudo   ALL=(ALL:ALL) ALL
 
-# Prevent root login via sudo without a password
-root    ALL=(ALL:ALL) ALL
+# Allow the Ansible user to run commands without a password
+ansible ALL=(ALL) NOPASSWD: ALL
