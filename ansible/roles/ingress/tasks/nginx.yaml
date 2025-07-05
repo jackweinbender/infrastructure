@@ -40,7 +40,7 @@
 - name: Install nginx
   ansible.builtin.apt:
     name: nginx
-    state: latest
+    state: present
     cache_valid_time: 3600
 
 - name: Validate nginx configuration
