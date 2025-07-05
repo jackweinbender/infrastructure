@@ -10,13 +10,6 @@
   ansible.builtin.package:
     name: "{{ core_packages }}"
     state: present
-- name: Ensure sudo is configured securely
-  ansible.builtin.copy:
-    src: sudoers
-    dest: /etc/sudoers
-    owner: root
-    group: root
-    mode: "0440"
 - name: Ensure rsync service is enabled and running
   ansible.builtin.service:
     name: rsync

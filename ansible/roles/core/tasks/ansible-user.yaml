@@ -1,9 +1,3 @@
-- name: Allow sudo group to run any commands
-  community.general.sudoers:
-    commands: ALL
-    group: sudo
-    state: present
-    name: sudoers
 - name: Create ansible user
   ansible.builtin.user:
     groups:
