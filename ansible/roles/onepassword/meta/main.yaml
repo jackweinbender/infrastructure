@@ -3,7 +3,7 @@ galaxy_info:
   description: Role for managing 1Password integration and secrets.
   company: Your Company
   license: MIT
-  min_ansible_version: 2.9
+  min_ansible_version: "2.9"
   platforms:
     - name: Ubuntu
       versions:
