@@ -38,6 +38,12 @@
   changed_when: false
   failed_when: nginx_validate.rc != 0
 
+- name: Reload nginx if configuration is valid
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded
+  when: nginx_validate.rc == 0
+
 - name: Enable nginx service
   ansible.builtin.service:
     name: nginx
