@@ -3,14 +3,44 @@
     name: nginx
     state: present
     cache_valid_time: 3600
-- name: Update nginx configs
+
+- name: Ensure /etc/nginx/snippets exists
+  ansible.builtin.file:
+    path: /etc/nginx/snippets
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Update nginx sites-available
   ansible.posix.synchronize:
     src: sites-available/
-    dest: /etc/nginx/sites-enabled
+    dest: /etc/nginx/sites-available
     delete: true
+
+- name: Update nginx config snippets
+  ansible.posix.synchronize:
+    src: snippets/
+    dest: /etc/nginx/snippets
+    delete: true
+
+- name: Symlink sites-enabled to sites-available
+  ansible.builtin.file:
+    src: "/etc/nginx/sites-available/{{ item }}"
+    dest: "/etc/nginx/sites-enabled/{{ item }}"
+    state: link
+  loop: "{{ enabled_sites }}"
+
+- name: Validate nginx configuration
+  ansible.builtin.command:
+    cmd: nginx -t
+  register: nginx_validate
+  changed_when: false
+  failed_when: nginx_validate.rc != 0
+
 - name: Enable nginx service
   ansible.builtin.service:
     name: nginx
     state: started
     enabled: true
-  notify: Restart nginx
+  notify: Reload nginx

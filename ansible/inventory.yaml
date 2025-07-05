@@ -1,6 +1,9 @@
 all:
   vars:
     ansible_user: ansible
+    enabled_sites:
+      - jellyfin.home.weinbender.io
+      - homeassistant.home.weinbender.io
 
 bootstrap:
   hosts:
