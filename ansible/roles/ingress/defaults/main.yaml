@@ -1,0 +1,5 @@
+---
+# Default variables for the ingress role
+enabled_sites:
+  - jellyfin.home.weinbender.io
+  - homeassistant.home.weinbender.io

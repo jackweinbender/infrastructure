@@ -1,0 +1,5 @@
+---
+# Default variables for the core role
+core_packages:
+  - sudo
+  - rsync
