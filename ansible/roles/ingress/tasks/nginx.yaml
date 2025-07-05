@@ -30,10 +30,9 @@
 
 - name: Enable selected Nginx sites
   ansible.builtin.file:
-    src: "/etc/nginx/sites-available/{{ item }}"
-    dest: "/etc/nginx/sites-enabled/{{ item }}"
+    src: "/etc/nginx/sites-available/{{ item }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ item }}.conf"
     state: link
-    force: true
   loop: "{{ enabled_sites }}"
 
 - name: Validate nginx configuration
