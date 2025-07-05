@@ -35,6 +35,14 @@
     state: link
   loop: "{{ enabled_sites }}"
 
+- name: Copy Nginx main configuration file
+  ansible.builtin.copy:
+    src: "nginx.conf"
+    dest: "/etc/nginx/nginx.conf"
+    owner: root
+    group: root
+    mode: "0644"
+
 - name: Validate nginx configuration
   ansible.builtin.command:
     cmd: nginx -t
