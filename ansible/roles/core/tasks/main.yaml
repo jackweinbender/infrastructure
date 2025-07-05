@@ -17,8 +17,3 @@
     owner: root
     group: root
     mode: "0440"
-- name: Ensure rsync service is enabled and running
-  ansible.builtin.service:
-    name: rsync
-    state: started
-    enabled: true
