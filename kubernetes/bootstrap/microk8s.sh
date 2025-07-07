@@ -1,15 +1,27 @@
-# Commands to bootstrap microk8s on a new host.
-# These commands are idempotent, so you can run them multiple times without issues.
+#!/bin/bash
+
+# SSH into the new host and run this script to bootstrap microk8s and install Argo CD.
+# Ensure you have microk8s installed on the host before running this script.
+# Save yourself some trouble and use `ssh -L 8080:localhost:8080 user@remote-host`
+# to forward the port for accessing the Argo CD UI when the time comes.
+
 alias kubectl='microk8s kubectl'
 alias k='microk8s kubectl'
 
-# DNS is required for most applications to resolve service names within the cluster.
-# in my case, argocd is the key app that needs this
+# Enable microk8s modules
 microk8s enable dns
-
-# `ingress` here is the ingress-nginx controller, which is an official Kubernetes
-# project that manages external access to the services in a cluster.
 microk8s enable ingress
 
-# todo
-microk8s enable metallb
+# Install Argo CD
+argo_version="stable"
+microk8s kubectl create namespace argocd
+microk8s kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+# Print the initial admin password for Argo CD
+echo "Argo CD initial admin password: $(microk8s kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)"
+# Delete Argo CD initial admin password secret
+microk8s kubectl -n argocd delete secret argocd-initial-admin-secret
+echo "Argo CD initial admin password secret deleted."
+
+# Add port forwarding to access the Argo CD UI
+kubectl port-forward svc/argocd-server -n argocd 8080:443
