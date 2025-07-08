@@ -24,4 +24,4 @@ microk8s kubectl -n argocd delete secret argocd-initial-admin-secret
 echo "Argo CD initial admin password secret deleted."
 
 # Add port forwarding to access the Argo CD UI
-kubectl port-forward svc/argocd-server -n argocd 8080:443
+microk8s kubectl port-forward svc/argocd-server -n argocd 8080:443
