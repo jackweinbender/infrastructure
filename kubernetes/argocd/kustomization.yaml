@@ -3,5 +3,7 @@ kind: Kustomization
 
 resources:
   - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-  - argocd-cmd-params-cm.yaml
   - httproute.yaml
+
+patchesStrategicMerge:
+  - argocd-cmd-params-cm.yaml
