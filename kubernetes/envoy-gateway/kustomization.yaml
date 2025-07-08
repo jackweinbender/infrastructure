@@ -6,5 +6,5 @@ resources:
   - gateway-class.yaml
   - gateway.yaml
 
-patchesStrategicMerge:
+patches:
   - gateway-service-patch.yaml
