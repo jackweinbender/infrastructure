@@ -14,5 +14,5 @@ spec:
           cloudflare:
             email: jack@weinbender.io
             apiTokenSecretRef:
-              name: cloudflare-api-token-kubectl
+              name: cloudflare-api-token
               key: api-token
