@@ -7,4 +7,4 @@ resources:
   - gateway.yaml
 
 patches:
-  - gateway-service-patch.yaml
+  - path: gateway-service-patch.yaml

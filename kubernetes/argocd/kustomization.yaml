@@ -6,4 +6,4 @@ resources:
   - httproute.yaml
 
 patches:
-  - argocd-cmd-params-cm.yaml
+  - path: argocd-cmd-params-cm.yaml
