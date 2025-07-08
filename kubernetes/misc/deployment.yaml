@@ -15,11 +15,9 @@ spec:
     spec:
       containers:
         - name: hello-world
-          image: hashicorp/http-echo:latest
-          args:
-            - "-text=Hello, World!"
+          image: nginx:latest
           ports:
-            - containerPort: 5678
+            - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
@@ -32,7 +30,7 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 5678
+      targetPort: 80
   type: ClusterIP
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1
@@ -48,5 +46,5 @@ spec:
       namespace: envoy-gateway-system
   rules:
     - backendRefs:
-    - name: hello-world
-      port: 80
+        - name: hello-world
+          port: 80
