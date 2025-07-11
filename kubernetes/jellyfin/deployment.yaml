@@ -18,12 +18,12 @@ spec:
           ports:
             - containerPort: 8096
             - containerPort: 8920
-          volumeMounts:
-            - name: jellyfin-media
-              mountPath: /media
-      volumes:
-        - name: jellyfin-media
-          nfs:
-            server: caba-host.weinbender.io
-            path: /mnt/media
-            readOnly: true
+          # volumeMounts:
+          #   - name: jellyfin-media
+          #     mountPath: /media
+      # volumes:
+      #   - name: jellyfin-media
+      #     nfs:
+      #       server: caba-host.weinbender.io
+      #       path: /mnt/media
+      #       readOnly: true
