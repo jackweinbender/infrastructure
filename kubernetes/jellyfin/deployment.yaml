@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyfin
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+    spec:
+      containers:
+        - name: jellyfin
+          image: jellyfin/jellyfin:latest
+          ports:
+            - containerPort: 8096
+            - containerPort: 8920
+          volumeMounts:
+            - name: jellyfin-media
+              mountPath: /media
+      volumes:
+        - name: jellyfin-media
+          nfs:
+            server: caba-host.weinbender.io
+            path: /mnt/media
+            readOnly: true

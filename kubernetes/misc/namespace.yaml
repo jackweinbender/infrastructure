@@ -1,18 +1,4 @@
 apiVersion: v1
-kind: Pod
+kind: Namespace
 metadata:
-  name: test-pd
-  namespace: misc
-spec:
-  containers:
-    - image: registry.k8s.io/test-webserver
-      name: test-container
-      volumeMounts:
-        - mountPath: /my-nfs-data
-          name: test-volume
-  volumes:
-    - name: test-volume
-      nfs:
-        server: caba-host.weinbender.io
-        path: /mnt/media
-        readOnly: true
+  name: misc
