@@ -4,9 +4,11 @@ kind: Kustomization
 resources:
   - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
   - httproute.yaml
+  - argocd-applications.yaml
+  - argocd-projects.yaml
 
 patches:
   - target:
       kind: ConfigMap
       name: argocd-cmd-params-cm
-    path: argocd-cmd-params-cm-patch.yaml
+    path: patch-argocd-cmd-params-cm.yaml
