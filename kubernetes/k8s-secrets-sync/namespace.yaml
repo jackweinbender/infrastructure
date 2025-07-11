@@ -1,4 +1,4 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: secrets-operator
+  name: k8s-secrets-sync

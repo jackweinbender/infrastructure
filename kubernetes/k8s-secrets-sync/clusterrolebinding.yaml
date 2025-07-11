@@ -1,12 +1,12 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: secrets-operator-binding
+  name: k8s-secrets-sync-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: secrets-operator-role
+  name: k8s-secrets-sync-role
 subjects:
   - kind: ServiceAccount
-    name: secrets-operator-sa
-    namespace: secrets-operator
+    name: k8s-secrets-sync-sa
+    namespace: k8s-secrets-sync

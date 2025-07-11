@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: secrets-operator
-  namespace: secrets-operator
+  name: k8s-secrets-sync
+  namespace: k8s-secrets-sync
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: secrets-operator
+      app: k8s-secrets-sync
   template:
     metadata:
       labels:
-        app: secrets-operator
+        app: k8s-secrets-sync
     spec:
-      serviceAccountName: secrets-operator-sa
+      serviceAccountName: k8s-secrets-sync-sa
       containers:
-        - name: secrets-operator
-          image: ghcr.io/jackweinbender/secrets-operator:latest
+        - name: k8s-secrets-sync
+          image: ghcr.io/jackweinbender/k8s-secrets-sync:latest
           env:
             - name: OP_SERVICE_ACCOUNT_TOKEN
               valueFrom:
