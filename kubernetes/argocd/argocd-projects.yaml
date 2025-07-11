@@ -23,7 +23,7 @@ metadata:
 spec:
   description: Cluster applications
   sourceRepos:
-    - "*"
+    - git@github.com:jackweinbender/infrastructure.git
   destinations:
     - namespace: "!kube-system"
       server: https://kubernetes.default.svc
