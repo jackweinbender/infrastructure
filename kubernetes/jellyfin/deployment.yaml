@@ -19,10 +19,19 @@ spec:
             - containerPort: 8096
             - containerPort: 8920
           volumeMounts:
+            - name: jellyfin-config
+              mountPath: /config
+            - name: jellyfin-cache
+              mountPath: /cache
             - name: jellyfin-media
               mountPath: /media
       volumes:
+        - name: jellyfin-config
+          hostPath:
+            path: /mnt/shared/pvcs/jellyfin-config
+        - name: jellyfin-cache
+          hostPath:
+            path: /mnt/shared/pvcs/jellyfin-cache
         - name: jellyfin-media
           hostPath:
             path: /mnt/media
-            readOnly: true
