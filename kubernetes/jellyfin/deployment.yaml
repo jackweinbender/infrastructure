@@ -34,10 +34,10 @@ spec:
       volumes:
         - name: jellyfin-config
           hostPath:
-            path: /media/shared/pvcs/jellyfin-config
+            path: /home/nas/shared/pvcs/jellyfin-config
         - name: jellyfin-cache
           hostPath:
-            path: /media/shared/pvcs/jellyfin-cache
+            path: /home/nas/shared/pvcs/jellyfin-cache
         - name: jellyfin-media
           hostPath:
-            path: /media/media
+            path: /home/nas/media
