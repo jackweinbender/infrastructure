@@ -28,10 +28,10 @@ spec:
       volumes:
         - name: jellyfin-config
           hostPath:
-            path: /mnt/shared/pvcs/jellyfin-config
+            path: /media/shared/pvcs/jellyfin-config
         - name: jellyfin-cache
           hostPath:
-            path: /mnt/shared/pvcs/jellyfin-cache
+            path: /media/shared/pvcs/jellyfin-cache
         - name: jellyfin-media
           hostPath:
-            path: /mnt/media
+            path: /media/media
