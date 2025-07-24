@@ -12,6 +12,12 @@ spec:
       labels:
         app: jellyfin
     spec:
+      securityContext:
+        # these settings ensure that Jellyfin runs with the correct user and group IDs
+        # which are necessary for file permissions on the host system
+        runAsUser: 101000
+        runAsGroup: 110000
+        fsGroup: 110000
       containers:
         - name: jellyfin
           image: jellyfin/jellyfin:latest
