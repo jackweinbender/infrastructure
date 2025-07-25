@@ -26,6 +26,9 @@ configMapGenerator:
     files:
       - config/postgresql.conf
 
+generatorOptions:
+  disableNameSuffixHash: true
+
 images:
   - name: pgvector/pgvector
     newTag: pg16
