@@ -21,14 +21,6 @@ spec:
       containers:
         - name: pgadmin
           image: dpage/pgadmin4:latest
-          securityContext:
-            # pgAdmin runs as user 5050 by default, which works well
-            # We just need to ensure the volume has correct permissions via init container
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: false
-            capabilities:
-              drop:
-                - ALL
           ports:
             - containerPort: 80
               name: http
