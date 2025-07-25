@@ -26,10 +26,6 @@ configMapGenerator:
     files:
       - config/postgresql.conf
 
-labels:
-  - pairs:
-      project: infrastructure/postgresql
-
 images:
   - name: pgvector/pgvector
     newTag: pg16
