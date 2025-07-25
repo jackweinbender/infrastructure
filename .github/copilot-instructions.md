@@ -44,6 +44,30 @@ This is a monorepo containing infrastructure-as-code for a home lab environment.
 - Configure resource limits and requests
 - Use GitOps patterns with ArgoCD for deployments
 
+#### Storage & NFS Permissions
+
+The storage architecture uses ZFS → NFS → Ubuntu VM → hostPath volumes. All applications using persistent storage must run with specific user/group IDs to access NFS-mounted directories:
+
+**Required Security Context for NFS Storage:**
+
+```yaml
+spec:
+  template:
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101000
+        runAsGroup: 110000
+        fsGroup: 110000
+```
+
+**Storage Mount Points:**
+
+- **Shared storage**: `/home/nas/shared/pvcs/` (application data, configs, databases)
+- **Media storage**: `/home/nas/media/` (media files, large datasets, content)
+
+**Important**: These user/group IDs (101000/110000) are required for write access to both NFS mount points and must be used consistently across all deployments.
+
 #### Secrets Management
 
 Sensitive data is managed using the custom `k8s-secrets-sync` operator (https://github.com/jackweinbender/k8s-secrets-sync) that syncs secrets from 1Password:
