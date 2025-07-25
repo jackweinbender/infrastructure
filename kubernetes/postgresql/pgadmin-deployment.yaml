@@ -16,16 +16,14 @@ spec:
         app: pgadmin
     spec:
       securityContext:
-        # These settings ensure that pgAdmin runs with the correct user and group IDs
-        # which are necessary for file permissions on the NFS-backed host system
-        runAsNonRoot: true
-        runAsUser: 101000
-        runAsGroup: 110000
+        # Set fsGroup to ensure volumes have correct group ownership for NFS
         fsGroup: 110000
       containers:
         - name: pgadmin
           image: dpage/pgadmin4:latest
           securityContext:
+            # pgAdmin runs as user 5050 by default, which works well
+            # We just need to ensure the volume has correct permissions via init container
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false
             capabilities:
