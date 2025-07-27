@@ -7,8 +7,6 @@ resources:
   - deployment-server.yaml
   - deployment-worker.yaml
   - deployment-redis.yaml
-  - deployment-db.yaml
   - service-server.yaml
   - service-redis.yaml
-  - service-db.yaml
   - httproute.yaml
