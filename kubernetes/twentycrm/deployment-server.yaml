@@ -23,35 +23,6 @@ spec:
     spec:
       securityContext:
         fsGroup: 110000
-      initContainers:
-        - name: wait-for-db
-          image: postgres:16-alpine
-          command:
-            - sh
-            - -c
-            - |
-              until pg_isready -h postgresql.postgresql.svc -p 5432 -U postgres; do
-                echo "Waiting for PostgreSQL to be ready..."
-                sleep 2
-              done
-              echo "PostgreSQL is ready!"
-              
-              # Check if twentycrm database exists, create if not
-              PGPASSWORD="$POSTGRES_PASSWORD" psql -h postgresql.postgresql.svc -p 5432 -U postgres -lqt | cut -d \| -f 1 | grep -qw twentycrm
-              if [ $? -ne 0 ]; then
-                echo "Creating twentycrm database..."
-                PGPASSWORD="$POSTGRES_PASSWORD" psql -h postgresql.postgresql.svc -p 5432 -U postgres -c "CREATE DATABASE twentycrm;"
-                PGPASSWORD="$POSTGRES_PASSWORD" psql -h postgresql.postgresql.svc -p 5432 -U postgres -d twentycrm -c "CREATE EXTENSION IF NOT EXISTS vector;"
-                echo "Database created successfully!"
-              else
-                echo "Database twentycrm already exists."
-              fi
-          env:
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-password
-                  key: password
       volumes:
         # Server-specific data: file uploads, user data, application state
         - name: twentycrm-server-data
