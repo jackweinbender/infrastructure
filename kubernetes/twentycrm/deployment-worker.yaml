@@ -44,7 +44,7 @@ spec:
               value: "https://twentycrm.k8s.weinbender.io:443"
             - name: PG_DATABASE_URL
               value: "postgres://postgres:$(POSTGRES_PASSWORD)@postgresql.postgresql.svc:5432/twentycrm"
-            - name: "POSTGRES_PASSWORD"
+            - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postgres-password
@@ -53,9 +53,9 @@ spec:
               value: "false" # it already runs on the server
             - name: STORAGE_TYPE
               value: "local"
-            - name: "REDIS_URL"
+            - name: REDIS_URL
               value: "redis://:$(REDIS_PASSWORD)@twentycrm-redis.twentycrm.svc:6379"
-            - name: "REDIS_PASSWORD"
+            - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: redis-password
