@@ -13,7 +13,7 @@ spec:
   source:
     path: kubernetes/twenty
     repoURL: git@github.com:jackweinbender/infrastructure.git
-    targetRevision: HEAD
+    targetRevision: feature/add-twenty-app
   syncPolicy:
     automated:
       prune: true
