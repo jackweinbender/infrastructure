@@ -32,7 +32,7 @@ spec:
                   name: postgres-password
                   key: password
             - name: PG_DATABASE_URL
-              value: "postgres://$(POSTGRES_ADMIN_USER):$(POSTGRES_ADMIN_PASSWORD)@postgresql.postgresql.svc.cluster.local:5432/twenty"
+              value: "postgres://$(POSTGRES_ADMIN_USER):$(POSTGRES_ADMIN_PASSWORD)@postgresql.postgresql.svc:5432/twenty"
             - name: FRONT_BASE_URL
               value: "https://twenty.weinbender.io"
             - name: SERVER_URL
