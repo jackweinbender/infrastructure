@@ -11,7 +11,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: kubernetes/twenty
+    path: kubernetes/twentycrm
     repoURL: git@github.com:jackweinbender/infrastructure.git
     targetRevision: feature/add-twenty-app
   syncPolicy:
