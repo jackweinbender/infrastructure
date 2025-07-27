@@ -54,12 +54,7 @@ spec:
             - name: PG_DATABASE_URL
               value: "postgres://$(POSTGRES_ADMIN_USER):$(POSTGRES_PASSWORD)@postgresql.postgresql.svc:5432/twentycrm"
             - name: REDIS_URL
-              value: "redis://:$(REDIS_PASSWORD)@twentycrm-redis.twentycrm.svc:6379"
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: redis-password
-                  key: password
+              value: "redis://twentycrm-redis.twentycrm.svc:6379"
             - name: SIGN_IN_PREFILLED
               value: "false"
             - name: STORAGE_TYPE
