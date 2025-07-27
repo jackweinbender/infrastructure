@@ -114,6 +114,77 @@ data:
   DB_USER: "app_user"
 ```
 
+#### ArgoCD Application Sync Policy
+
+All ArgoCD applications must use the standardized sync policy for consistent behavior and reliability. Use this exact sync policy configuration for all applications:
+
+**Standard Sync Policy:**
+
+```yaml
+syncPolicy:
+  syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
+    - Validate=true
+    - PruneLast=true
+  automated:
+    prune: true
+    selfHeal: true
+```
+
+**Sync Options Explanation:**
+
+- **CreateNamespace=true**: Automatically creates target namespaces if they don't exist
+- **ServerSideApply=true**: Uses server-side apply for better field ownership and conflict resolution with operators
+- **Validate=true**: Validates resources before applying to catch configuration errors early
+- **PruneLast=true**: Ensures resources are pruned after new ones are applied, preventing conflicts
+- **automated.prune=true**: Automatically removes resources no longer defined in Git
+- **automated.selfHeal=true**: Automatically corrects any configuration drift
+
+**Important**: Do not use `ApplyOutOfSyncOnly=true` as it can cause issues with interdependent resources and operators. ServerSideApply is preferred for this infrastructure setup.
+
+#### Resource-Specific Sync Policies
+
+For resources that need special handling, use annotations to override the application-level sync policy:
+
+**Force Secret Recreation:**
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sensitive-secret
+  annotations:
+    argocd.argoproj.io/sync-options: "Replace=true"
+    "k8s-secrets-sync.weinbender.io/provider": "op"
+    "k8s-secrets-sync.weinbender.io/secret-key": "password"
+    "k8s-secrets-sync.weinbender.io/ref": "op://vault/item/field"
+```
+
+**Common Resource-Level Sync Options:**
+
+- **`Replace=true`**: Delete and recreate the resource (useful for secrets that need fresh state)
+- **`Force=true`**: Force apply even with conflicts (use sparingly)
+- **`Validate=false`**: Skip validation for problematic resources
+- **`Prune=false`**: Prevent auto-deletion when removed from Git
+- **`SkipDryRunOnMissingResource=true`**: Skip dry-run validation for resources that don't support it
+
+**Sync Hooks for Complex Workflows:**
+
+```yaml
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: "PreSync"
+    argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
+```
+
+**Best Practices:**
+
+- Use `Replace=true` for secrets that need clean state
+- Use sync hooks for resources with complex dependencies
+- Avoid `Force=true` unless absolutely necessary
+- Test resource-specific policies in non-production first
+
 ## Security Considerations
 
 Sensitive data is managed via custom `k8s-secrets-sync` operator + 1Password:
