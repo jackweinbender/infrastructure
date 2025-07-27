@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: twenty
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: twenty
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: kubernetes/twenty
+    repoURL: git@github.com:jackweinbender/infrastructure.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
