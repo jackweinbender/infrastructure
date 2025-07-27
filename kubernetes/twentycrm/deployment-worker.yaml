@@ -55,6 +55,8 @@ spec:
               value: "true" # migrations should only run on the server
             - name: IS_SIGN_UP_DISABLED
               value: "false"
+            - name: IS_MULTIWORKSPACE_ENABLED
+              value: "true"
             - name: TELEMETRY_ENABLED
               value: "false"
             - name: STORAGE_TYPE

@@ -62,6 +62,8 @@ spec:
               value: "debug"
             - name: IS_SIGN_UP_DISABLED
               value: "false"
+            - name: IS_MULTIWORKSPACE_ENABLED
+              value: "true"
             - name: TELEMETRY_ENABLED
               value: "false"
             - name: SIGN_IN_PREFILLED
