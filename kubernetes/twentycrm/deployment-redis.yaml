@@ -34,10 +34,19 @@ spec:
           image: redis/redis-stack-server:latest
           imagePullPolicy: Always
           command: ["redis-server"]
-          args: ["--maxmemory-policy", "noeviction"]
+          args:
+            - --requirepass
+            - $(REDIS_PASSWORD)
+            - --maxmemory-policy
+            - noeviction
           env:
             - name: PORT
               value: "6379"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-password
+                  key: password
           ports:
             - containerPort: 6379
               name: redis

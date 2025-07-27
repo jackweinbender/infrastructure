@@ -45,9 +45,19 @@ spec:
             - name: SERVER_URL
               value: "https://crm.example.com:443"
             - name: "PG_DATABASE_URL"
-              value: "postgres://postgres:postgres@postgresql.postgresql.svc:5432/twenty"
+              value: "postgres://postgres:$(POSTGRES_PASSWORD)@postgresql.postgresql.svc:5432/twenty"
+            - name: "POSTGRES_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-password
+                  key: password
             - name: "REDIS_URL"
-              value: "redis://twentycrm-redis.twentycrm.svc:6379"
+              value: "redis://:$(REDIS_PASSWORD)@twentycrm-redis.twentycrm.svc:6379"
+            - name: "REDIS_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: redis-password
+                  key: password
             - name: SIGN_IN_PREFILLED
               value: "false"
             - name: STORAGE_TYPE
