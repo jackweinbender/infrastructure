@@ -5,6 +5,7 @@ This directory contains Kubernetes manifests for deploying [Twenty CRM](https://
 ## Overview
 
 Twenty CRM is deployed as a multi-component application consisting of:
+
 - **Server**: Main application backend (API, GraphQL, authentication)
 - **Worker**: Background job processing (emails, data sync, automation)
 - **Redis**: Session storage and job queue management
@@ -13,18 +14,22 @@ Twenty CRM is deployed as a multi-component application consisting of:
 ## Important Configuration Notes
 
 ### Secret Management
+
 - **Critical**: Do NOT include `data: {}` blocks in secret definitions
 - **Reason**: The k8s-secrets-sync operator automatically populates the data field
 - **Pattern**: Uses 1Password integration for secure credential management
 
 ### Database Configuration
+
 - **Service**: `twentycrm-db.twentycrm.svc:5432` (dedicated instance)
 - **Database Name**: `twentycrm`
 - **Image**: `twentycrm/twenty-postgres-spilo:latest`
 - **Migration Strategy**: Server handles schema initialization, worker skips migrations
 
 ### Storage Requirements
+
 All deployments require NFS-compatible security context:
+
 ```yaml
 securityContext:
   runAsNonRoot: true
@@ -36,6 +41,7 @@ securityContext:
 ## Components
 
 ### Core Services
+
 - **Namespace**: `twentycrm` - Isolated namespace for the application
 - **Server Deployment**: Main Twenty CRM application server
 - **Worker Deployment**: Background job processor for async tasks
@@ -45,7 +51,9 @@ securityContext:
 - **Secret**: Database credentials managed via k8s-secrets-sync and 1Password
 
 ### Storage Architecture
+
 All components use NFS-backed hostPath volumes with proper security context:
+
 - **Server Data**: `/home/nas/shared/pvcs/twentycrm-server` → `/app/packages/twenty-server/.local-storage`
   - File uploads, user data, application state
 - **Docker Data**: `/home/nas/shared/pvcs/twentycrm-docker` → `/app/docker-data`
@@ -56,18 +64,22 @@ All components use NFS-backed hostPath volumes with proper security context:
 ## Configuration
 
 ### Database Connection
+
 - **Database**: Uses shared PostgreSQL instance in `postgresql` namespace
 - **Connection**: `postgresql.postgresql.svc:5432/twenty`
 - **Credentials**: Managed via 1Password secret sync
 - **Migrations**: Handled automatically by the server component
 
 ### Redis Connection
+
 - **Service**: Local Redis instance within `twentycrm` namespace
 - **Connection**: `twentycrm-redis.twentycrm.svc:6379`
 - **Usage**: Session storage, job queue, caching
 
 ### Environment Variables
+
 Key configuration managed through environment variables:
+
 - `SERVER_URL`: External application URL
 - `PG_DATABASE_URL`: PostgreSQL connection string
 - `REDIS_URL`: Redis connection string
@@ -75,7 +87,9 @@ Key configuration managed through environment variables:
 - `APP_SECRET`: Application secret key from 1Password
 
 ### Security Context
+
 All pods run with NFS-compatible security context:
+
 ```yaml
 securityContext:
   runAsNonRoot: true
@@ -94,17 +108,20 @@ securityContext:
 ## Prerequisites
 
 1. **Database Setup**:
+
    - PostgreSQL instance running in `postgresql` namespace
    - Database `twenty` created and accessible
    - 1Password secret `op://microk8s/postgresql-db/password` configured
 
 2. **Storage**:
+
    - NFS storage directories with proper permissions:
      - `/home/nas/shared/pvcs/twentycrm-server`
      - `/home/nas/shared/pvcs/twentycrm-docker`
      - `/home/nas/shared/pvcs/twentycrm-redis`
 
 3. **Secrets Management**:
+
    - k8s-secrets-sync operator deployed and configured
    - 1Password vault access for secret synchronization
 
@@ -117,6 +134,7 @@ securityContext:
 This application is managed by ArgoCD with automated synchronization. Changes to this directory will be automatically deployed to the cluster.
 
 ### Manual Operations
+
 ```bash
 # Check deployment status
 kubectl get pods -n twentycrm
@@ -133,28 +151,33 @@ kubectl exec -n twentycrm deployment/twentycrm-server -- ls -la /app/packages/tw
 ## Twenty CRM Documentation
 
 ### Core Documentation
+
 - **Official Documentation**: https://twenty.com/developers
 - **Self-Hosting Guide**: https://twenty.com/developers/self-hosting/docker-compose
 - **Architecture Overview**: https://twenty.com/developers/frontend/overview
 
 ### Technical References
+
 - **Environment Variables**: https://twenty.com/developers/self-hosting/environment-variables
 - **Storage Configuration**: https://twenty.com/developers/self-hosting/storage
 - **Database Setup**: https://twenty.com/developers/self-hosting/database
 - **Redis Configuration**: https://twenty.com/developers/self-hosting/redis
 
 ### Kubernetes Specific
+
 - **Official K8s Examples**: https://github.com/twentyhq/twenty/tree/main/packages/twenty-docker/k8s
 - **Docker Deployment**: https://github.com/twentyhq/twenty/tree/main/packages/twenty-docker
 - **Worker Configuration**: https://twenty.com/developers/backend/worker
 
 ### API & Development
+
 - **GraphQL API**: https://twenty.com/developers/backend/graphql
 - **REST API**: https://twenty.com/developers/backend/rest-api
 - **Authentication**: https://twenty.com/developers/backend/authentication
 - **File Upload**: https://twenty.com/developers/backend/file-upload
 
 ### Troubleshooting
+
 - **Common Issues**: https://twenty.com/developers/self-hosting/troubleshooting
 - **Performance**: https://twenty.com/developers/self-hosting/performance
 - **Monitoring**: https://twenty.com/developers/self-hosting/monitoring
