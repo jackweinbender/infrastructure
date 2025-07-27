@@ -41,7 +41,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: SERVER_URL
-              value: "https://twentycrm.k8s.weinbender.io:443"
+              value: "https://app.twentycrm.k8s.weinbender.io:443"
             - name: POSTGRES_ADMIN_USER
               value: "postgres"
             - name: POSTGRES_PASSWORD
