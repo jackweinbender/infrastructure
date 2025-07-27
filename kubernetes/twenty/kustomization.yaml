@@ -4,6 +4,9 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - secret.yaml
-  - deployment.yaml
-  - service.yaml
+  - deployment-server.yaml
+  - deployment-worker.yaml
+  - deployment-redis.yaml
+  - service-server.yaml
+  - service-redis.yaml
   - httproute.yaml

@@ -22,7 +22,19 @@ spec:
         app: twentycrm-server
     spec:
       securityContext:
+        runAsNonRoot: true
         fsGroup: 110000
+      volumes:
+        # Server-specific data: file uploads, user data, application state
+        - name: twentycrm-server-data
+          hostPath:
+            path: /home/nas/shared/pvcs/twentycrm-server
+            type: DirectoryOrCreate
+        # General application data: temporary files, logs, build artifacts
+        - name: twentycrm-docker-data
+          hostPath:
+            path: /home/nas/shared/pvcs/twentycrm-docker
+            type: DirectoryOrCreate
       containers:
         - name: twentycrm
           image: twentycrm/twenty:latest
@@ -33,9 +45,9 @@ spec:
             - name: SERVER_URL
               value: "https://crm.example.com:443"
             - name: "PG_DATABASE_URL"
-              value: "postgres://postgres:postgres@twentycrm-db.twentycrm.svc.cluster.local/default"
+              value: "postgres://postgres:postgres@postgresql.postgresql.svc:5432/twenty"
             - name: "REDIS_URL"
-              value: "redis://twentycrm-redis.twentycrm.svc.cluster.local:6379"
+              value: "redis://twentycrm-redis.twentycrm.svc:6379"
             - name: SIGN_IN_PREFILLED
               value: "false"
             - name: STORAGE_TYPE
@@ -63,8 +75,10 @@ spec:
           stdin: true
           tty: true
           volumeMounts:
+            # General application data storage
             - mountPath: /app/docker-data
               name: twentycrm-docker-data
+            # Server-specific data: file uploads, user data
             - mountPath: /app/packages/twenty-server/.local-storage
               name: twentycrm-server-data
       dnsPolicy: ClusterFirst
