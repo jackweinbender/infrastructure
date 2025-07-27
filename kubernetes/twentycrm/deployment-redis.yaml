@@ -35,6 +35,8 @@ spec:
           imagePullPolicy: Always
           command: ["redis-server"]
           args:
+            - --protected-mode
+            - "no"
             - --maxmemory-policy
             - noeviction
           env:
