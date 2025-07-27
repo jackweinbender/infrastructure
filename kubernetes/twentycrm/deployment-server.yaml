@@ -22,7 +22,6 @@ spec:
         app: twentycrm-server
     spec:
       securityContext:
-        runAsNonRoot: true
         fsGroup: 110000
       initContainers:
         - name: wait-for-db
@@ -36,7 +35,7 @@ spec:
                 sleep 2
               done
               echo "PostgreSQL is ready!"
-              
+
               # Check if twentycrm database exists, create if not
               PGPASSWORD="$POSTGRES_PASSWORD" psql -h postgresql.postgresql.svc -p 5432 -U postgres -lqt | cut -d \| -f 1 | grep -qw twentycrm
               if [ $? -ne 0 ]; then
