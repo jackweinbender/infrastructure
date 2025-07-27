@@ -2,8 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: twentycrm-worker
-  name: twentycrm-worker
+    app: twentycrm-server
+  name: twentycrm-server
   namespace: twentycrm
 spec:
   progressDeadlineSeconds: 600
@@ -15,11 +15,11 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: twentycrm-worker
+      app: twentycrm-server
   template:
     metadata:
       labels:
-        app: twentycrm-worker
+        app: twentycrm-server
     spec:
       securityContext:
         runAsNonRoot: true
@@ -40,30 +40,37 @@ spec:
           image: twentycrm/twenty:latest
           imagePullPolicy: Always
           env:
+            - name: NODE_PORT
+              value: "3000"
             - name: SERVER_URL
               value: "https://crm.example.com:443"
-            - name: PG_DATABASE_URL
+            - name: "PG_DATABASE_URL"
               value: "postgres://postgres:postgres@postgresql.postgresql.svc:5432/twenty"
-            - name: DISABLE_DB_MIGRATIONS
-              value: "false" # it already runs on the server
-            - name: STORAGE_TYPE
-              value: "local"
             - name: "REDIS_URL"
               value: "redis://twentycrm-redis.twentycrm.svc:6379"
+            - name: SIGN_IN_PREFILLED
+              value: "false"
+            - name: STORAGE_TYPE
+              value: "local"
+            - name: "ACCESS_TOKEN_EXPIRES_IN"
+              value: "7d"
+            - name: "LOGIN_TOKEN_EXPIRES_IN"
+              value: "1h"
             - name: APP_SECRET
               valueFrom:
                 secretKeyRef:
                   name: tokens
                   key: accessToken
-          command:
-            - yarn
-            - worker:prod
+          ports:
+            - containerPort: 3000
+              name: http-tcp
+              protocol: TCP
           resources:
             requests:
-              memory: "1024Mi"
+              memory: "256Mi"
               cpu: "250m"
             limits:
-              memory: "2048Mi"
+              memory: "1024Mi"
               cpu: "1000m"
           stdin: true
           tty: true

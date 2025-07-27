@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: twentycrm-redis
+  name: twentycrm-redis
+  namespace: twentycrm
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: twentycrm-redis
+  template:
+    metadata:
+      labels:
+        app: twentycrm-redis
+    spec:
+      securityContext:
+        fsGroup: 110000
+      volumes:
+        # Redis data persistence: cache data, session storage
+        - name: redis-data
+          hostPath:
+            path: /home/nas/shared/pvcs/twentycrm-redis
+            type: DirectoryOrCreate
+      containers:
+        - name: redis
+          image: redis/redis-stack-server:latest
+          imagePullPolicy: Always
+          args: ["--maxmemory-policy", "noeviction"]
+          env:
+            - name: PORT
+              value: "6379"
+          ports:
+            - containerPort: 6379
+              name: redis
+              protocol: TCP
+          resources:
+            requests:
+              memory: "1024Mi"
+              cpu: "250m"
+            limits:
+              memory: "2048Mi"
+              cpu: "500m"
+          volumeMounts:
+            # Redis data directory: persistent cache and session data
+            - mountPath: /data
+              name: redis-data
+
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
