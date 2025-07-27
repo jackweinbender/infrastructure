@@ -6,7 +6,7 @@ metadata:
 spec:
   hostnames:
     - twentycrm.k8s.weinbender.io
-    - app.twentycrm.k8s.weinbender.io
+    - *.twentycrm.k8s.weinbender.io
   parentRefs:
     - name: cluster-gateway
       namespace: envoy-gateway-system
