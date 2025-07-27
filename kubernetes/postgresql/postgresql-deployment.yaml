@@ -16,22 +16,11 @@ spec:
         app: postgresql
     spec:
       securityContext:
-        # These settings ensure that PostgreSQL runs with the correct user and group IDs
-        # which are necessary for file permissions on the NFS-backed host system
-        runAsNonRoot: true
-        runAsUser: 101000
-        runAsGroup: 110000
         fsGroup: 110000
       containers:
         - name: postgresql
           # Using pgvector image which includes PostgreSQL with vector extension
           image: pgvector/pgvector:pg16
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: false
-            capabilities:
-              drop:
-                - ALL
           ports:
             - containerPort: 5432
               name: postgresql
