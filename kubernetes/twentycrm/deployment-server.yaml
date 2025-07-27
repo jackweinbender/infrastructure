@@ -30,27 +30,16 @@ spec:
             - sh
             - -c
             - |
-              until pg_isready -h postgresql.postgresql.svc -p 5432 -U postgres; do
+              until pg_isready -h twentycrm-db.twentycrm.svc -p 5432 -U postgres; do
                 echo "Waiting for PostgreSQL to be ready..."
                 sleep 2
               done
               echo "PostgreSQL is ready!"
-
-              # Check if twentycrm database exists, create if not
-              PGPASSWORD="$POSTGRES_PASSWORD" psql -h postgresql.postgresql.svc -p 5432 -U postgres -lqt | cut -d \| -f 1 | grep -qw twentycrm
-              if [ $? -ne 0 ]; then
-                echo "Creating twentycrm database..."
-                PGPASSWORD="$POSTGRES_PASSWORD" psql -h postgresql.postgresql.svc -p 5432 -U postgres -c "CREATE DATABASE twentycrm;"
-                PGPASSWORD="$POSTGRES_PASSWORD" psql -h postgresql.postgresql.svc -p 5432 -U postgres -d twentycrm -c "CREATE EXTENSION IF NOT EXISTS vector;"
-                echo "Database created successfully!"
-              else
-                echo "Database twentycrm already exists."
-              fi
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-password
+                  name: twentycrm-db-password
                   key: password
       volumes:
         # Server-specific data: file uploads, user data, application state
@@ -77,10 +66,10 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-password
+                  name: twentycrm-db-password
                   key: password
             - name: PG_DATABASE_URL
-              value: "postgres://$(POSTGRES_ADMIN_USER):$(POSTGRES_PASSWORD)@postgresql.postgresql.svc:5432/twentycrm"
+              value: "postgres://$(POSTGRES_ADMIN_USER):$(POSTGRES_PASSWORD)@twentycrm-db.twentycrm.svc:5432/twentycrm"
             - name: REDIS_URL
               value: "redis://twentycrm-redis.twentycrm.svc:6379"
             - name: DISABLE_DB_MIGRATIONS

@@ -43,11 +43,11 @@ spec:
             - name: SERVER_URL
               value: "https://twentycrm.k8s.weinbender.io:443"
             - name: PG_DATABASE_URL
-              value: "postgres://postgres:$(POSTGRES_PASSWORD)@postgresql.postgresql.svc:5432/twentycrm"
+              value: "postgres://postgres:$(POSTGRES_PASSWORD)@twentycrm-db.twentycrm.svc:5432/twentycrm"
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-password
+                  name: twentycrm-db-password
                   key: password
             - name: DISABLE_DB_MIGRATIONS
               value: "true" # migrations should only run on the server

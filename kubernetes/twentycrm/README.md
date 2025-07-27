@@ -8,6 +8,30 @@ Twenty CRM is deployed as a multi-component application consisting of:
 - **Server**: Main application backend (API, GraphQL, authentication)
 - **Worker**: Background job processing (emails, data sync, automation)
 - **Redis**: Session storage and job queue management
+- **Database**: Dedicated PostgreSQL instance with pgvector support
+
+## Important Configuration Notes
+
+### Secret Management
+- **Critical**: Do NOT include `data: {}` blocks in secret definitions
+- **Reason**: The k8s-secrets-sync operator automatically populates the data field
+- **Pattern**: Uses 1Password integration for secure credential management
+
+### Database Configuration
+- **Service**: `twentycrm-db.twentycrm.svc:5432` (dedicated instance)
+- **Database Name**: `twentycrm`
+- **Image**: `twentycrm/twenty-postgres-spilo:latest`
+- **Migration Strategy**: Server handles schema initialization, worker skips migrations
+
+### Storage Requirements
+All deployments require NFS-compatible security context:
+```yaml
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 101000
+  runAsGroup: 110000
+  fsGroup: 110000
+```
 
 ## Components
 
