@@ -22,7 +22,6 @@ spec:
         app: twentycrm-redis
     spec:
       securityContext:
-        runAsNonRoot: true
         fsGroup: 110000
       volumes:
         # Redis data persistence: cache data, session storage
