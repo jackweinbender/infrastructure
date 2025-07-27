@@ -16,42 +16,39 @@ spec:
         app: twenty
     spec:
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 101000
-        runAsGroup: 110000
         fsGroup: 110000
       containers:
-      - name: twenty
-        image: twentycrm/twenty:latest
-        ports:
-        - containerPort: 3000
-          name: http
-        env:
-        - name: POSTGRES_ADMIN_USER
-          value: "postgres"
-        - name: POSTGRES_ADMIN_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: twenty-postgres-password
-              key: password
-        - name: PG_DATABASE_URL
-          value: "postgres://$(POSTGRES_ADMIN_USER):$(POSTGRES_ADMIN_PASSWORD)@postgresql.postgresql.svc.cluster.local:5432/twenty"
-        - name: FRONT_BASE_URL
-          value: "https://twenty.weinbender.io"
-        - name: SERVER_URL
-          value: "https://twenty.weinbender.io:443"
-        volumeMounts:
-        - name: twenty-data
-          mountPath: /app/.local-storage
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "250m"
-          limits:
-            memory: "1Gi"
-            cpu: "500m"
+        - name: twenty
+          image: twentycrm/twenty:latest
+          ports:
+            - containerPort: 3000
+              name: http
+          env:
+            - name: POSTGRES_ADMIN_USER
+              value: "postgres"
+            - name: POSTGRES_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-password
+                  key: password
+            - name: PG_DATABASE_URL
+              value: "postgres://$(POSTGRES_ADMIN_USER):$(POSTGRES_ADMIN_PASSWORD)@postgresql.postgresql.svc.cluster.local:5432/twenty"
+            - name: FRONT_BASE_URL
+              value: "https://twenty.weinbender.io"
+            - name: SERVER_URL
+              value: "https://twenty.weinbender.io:443"
+          volumeMounts:
+            - name: twenty-data
+              mountPath: /app/.local-storage
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
       volumes:
-      - name: twenty-data
-        hostPath:
-          path: /home/nas/shared/pvcs/twenty
-          type: DirectoryOrCreate
+        - name: twenty-data
+          hostPath:
+            path: /home/nas/shared/pvcs/twenty
+            type: DirectoryOrCreate
