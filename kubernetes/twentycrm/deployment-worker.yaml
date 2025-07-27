@@ -50,7 +50,11 @@ spec:
                   name: postgres-password
                   key: password
             - name: DISABLE_DB_MIGRATIONS
-              value: "false" # it already runs on the server
+              value: "true" # migrations should only run on the server
+            - name: IS_SIGN_UP_DISABLED
+              value: "false"
+            - name: TELEMETRY_ENABLED
+              value: "false"
             - name: STORAGE_TYPE
               value: "local"
             - name: REDIS_URL
