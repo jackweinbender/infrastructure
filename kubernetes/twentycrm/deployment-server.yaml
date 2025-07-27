@@ -44,13 +44,15 @@ spec:
               value: "3000"
             - name: SERVER_URL
               value: "https://crm.example.com:443"
-            - name: PG_DATABASE_URL
-              value: "postgres://postgres:$(POSTGRES_PASSWORD)@postgresql.postgresql.svc:5432/twentycrm"
+            - name: POSTGRES_ADMIN_USER
+              value: "postgres"
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postgres-password
                   key: password
+            - name: PG_DATABASE_URL
+              value: "postgres://$(POSTGRES_ADMIN_USER):$(POSTGRES_PASSWORD)@postgresql.postgresql.svc:5432/twentycrm"
             - name: REDIS_URL
               value: "redis://:$(REDIS_PASSWORD)@twentycrm-redis.twentycrm.svc:6379"
             - name: REDIS_PASSWORD
