@@ -43,7 +43,7 @@ spec:
             - name: SERVER_URL
               value: "https://crm.example.com:443"
             - name: PG_DATABASE_URL
-              value: "postgres://postgres:$(POSTGRES_PASSWORD)@postgresql.postgresql.svc:5432/twenty"
+              value: "postgres://postgres:$(POSTGRES_PASSWORD)@postgresql.postgresql.svc:5432/twentycrm"
             - name: "POSTGRES_PASSWORD"
               valueFrom:
                 secretKeyRef:
