@@ -22,9 +22,6 @@ spec:
         app: twentycrm-db
     spec:
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 101000
-        runAsGroup: 110000
         fsGroup: 110000
       volumes:
         - name: twentycrm-db-data
