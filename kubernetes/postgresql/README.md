@@ -47,6 +47,28 @@ Uses hostPath volumes for single-node cluster:
 - PostgreSQL data: `/home/nas/shared/pvcs/postgresql-data`
 - pgAdmin data: `/home/nas/shared/pvcs/pgadmin-data`
 
+### Backup Infrastructure
+
+Automated daily backups to AWS S3 via Kubernetes CronJob:
+
+- **S3 Bucket**: `k8s-weinbender-io-postgres` (managed via Terraform)
+- **Schedule**: Daily at 3am US/Central timezone
+- **Method**: `pg_dump` with compression for all databases
+- **Retention**: Manual cleanup (no automatic deletion)
+- **Storage**: AWS Intelligent Tiering for cost optimization
+- **Security**: IAM user with bucket-scoped read/write permissions
+
+The backup infrastructure includes:
+
+- `backup-secrets.yaml`: S3 credentials from 1Password
+- `backup-configmap.yaml`: S3 bucket and backup configuration
+- `backup-script-configmap.yaml`: Backup script with error handling
+- `backup-cronjob.yaml`: Scheduled backup execution
+
+Backup files are stored with timestamp format: `postgres-backup-YYYYMMDD-HHMMSS.sql.gz`
+
+For backup infrastructure setup, see: `terraform/aws/k8s-weinbender-io-postgres.tf`
+
 ## Usage
 
 ### Database Connection

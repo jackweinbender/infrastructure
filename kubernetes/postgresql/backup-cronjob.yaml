@@ -1,0 +1,105 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgresql-backup
+  namespace: postgresql
+  labels:
+    app: postgresql-backup
+spec:
+  # Run every day at 3:00 AM US/Central (8:00 AM UTC during CST, 7:00 AM UTC during CDT)
+  # Using 8:00 AM UTC to cover CST (adjust manually for CDT if needed)
+  schedule: "0 8 * * *"
+  timeZone: "US/Central"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: postgresql-backup
+        spec:
+          restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 101000
+            runAsGroup: 110000
+            fsGroup: 110000
+          containers:
+            - name: backup
+              # Using postgres image for pg_dump and AWS CLI
+              image: postgres:17
+              command:
+                - /bin/bash
+                - /scripts/backup.sh
+              env:
+                # PostgreSQL connection
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgresql-password
+                      key: password
+                # S3 credentials
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3-backup-credentials
+                      key: access-key-id
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3-backup-secret-key
+                      key: secret-access-key
+              envFrom:
+                - configMapRef:
+                    name: backup-config
+              volumeMounts:
+                - name: backup-script
+                  mountPath: /scripts
+                  readOnly: true
+                - name: shared-bin
+                  mountPath: /usr/local/bin
+                - name: shared-lib
+                  mountPath: /usr/local/lib/python3.11/dist-packages
+              resources:
+                requests:
+                  memory: "128Mi"
+                  cpu: "100m"
+                limits:
+                  memory: "512Mi"
+                  cpu: "500m"
+          # Add init container to install AWS CLI
+          initContainers:
+            - name: install-aws-cli
+              image: postgres:17
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  apt-get update
+                  apt-get install -y awscli
+                  # Copy aws binary to shared volume for main container
+                  cp /usr/bin/aws /shared-bin/
+                  cp -r /usr/lib/python3/dist-packages/aws* /shared-lib/
+              volumeMounts:
+                - name: shared-bin
+                  mountPath: /shared-bin
+                - name: shared-lib
+                  mountPath: /shared-lib
+              resources:
+                requests:
+                  memory: "64Mi"
+                  cpu: "100m"
+                limits:
+                  memory: "256Mi"
+                  cpu: "500m"
+          volumes:
+            - name: backup-script
+              configMap:
+                name: backup-script
+                defaultMode: 0755
+            - name: shared-bin
+              emptyDir: {}
+            - name: shared-lib
+              emptyDir: {}

@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backup-script
+  namespace: postgresql
+data:
+  backup.sh: |
+    #!/bin/bash
+    set -euo pipefail
+
+    # Set timezone to US/Central
+    export TZ=US/Central
+
+    # Generate timestamp for backup filename
+    TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+    BACKUP_FILE="postgresql_backup_${TIMESTAMP}.sql.gz"
+
+    echo "$(date): Starting PostgreSQL backup..."
+
+    # Create pg_dump and compress it
+    echo "$(date): Creating database dump..."
+    pg_dump -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d "$POSTGRES_DB" \
+      --verbose --no-password --format=custom | gzip > "/tmp/${BACKUP_FILE}"
+
+    # Check if backup file was created and has content
+    if [[ ! -f "/tmp/${BACKUP_FILE}" ]] || [[ ! -s "/tmp/${BACKUP_FILE}" ]]; then
+      echo "$(date): ERROR: Backup file was not created or is empty!"
+      exit 1
+    fi
+
+    BACKUP_SIZE=$(du -h "/tmp/${BACKUP_FILE}" | cut -f1)
+    echo "$(date): Backup created successfully. Size: ${BACKUP_SIZE}"
+
+    # Upload to S3
+    echo "$(date): Uploading backup to S3..."
+    aws s3 cp "/tmp/${BACKUP_FILE}" "s3://${S3_BUCKET}/${S3_PREFIX}${BACKUP_FILE}" \
+      --region "$S3_REGION" \
+      --storage-class STANDARD_IA
+
+    if [[ $? -eq 0 ]]; then
+      echo "$(date): Backup uploaded successfully to s3://${S3_BUCKET}/${S3_PREFIX}${BACKUP_FILE}"
+    else
+      echo "$(date): ERROR: Failed to upload backup to S3!"
+      exit 1
+    fi
+
+    # Clean up local backup file
+    rm -f "/tmp/${BACKUP_FILE}"
+    echo "$(date): Local backup file cleaned up"
+
+    # Optional: Clean up old backups (keep last 30 days)
+    echo "$(date): Cleaning up old backups (keeping last 30 days)..."
+    CUTOFF_DATE=$(date -d '30 days ago' +%Y%m%d)
+    aws s3 ls "s3://${S3_BUCKET}/${S3_PREFIX}" | while read -r line; do
+      BACKUP_DATE=$(echo "$line" | grep -oE 'postgresql_backup_[0-9]{8}' | grep -oE '[0-9]{8}' || true)
+      if [[ -n "$BACKUP_DATE" ]] && [[ "$BACKUP_DATE" -lt "$CUTOFF_DATE" ]]; then
+        OLD_FILE=$(echo "$line" | awk '{print $4}')
+        echo "$(date): Deleting old backup: ${OLD_FILE}"
+        aws s3 rm "s3://${S3_BUCKET}/${S3_PREFIX}${OLD_FILE}" --region "$S3_REGION"
+      fi
+    done
+
+    echo "$(date): Backup process completed successfully!"
