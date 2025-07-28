@@ -2,13 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - namespace.yaml
   - secret.yaml
   - postgresql-deployment.yaml
   - postgresql-service.yaml
-  - pgadmin-deployment.yaml
-  - pgadmin-service.yaml
-  - httproute.yaml
 
 configMapGenerator:
   - name: postgresql-config
@@ -16,9 +12,6 @@ configMapGenerator:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
       - PGDATA=/var/lib/postgresql/data/pgdata
-      - PGADMIN_DEFAULT_EMAIL=jack@weinbender.io
-      - PGADMIN_CONFIG_SERVER_MODE=False
-      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
   - name: postgresql-init
     files:
       - config/init.sql
@@ -32,5 +25,3 @@ generatorOptions:
 images:
   - name: pgvector/pgvector
     newTag: pg16
-  - name: dpage/pgadmin4
-    newTag: latest
