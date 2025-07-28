@@ -7,14 +7,6 @@ resources:
   - postgresql-service.yaml
 
 configMapGenerator:
-  - name: postgresql-config
-    literals:
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
-      - PGDATA=/var/lib/postgresql/data/pgdata
-  - name: postgresql-init
-    files:
-      - config/init.sql
   - name: postgresql-conf
     files:
       - config/postgresql.conf
@@ -24,4 +16,4 @@ generatorOptions:
 
 images:
   - name: pgvector/pgvector
-    newTag: pg16
+    newTag: pg17

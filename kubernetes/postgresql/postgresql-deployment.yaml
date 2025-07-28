@@ -23,40 +23,22 @@ spec:
       containers:
         - name: postgresql
           # Using pgvector image which includes PostgreSQL with vector extension
-          image: pgvector/pgvector:pg16
+          image: pgvector/pgvector
           ports:
             - containerPort: 5432
-              name: postgresql
           env:
-            - name: POSTGRES_USER
-              valueFrom:
-                configMapKeyRef:
-                  name: postgresql-config
-                  key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postgresql-password
                   key: password
-            - name: POSTGRES_DB
-              valueFrom:
-                configMapKeyRef:
-                  name: postgresql-config
-                  key: POSTGRES_DB
             - name: PGDATA
-              valueFrom:
-                configMapKeyRef:
-                  name: postgresql-config
-                  key: PGDATA
+              value: /var/lib/postgresql/data/pgdata
             - name: POSTGRES_INITDB_ARGS
               value: "--auth-host=md5"
-            - name: POSTGRES_CONFIG_FILE
-              value: "/etc/postgresql/postgresql.conf"
           volumeMounts:
             - name: postgresql-data
               mountPath: /var/lib/postgresql/data
-            - name: postgresql-init
-              mountPath: /docker-entrypoint-initdb.d
             - name: postgresql-conf
               mountPath: /etc/postgresql/postgresql.conf
               subPath: postgresql.conf
@@ -66,13 +48,13 @@ spec:
               cpu: "250m"
             limits:
               memory: "1Gi"
-              cpu: "500m"
+              cpu: "1000m"
           livenessProbe:
             exec:
               command:
                 - /bin/sh
                 - -c
-                - exec pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB" -h 127.0.0.1 -p 5432
+                - exec pg_isready -U postgres -d postgres -h 127.0.0.1 -p 5432
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
@@ -81,7 +63,7 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - exec pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB" -h 127.0.0.1 -p 5432
+                - exec pg_isready -U postgres -d postgres -h 127.0.0.1 -p 5432
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -89,9 +71,6 @@ spec:
         - name: postgresql-data
           hostPath:
             path: /home/nas/shared/pvcs/postgresql-data
-        - name: postgresql-init
-          configMap:
-            name: postgresql-init
         - name: postgresql-conf
           configMap:
             name: postgresql-conf
