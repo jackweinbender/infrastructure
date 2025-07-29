@@ -8,9 +8,12 @@ spec:
   parentRefs:
     - name: cluster-gateway
       namespace: envoy-gateway-system
+      kind: Gateway
+      group: gateway.networking.k8s.io
   rules:
     - backendRefs:
         - kind: Service
           name: argocd-server
           namespace: argocd
           port: 80
+          group: ""
