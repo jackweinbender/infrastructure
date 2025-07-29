@@ -17,3 +17,8 @@ spec:
           namespace: argocd
           port: 80
           group: ""
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
