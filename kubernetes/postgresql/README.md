@@ -1,11 +1,10 @@
 # PostgreSQL with pgvector
 
-Self-hosted PostgreSQL 16 with pgvector extension and pgAdmin web interface.
+Self-hosted PostgreSQL with pgvector extension for vector similarity search.
 
 ## Components
 
-- **PostgreSQL**: `pgvector/pgvector:pg16` with vector similarity search
-- **pgAdmin**: Web interface accessible at `pgadmin.k8s.weinbender.io`
+- **PostgreSQL**: `pgvector/pgvector:latest` with vector similarity search capabilities
 
 ## Configuration
 
@@ -23,14 +22,13 @@ annotations:
 Required 1Password items:
 
 - `postgresql-db` (database password)
-- `pgadmin-web` (web interface password)
+- `s3-backup-credentials` (S3 access credentials with `access-key-id` and `secret-access-key` fields)
 
 ### Configuration Management
 
 Non-sensitive configuration is managed via Kustomize ConfigMap generators in `kustomization.yaml`:
 
-- **PostgreSQL settings**: Database user, name, and data directory
-- **pgAdmin settings**: Email and server mode configuration
+- **PostgreSQL settings**: Environment variables and data directory configuration
 - **Initialization script**: `config/init.sql` for pgvector extension setup
 - **Performance tuning**: `config/postgresql.conf` for optimized settings
 
@@ -45,14 +43,13 @@ Non-sensitive configuration is managed via Kustomize ConfigMap generators in `ku
 Uses hostPath volumes for single-node cluster:
 
 - PostgreSQL data: `/home/nas/shared/pvcs/postgresql-data`
-- pgAdmin data: `/home/nas/shared/pvcs/pgadmin-data`
 
 ### Backup Infrastructure
 
 Automated daily backups to AWS S3 via Kubernetes CronJob:
 
 - **S3 Bucket**: `k8s-weinbender-io-postgres` (managed via Terraform)
-- **Schedule**: Daily at 3am US/Central timezone
+- **Schedule**: Daily at 3am America/Chicago (Central Time)
 - **Method**: `pg_dump` with compression for all databases
 - **Retention**: Manual cleanup (no automatic deletion)
 - **Storage**: AWS Intelligent Tiering for cost optimization
@@ -60,7 +57,7 @@ Automated daily backups to AWS S3 via Kubernetes CronJob:
 
 The backup infrastructure includes:
 
-- `backup-secrets.yaml`: S3 credentials from 1Password
+- `backup-secrets.yaml`: S3 credentials from 1Password (access key ID and secret key)
 - `backup-configmap.yaml`: S3 bucket and backup configuration
 - `backup-script-configmap.yaml`: Backup script with error handling
 - `backup-cronjob.yaml`: Scheduled backup execution
@@ -95,6 +92,8 @@ SELECT content FROM items ORDER BY embedding <-> '[0.1, 0.2, 0.3]' LIMIT 5;
 
 ## Setup Requirements
 
-1. Create 1Password items with password fields
-2. Ensure host directories exist with proper permissions
+1. Create 1Password items:
+   - `postgresql-db` with `password` field
+   - `s3-backup-credentials` with `access-key-id` and `secret-access-key` fields
+2. Ensure host directories exist with proper permissions (101000:110000)
 3. Deploy via ArgoCD

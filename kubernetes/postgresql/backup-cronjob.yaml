@@ -6,10 +6,9 @@ metadata:
   labels:
     app: postgresql-backup
 spec:
-  # Run every day at 3:00 AM US/Central (8:00 AM UTC during CST, 7:00 AM UTC during CDT)
-  # Using 8:00 AM UTC to cover CST (adjust manually for CDT if needed)
-  schedule: "0 8 * * *"
-  timeZone: "US/Central"
+  # Run every day at 3:00 AM America/Chicago (Central Time)
+  schedule: "0 3 * * *"
+  timeZone: "America/Chicago"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
