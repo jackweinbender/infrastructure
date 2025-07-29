@@ -7,14 +7,18 @@ spec:
   hostnames:
     - jellyfin.k8s.weinbender.io
   parentRefs:
-    - name: cluster-gateway
+    - kind: Gateway
+      name: cluster-gateway
       namespace: envoy-gateway-system
+      group: gateway.networking.k8s.io
   rules:
     - matches:
         - path:
             type: PathPrefix
             value: "/"
       backendRefs:
-        - name: jellyfin
+        - kind: Service
+          name: jellyfin
           namespace: jellyfin
           port: 8096
+          group: ""
