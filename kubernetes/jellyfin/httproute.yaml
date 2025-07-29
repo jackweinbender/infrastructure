@@ -22,3 +22,4 @@ spec:
           namespace: jellyfin
           port: 8096
           group: ""
+          weight: 1
