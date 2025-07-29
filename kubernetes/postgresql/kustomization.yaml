@@ -6,9 +6,6 @@ resources:
   - backup-secrets.yaml
   - postgresql-deployment.yaml
   - postgresql-service.yaml
-  - backup-configmap.yaml
-  - backup-script-configmap.yaml
-  - backup-cronjob.yaml
 
 configMapGenerator:
   - name: postgresql-conf
