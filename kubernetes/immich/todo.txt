@@ -1,0 +1,1 @@
+TODO: I need to add vector extension (and others) for immich
