@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-machine-learning
+  namespace: immich
+  labels:
+    app: immich-machine-learning
+    component: ml
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-machine-learning
+      component: ml
+  template:
+    metadata:
+      labels:
+        app: immich-machine-learning
+        component: ml
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101000
+        runAsGroup: 110000
+        fsGroup: 110000
+      containers:
+        - name: immich-machine-learning
+          image: ghcr.io/immich-app/immich-machine-learning:release
+          ports:
+            - containerPort: 3003
+              name: http
+          env:
+            - name: LOG_LEVEL
+              value: "verbose"
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "4Gi"
+              cpu: "2"
+          volumeMounts:
+            - name: model-cache
+              mountPath: /cache
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 3003
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 3003
+            initialDelaySeconds: 30
+            periodSeconds: 10
+      volumes:
+        - name: model-cache
+          hostPath:
+            path: /home/nas/shared/pvcs/immich/ml-cache
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-machine-learning
+  namespace: immich
+  labels:
+    app: immich-machine-learning
+    component: ml
+spec:
+  selector:
+    app: immich-machine-learning
+    component: ml
+  ports:
+    - name: http
+      port: 3003
+      targetPort: 3003
+      protocol: TCP
+  type: ClusterIP
