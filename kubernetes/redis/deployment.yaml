@@ -23,25 +23,35 @@ spec:
       initContainers:
         - name: setup-acl
           image: busybox:latest
+          env:
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-auth
+                  key: password
+            - name: IMMICH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-immich-user
+                  key: password
           command:
             - sh
             - -c
             - |
-              # Copy config files and substitute passwords
+              # Copy redis config as-is
               cp /config-template/redis.conf /config/redis.conf
-              # Copy ACL template and replace all passwords
-              sed "s/ADMIN_PASSWORD_PLACEHOLDER/$(cat /secrets/admin-password/password)/" /config-template/users.acl > /tmp/users.acl.tmp
-              sed "s/IMMICH_PASSWORD_PLACEHOLDER/$(cat /secrets/immich-password/password)/" /tmp/users.acl.tmp > /config/users.acl
-              rm /tmp/users.acl.tmp
+
+              # Use sed to substitute variables in ACL template
+              sed "s/\${ADMIN_PASSWORD}/${ADMIN_PASSWORD}/g; s/\${IMMICH_PASSWORD}/${IMMICH_PASSWORD}/g" \
+                /config-template/users.acl > /config/users.acl
+
+              echo "ACL file generated successfully"
+              cat /config/users.acl
           volumeMounts:
             - name: redis-config-template
               mountPath: /config-template
             - name: redis-config
               mountPath: /config
-            - name: admin-password
-              mountPath: /secrets/admin-password
-            - name: immich-password
-              mountPath: /secrets/immich-password
       containers:
         - name: redis
           image: docker.io/valkey/valkey:8-bookworm
@@ -51,6 +61,12 @@ spec:
           command:
             - valkey-server
             - /etc/redis/redis.conf
+          env:
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-auth
+                  key: password
           resources:
             requests:
               memory: "256Mi"
@@ -63,17 +79,12 @@ spec:
               mountPath: /data
             - name: redis-config
               mountPath: /etc/redis
-            - name: admin-password
-              mountPath: /secrets/admin-password
-          env:
-            - name: REDIS_ARGS
-              value: "--protected-mode yes"
           livenessProbe:
             exec:
               command:
                 - sh
                 - -c
-                - "redis-cli -a $(cat /secrets/admin-password/password) ping"
+                - "redis-cli -a $ADMIN_PASSWORD ping"
             initialDelaySeconds: 30
             periodSeconds: 30
           readinessProbe:
@@ -81,7 +92,7 @@ spec:
               command:
                 - sh
                 - -c
-                - "redis-cli -a $(cat /secrets/admin-password/password) ping"
+                - "redis-cli -a $ADMIN_PASSWORD ping"
             initialDelaySeconds: 10
             periodSeconds: 5
       volumes:
@@ -94,9 +105,3 @@ spec:
             name: redis-config
         - name: redis-config
           emptyDir: {}
-        - name: admin-password
-          secret:
-            secretName: redis-auth
-        - name: immich-password
-          secret:
-            secretName: redis-immich-user
