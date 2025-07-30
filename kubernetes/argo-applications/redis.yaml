@@ -3,18 +3,17 @@ kind: Application
 metadata:
   name: redis
   namespace: argocd
-  labels:
-    app.kubernetes.io/name: redis
-    app.kubernetes.io/part-of: infrastructure
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  project: infrastructure
-  source:
-    repoURL: https://github.com/jackweinbender/infrastructure
-    targetRevision: HEAD
-    path: kubernetes/redis
   destination:
-    server: https://kubernetes.default.svc
     namespace: redis
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: kubernetes/redis
+    repoURL: git@github.com:jackweinbender/infrastructure.git
+    targetRevision: HEAD
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
