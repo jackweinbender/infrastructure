@@ -36,7 +36,7 @@ spec:
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: immich-redis-auth
+                  name: immich-redis-password
                   key: password
           resources:
             requests:
