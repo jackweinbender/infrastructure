@@ -33,11 +33,6 @@ data:
     loglevel notice
 
   users.acl: |
-    # Default user (disabled for security)
     user default off
-
-    # Admin user - full access
     user admin on >${ADMIN_PASSWORD} ~* &* +@all
-
-    # Immich user - limited to database 0
     user immich on >${IMMICH_PASSWORD} ~* &* +@all -@dangerous +select|0
