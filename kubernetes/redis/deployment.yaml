@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: redis
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101000
+        runAsGroup: 110000
+        fsGroup: 110000
+      initContainers:
+        - name: setup-acl
+          image: busybox:latest
+          command:
+            - sh
+            - -c
+            - |
+              # Copy config files and substitute passwords
+              cp /config-template/redis.conf /config/redis.conf
+              # Copy ACL template and replace all passwords
+              sed "s/ADMIN_PASSWORD_PLACEHOLDER/$(cat /secrets/admin-password/password)/" /config-template/users.acl > /tmp/users.acl.tmp
+              sed "s/IMMICH_PASSWORD_PLACEHOLDER/$(cat /secrets/immich-password/password)/" /tmp/users.acl.tmp > /config/users.acl
+              rm /tmp/users.acl.tmp
+          volumeMounts:
+            - name: redis-config-template
+              mountPath: /config-template
+            - name: redis-config
+              mountPath: /config
+            - name: admin-password
+              mountPath: /secrets/admin-password
+            - name: immich-password
+              mountPath: /secrets/immich-password
+      containers:
+        - name: redis
+          image: docker.io/valkey/valkey:8-bookworm
+          ports:
+            - containerPort: 6379
+              name: redis
+          command:
+            - valkey-server
+            - /etc/redis/redis.conf
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+            - name: redis-config
+              mountPath: /etc/redis
+            - name: admin-password
+              mountPath: /secrets/admin-password
+          env:
+            - name: REDIS_ARGS
+              value: "--protected-mode yes"
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - "redis-cli -a $(cat /secrets/admin-password/password) ping"
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - "redis-cli -a $(cat /secrets/admin-password/password) ping"
+            initialDelaySeconds: 10
+            periodSeconds: 5
+      volumes:
+        - name: redis-data
+          hostPath:
+            path: /home/nas/shared/pvcs/redis
+            type: DirectoryOrCreate
+        - name: redis-config-template
+          configMap:
+            name: redis-config
+        - name: redis-config
+          emptyDir: {}
+        - name: admin-password
+          secret:
+            secretName: redis-auth
+        - name: immich-password
+          secret:
+            secretName: redis-immich-user
