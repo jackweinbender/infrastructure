@@ -3,20 +3,15 @@ kind: Deployment
 metadata:
   name: immich-server
   namespace: immich
-  labels:
-    app: immich-server
-    component: server
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: immich-server
-      component: server
   template:
     metadata:
       labels:
         app: immich-server
-        component: server
     spec:
       securityContext:
         runAsNonRoot: true
@@ -71,7 +66,7 @@ spec:
       volumes:
         - name: upload-storage
           hostPath:
-            path: /home/nas/media/immich/upload
+            path: /home/nas/shared/pvcs/immich/upload
             type: DirectoryOrCreate
         - name: localtime
           hostPath:

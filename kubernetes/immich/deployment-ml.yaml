@@ -3,20 +3,15 @@ kind: Deployment
 metadata:
   name: immich-machine-learning
   namespace: immich
-  labels:
-    app: immich-machine-learning
-    component: ml
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: immich-machine-learning
-      component: ml
   template:
     metadata:
       labels:
         app: immich-machine-learning
-        component: ml
     spec:
       securityContext:
         runAsNonRoot: true
@@ -59,22 +54,3 @@ spec:
           hostPath:
             path: /home/nas/shared/pvcs/immich/ml-cache
             type: DirectoryOrCreate
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: immich-machine-learning
-  namespace: immich
-  labels:
-    app: immich-machine-learning
-    component: ml
-spec:
-  selector:
-    app: immich-machine-learning
-    component: ml
-  ports:
-    - name: http
-      port: 3003
-      targetPort: 3003
-      protocol: TCP
-  type: ClusterIP

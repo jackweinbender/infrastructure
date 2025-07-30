@@ -9,6 +9,7 @@ resources:
   - deployment-server.yaml
   - deployment-ml.yaml
   - service.yaml
+  - service-ml.yaml
   - httproute.yaml
 
 commonLabels:

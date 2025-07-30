@@ -3,8 +3,6 @@ kind: HTTPRoute
 metadata:
   name: immich
   namespace: immich
-  labels:
-    app: immich
 spec:
   parentRefs:
     - name: gateway
