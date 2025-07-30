@@ -13,7 +13,7 @@ spec:
   source:
     path: kubernetes/immich
     repoURL: git@github.com:jackweinbender/infrastructure.git
-    targetRevision: app/immich
+    targetRevision: HEAD
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
