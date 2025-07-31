@@ -10,7 +10,7 @@ spec:
       kind: Gateway
       group: gateway.networking.k8s.io
   hostnames:
-    - "immich.weinbender.io"
+    - "immich.k8s.weinbender.io"
   rules:
     - matches:
         - path:
