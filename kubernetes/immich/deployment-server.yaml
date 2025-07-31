@@ -53,13 +53,13 @@ spec:
               readOnly: true
           livenessProbe:
             httpGet:
-              path: /api/server-info/ping
+              path: /health
               port: 2283
             initialDelaySeconds: 30
             periodSeconds: 30
           readinessProbe:
             httpGet:
-              path: /api/server-info/ping
+              path: /health
               port: 2283
             initialDelaySeconds: 10
             periodSeconds: 10
