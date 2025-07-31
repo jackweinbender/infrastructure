@@ -13,7 +13,7 @@ data:
 
     # Memory configuration
     maxmemory 512mb
-    maxmemory-policy allkeys-lru
+    maxmemory-policy noeviction
 
     # Database configuration
     databases 16
