@@ -35,4 +35,4 @@ data:
   users.acl: |
     user default off
     user admin on >${ADMIN_PASSWORD} ~* &* +@all
-    user immich on >${IMMICH_PASSWORD} ~* &* +@all -@dangerous +select|0
+    user immich on >${IMMICH_PASSWORD} ~* &* +@all|0
