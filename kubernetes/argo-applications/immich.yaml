@@ -17,8 +17,8 @@ spec:
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true
       - Validate=true
+      - Prune=true
       - PruneLast=true
     automated:
       prune: true

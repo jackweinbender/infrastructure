@@ -4,7 +4,7 @@ metadata:
   name: cloudflare-api-token
   namespace: cert-manager
   annotations:
-    argocd.argoproj.io/sync-options: "Replace=true"
+    argocd.argoproj.io/sync-options: "Force=true,Replace=true"
     k8s-secrets-sync.weinbender.io/provider: "op"
     k8s-secrets-sync.weinbender.io/secret-key: "api-token"
     k8s-secrets-sync.weinbender.io/ref: "op://microk8s/cloudflare-auth-weinbenderio/credential"

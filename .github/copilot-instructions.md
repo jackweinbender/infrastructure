@@ -124,9 +124,8 @@ All ArgoCD applications must use the standardized sync policy for consistent beh
 syncPolicy:
   syncOptions:
     - CreateNamespace=true
-    - ServerSideApply=true
     - Validate=true
-    - PruneLast=true
+    - Prune=true
   automated:
     prune: true
     selfHeal: true
@@ -135,19 +134,18 @@ syncPolicy:
 **Sync Options Explanation:**
 
 - **CreateNamespace=true**: Automatically creates target namespaces if they don't exist
-- **ServerSideApply=true**: Uses server-side apply for better field ownership and conflict resolution with operators
 - **Validate=true**: Validates resources before applying to catch configuration errors early
-- **PruneLast=true**: Ensures resources are pruned after new ones are applied, preventing conflicts
-- **automated.prune=true**: Automatically removes resources no longer defined in Git
+- **Prune=true**: Automatically removes resources no longer defined in Git at the application level
+- **automated.prune=true**: Enables automatic pruning of resources
 - **automated.selfHeal=true**: Automatically corrects any configuration drift
 
-**Important**: Do not use `ApplyOutOfSyncOnly=true` as it can cause issues with interdependent resources and operators. ServerSideApply is preferred for this infrastructure setup.
+**Important**: This simplified sync policy provides reliable GitOps behavior while avoiding potential conflicts that can arise from more complex sync options like `ServerSideApply` or `PruneLast`.
 
 #### Resource-Specific Sync Policies
 
 For resources that need special handling, use annotations to override the application-level sync policy:
 
-**Force Secret Recreation:**
+**Force Secret Recreation (Required for k8s-secrets-sync managed secrets):**
 
 ```yaml
 apiVersion: v1
@@ -155,7 +153,7 @@ kind: Secret
 metadata:
   name: sensitive-secret
   annotations:
-    argocd.argoproj.io/sync-options: "Replace=true"
+    argocd.argoproj.io/sync-options: "Force=true,Replace=true"
     "k8s-secrets-sync.weinbender.io/provider": "op"
     "k8s-secrets-sync.weinbender.io/secret-key": "password"
     "k8s-secrets-sync.weinbender.io/ref": "op://vault/item/field"
@@ -163,8 +161,8 @@ metadata:
 
 **Common Resource-Level Sync Options:**
 
-- **`Replace=true`**: Delete and recreate the resource (useful for secrets that need fresh state)
-- **`Force=true`**: Force apply even with conflicts (use sparingly)
+- **`Replace=true`**: Delete and recreate the resource (required for secrets managed by k8s-secrets-sync)
+- **`Force=true`**: Force apply even with conflicts (required with Replace for secrets)
 - **`Validate=false`**: Skip validation for problematic resources
 - **`Prune=false`**: Prevent auto-deletion when removed from Git
 - **`SkipDryRunOnMissingResource=true`**: Skip dry-run validation for resources that don't support it
@@ -180,10 +178,10 @@ metadata:
 
 **Best Practices:**
 
-- Use `Replace=true` for secrets that need clean state
+- Always use `Force=true,Replace=true` for secrets managed by k8s-secrets-sync operator
 - Use sync hooks for resources with complex dependencies
-- Avoid `Force=true` unless absolutely necessary
 - Test resource-specific policies in non-production first
+- Keep the application-level sync policy simple and consistent
 
 ## Security Considerations
 

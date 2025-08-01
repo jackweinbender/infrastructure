@@ -46,9 +46,9 @@ spec:
               memory: "2Gi"
               cpu: "2"
           volumeMounts:
-            - name: external-media
-              mountPath: /media
-            - name: upload-storage
+            - name: nas-media-photos
+              mountPath: /external-libraries
+            - name: nas-media-immich-uploads
               mountPath: /usr/src/app/upload
             - name: localtime
               mountPath: /etc/localtime
@@ -66,13 +66,12 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 10
       volumes:
-        - name: external-media
+        - name: nas-media-photos
           hostPath:
-            path: /home/nas/media
-        - name: upload-storage
+            path: /home/nas/media/photos
+        - name: nas-media-uploads-photos
           hostPath:
-            path: /home/nas/shared/pvcs/immich/upload
-            type: DirectoryOrCreate
+            path: /home/nas/media/immich-uploads
         - name: localtime
           hostPath:
             path: /etc/localtime

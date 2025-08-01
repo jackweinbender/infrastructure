@@ -52,5 +52,5 @@ spec:
       volumes:
         - name: model-cache
           hostPath:
-            path: /home/nas/shared/pvcs/immich/ml-cache
+            path: /home/nas/shared/pvcs/immich-ml-cache
             type: DirectoryOrCreate

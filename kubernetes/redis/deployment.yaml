@@ -98,7 +98,7 @@ spec:
       volumes:
         - name: redis-data
           hostPath:
-            path: /home/nas/shared/pvcs/redis
+            path: /home/nas/shared/pvcs/redis-data
             type: DirectoryOrCreate
         - name: redis-config-template
           configMap:
