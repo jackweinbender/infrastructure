@@ -69,9 +69,11 @@ spec:
         - name: nas-media-photos
           hostPath:
             path: /home/nas/media/photos
+            type: DirectoryOrCreate
         - name: nas-media-immich-uploads
           hostPath:
             path: /home/nas/media/immich-uploads
+            type: DirectoryOrCreate
         - name: localtime
           hostPath:
             path: /etc/localtime
