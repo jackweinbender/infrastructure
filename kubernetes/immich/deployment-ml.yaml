@@ -27,6 +27,8 @@ spec:
           env:
             - name: LOG_LEVEL
               value: "verbose"
+            - name: MPLCONFIGDIR
+              value: "/.config/matplotlib"
           resources:
             requests:
               memory: "1Gi"
