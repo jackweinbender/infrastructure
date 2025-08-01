@@ -37,6 +37,8 @@ spec:
           volumeMounts:
             - name: model-cache
               mountPath: /cache
+            - name: matplotlib
+              mountPath: /.config/matplotlib
           livenessProbe:
             httpGet:
               path: /ping
@@ -53,4 +55,8 @@ spec:
         - name: model-cache
           hostPath:
             path: /home/nas/shared/pvcs/immich-ml-cache
+            type: DirectoryOrCreate
+        - name: matplotlib
+          hostPath:
+            path: /home/nas/shared/pvcs/immich-ml-matplotlib
             type: DirectoryOrCreate
