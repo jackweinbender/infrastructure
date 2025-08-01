@@ -69,7 +69,7 @@ spec:
         - name: nas-media-photos
           hostPath:
             path: /home/nas/media/photos
-        - name: nas-media-uploads-photos
+        - name: nas-media-immich-uploads
           hostPath:
             path: /home/nas/media/immich-uploads
         - name: localtime
