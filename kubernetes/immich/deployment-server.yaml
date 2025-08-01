@@ -46,6 +46,8 @@ spec:
               memory: "2Gi"
               cpu: "2"
           volumeMounts:
+            - name: external-media
+              mountPath: /media
             - name: upload-storage
               mountPath: /usr/src/app/upload
             - name: localtime
@@ -64,6 +66,9 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 10
       volumes:
+        - name: external-media
+          hostPath:
+            path: /home/nas/media
         - name: upload-storage
           hostPath:
             path: /home/nas/shared/pvcs/immich/upload
