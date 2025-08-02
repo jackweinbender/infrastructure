@@ -37,10 +37,6 @@ spec:
               secretKeyRef:
                 name: transmission-password
                 key: password
-            - name: TZ
-              value: "America/Chicago"
-            - name: TRANSMISSION_WEB_HOME
-              value: "/transmission-web-control/"
           volumeMounts:
             - name: transmission-config
               mountPath: /config
