@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+  namespace: sonarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      securityContext:
+        # Required for NFS storage access - these IDs match the NFS permissions
+        runAsNonRoot: true
+        runAsUser: 101000
+        runAsGroup: 110000
+        fsGroup: 110000
+      containers:
+        - name: sonarr
+          image: linuxserver/sonarr:latest
+          ports:
+            - containerPort: 8989
+              name: web
+          env:
+            - name: PUID
+              value: "101000"
+            - name: PGID
+              value: "110000"
+            - name: TZ
+              value: "America/New_York"
+          volumeMounts:
+            - name: sonarr-config
+              mountPath: /config
+            - name: sonarr-tv
+              mountPath: /tv
+            - name: sonarr-downloads
+              mountPath: /downloads
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 8989
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 8989
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: sonarr-config
+          hostPath:
+            path: /home/nas/shared/pvcs/sonarr-config
+            type: DirectoryOrCreate
+        - name: sonarr-tv
+          hostPath:
+            path: /home/nas/media/tv-shows
+            type: DirectoryOrCreate
+        - name: sonarr-downloads
+          hostPath:
+            path: /home/nas/media/transmission-downloads
+            type: DirectoryOrCreate
