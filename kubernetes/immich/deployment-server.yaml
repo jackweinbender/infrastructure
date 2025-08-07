@@ -38,13 +38,6 @@ spec:
                 secretKeyRef:
                   name: immich-redis-password
                   key: password
-          resources:
-            requests:
-              memory: "512Mi"
-              cpu: "500m"
-            limits:
-              memory: "2Gi"
-              cpu: "2"
           volumeMounts:
             - name: nas-media-photos
               mountPath: /external-libraries
