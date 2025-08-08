@@ -1,0 +1,45 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: ${env:MY_POD_IP}:4317
+      http:
+        endpoint: ${env:MY_POD_IP}:4318
+
+processors:
+  memory_limiter:
+    # 80% of maximum memory up to 2G
+    limit_mib: 1500
+    # 25% of limit up to 2G
+    spike_limit_mib: 512
+    check_interval: 5s
+
+extensions:
+  zpages: {}
+
+exporters:
+  # TODO: Replace with your actual observability backend endpoint
+  # Examples:
+  # - Jaeger: jaeger endpoint with proper configuration
+  # - Prometheus: prometheus exporter for metrics
+  # - OTLP: external OTLP endpoint (Grafana Cloud, Datadog, etc.)
+  otlp:
+    endpoint: "http://grafana-alloy.monitoring:4317" # Update this endpoint
+    tls:
+      insecure: true
+  # Example: Add debug exporter for debugging
+  debug:
+    verbosity: normal
+
+service:
+  extensions: [zpages]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter]
+      exporters: [otlp, debug]
+    # Add metrics pipeline if needed
+    # metrics:
+    #   receivers: [otlp]
+    #   processors: [memory_limiter]
+    #   exporters: [otlp]

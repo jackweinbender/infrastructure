@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-collector
+  namespace: opentelemetry
+  labels:
+    app: opentelemetry
+    component: otel-collector
+spec:
+  selector:
+    matchLabels:
+      app: opentelemetry
+      component: otel-collector
+  minReadySeconds: 5
+  progressDeadlineSeconds: 120
+  replicas: 1 # Single-node cluster - keep at 1
+  template:
+    metadata:
+      labels:
+        app: opentelemetry
+        component: otel-collector
+    spec:
+      containers:
+        - command:
+            - "/otelcol"
+            - "--config=/conf/otel-collector-config.yaml"
+          image: otel/opentelemetry-collector:latest
+          name: otel-collector
+          resources:
+            limits:
+              cpu: 1
+              memory: 2Gi
+            requests:
+              cpu: 200m
+              memory: 400Mi
+          ports:
+            - containerPort: 55679 # ZPages endpoint
+            - containerPort: 4317 # OpenTelemetry gRPC receiver
+            - containerPort: 4318 # OpenTelemetry HTTP receiver
+            - containerPort: 14250 # Jaeger gRPC receiver
+            - containerPort: 14268 # Jaeger HTTP receiver
+            - containerPort: 9411 # Zipkin receiver
+            - containerPort: 8888 # Metrics endpoint
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+            - name: GOMEMLIMIT
+              value: 1600MiB
+          volumeMounts:
+            - name: otel-collector-config-vol
+              mountPath: /conf
+          # Uncomment if using TLS certificates
+          # - name: otel-collector-secrets
+          #   mountPath: /secrets
+      volumes:
+        - configMap:
+            name: otel-collector-conf
+            items:
+              - key: otel-collector-config
+                path: otel-collector-config.yaml
+          name: otel-collector-config-vol
+        # Uncomment if using TLS certificates
+        # - secret:
+        #     name: otel-collector-secrets
+        #     items:
+        #       - key: cert.pem
+        #         path: cert.pem
+        #       - key: key.pem
+        #         path: key.pem

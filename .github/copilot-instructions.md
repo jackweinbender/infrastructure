@@ -43,6 +43,7 @@ This is a monorepo containing infrastructure-as-code for a home lab environment.
 - Use hostPath volumes for single-node clusters with NFS-backed storage
 - Configure resource limits and requests
 - Use GitOps patterns with ArgoCD for deployments
+- **ConfigMap Best Practice**: For large configuration files, create separate files and use Kustomize `configMapGenerator` instead of inline YAML. This improves readability, enables syntax highlighting, and makes editing easier (e.g., `alloy.river` file with configMapGenerator vs inline River config).
 
 #### Storage & NFS Permissions
 
@@ -113,6 +114,16 @@ data:
   DB_NAME: "app_production"
   DB_USER: "app_user"
 ```
+
+#### ArgoCD Projects
+
+The ArgoCD instance uses three projects for organizing applications:
+
+- **`default`**: Most applications should use this project (recommended for new deployments)
+- **`system`**: Core infrastructure components (ArgoCD itself, cert-manager, monitoring tools like Grafana Alloy, etc.)
+- **`app`**: Application-specific deployments
+
+When creating new ArgoCD applications, use `project: default` unless there's a specific reason to use a different project. Use `project: system` for infrastructure components that monitor or manage the cluster itself.
 
 #### ArgoCD Application Sync Policy
 
