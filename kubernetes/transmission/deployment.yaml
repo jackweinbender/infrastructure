@@ -34,9 +34,10 @@ spec:
             - name: USER
               value: "admin"
             - name: PASS
-              secretKeyRef:
-                name: transmission-password
-                key: password
+              valueFrom:
+                secretKeyRef:
+                  name: transmission-password
+                  key: password
           volumeMounts:
             - name: transmission-config
               mountPath: /config
