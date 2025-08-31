@@ -21,4 +21,4 @@ spec:
       - Prune=true
     automated:
       prune: true
-      selfHeal: true
+      selfHeal: false
