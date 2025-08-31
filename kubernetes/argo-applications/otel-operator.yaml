@@ -10,6 +10,7 @@ spec:
     targetRevision: main
     path: kubernetes/otel-operator
   destination:
+    namespace: otel
     server: https://kubernetes.default.svc
   syncPolicy:
     syncOptions:
