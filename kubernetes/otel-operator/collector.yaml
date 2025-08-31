@@ -1,7 +1,7 @@
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
-  name: simplest
+  name: otel-collector
 spec:
   config:
     receivers:
