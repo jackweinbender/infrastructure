@@ -13,7 +13,7 @@ spec:
           name: grafana-otlp-token
           key: token
     - name: OTEL_EXPORTER_OTLP_ENDPOINT
-      value: "https://otlp-gateway-prod-us-east-0.grafana.net/otlp:443"
+      value: "https://otlp-gateway-prod-us-east-0.grafana.net/otlp"
   volumes:
     - name: hostfs
       hostPath:
@@ -81,8 +81,8 @@ spec:
               # This rule will use the IP from the incoming connection from which the resource is received, and find the matching pod, based on the 'pod.status.podIP' of the observed pods
               - from: connection
     exporters:
-      otlp/metrics:
-        endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT}
+      otlphttp:
+        endpoint: "${OTEL_EXPORTER_OTLP_ENDPOINT}:4318"
         headers:
           Authorization: "Basic ${OTLP_EXPORTER_OTLP_TOKEN_B64}"
       debug: {}
@@ -91,4 +91,4 @@ spec:
         metrics:
           receivers: [hostmetrics]
           processors: [k8sattributes]
-          exporters: [otlp/metrics]
+          exporters: [otlphttp]
