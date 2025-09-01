@@ -6,6 +6,16 @@ spec:
   mode: daemonset
   serviceAccount: collector-sa
   image: otel/opentelemetry-collector-contrib:latest
+  env:
+    - name: OTEL_EXPORTER_OTLP_PROTOCOL
+      value: "http/protobuf"
+    - name: OTEL_EXPORTER_OTLP_HEADERS
+      valueFrom:
+        secretKeyRef:
+          name: grafana-otlp-headers
+          key: headers
+    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      value: "https://otlp-gateway-prod-us-east-0.grafana.net"
   volumes:
     - name: hostfs
       hostPath:
@@ -80,6 +90,9 @@ spec:
               - from: connection
 
     exporters:
+      otlp:
+        endpoint: https://otlp-gateway-prod-us-east-0.grafana.net/otlp # e.g., "tempo:4317" or "tempo.otel-collector.svc.cluster.local:4317"
+        protocol: http/protobuf
       # NOTE: Prior to v0.86.0 use `logging` instead of `debug`.
       debug: {}
 
