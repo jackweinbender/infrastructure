@@ -22,11 +22,11 @@ spec:
         collection_interval: 10s
         scrapers:
           cpu: {}
-          load:
-          memory:
-          disk:
-          filesystem:
-          network:
+          load: {}
+          memory: {}
+          disk: {}
+          filesystem: {}
+          network: {}
       otlp:
         protocols:
           grpc:
