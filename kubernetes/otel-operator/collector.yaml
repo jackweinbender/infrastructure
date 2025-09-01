@@ -21,7 +21,7 @@ spec:
         root_path: /hostfs
         collection_interval: 10s
         scrapers:
-          cpu:
+          cpu: {}
           load:
           memory:
           disk:
