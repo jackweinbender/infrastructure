@@ -6,6 +6,15 @@ spec:
   mode: daemonset
   serviceAccount: collector-sa
   image: otel/opentelemetry-collector-contrib:latest
+  volumes:
+    - name: hostfs
+      hostPath:
+        path: /
+  volumeMounts:
+    - name: hostfs
+      mountPath: /hostfs
+      readOnly: true
+      mountPropagation: HostToContainer
   config:
     receivers:
       hostmetrics:
@@ -37,7 +46,7 @@ spec:
         passthrough: false
         filter:
           # only retrieve pods running on the same node as the collector
-          node_from_env_var: KUBE_NODE_NAME
+          # node_from_env_var: KUBE_NODE_NAME
         extract:
           # The attributes provided in 'metadata' will be added to associated resources
           metadata:
