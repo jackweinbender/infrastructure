@@ -3,6 +3,9 @@ kind: OpenTelemetryCollector
 metadata:
   name: otel-collector
 spec:
+  mode: daemonset
+  serviceAccount: collector-sa
+  image: otel/opentelemetry-collector-contrib:latest
   config:
     receivers:
       hostmetrics:
