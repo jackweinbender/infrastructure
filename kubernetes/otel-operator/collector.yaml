@@ -7,15 +7,13 @@ spec:
   serviceAccount: collector-sa
   image: otel/opentelemetry-collector-contrib:latest
   env:
-    - name: OTEL_EXPORTER_OTLP_PROTOCOL
-      value: "http/protobuf"
-    - name: OTEL_EXPORTER_OTLP_HEADERS
+    - name: OTLP_EXPORTER_OTLP_TOKEN_B64
       valueFrom:
         secretKeyRef:
-          name: grafana-otlp-headers
-          key: headers
+          name: grafana-otlp-token
+          key: token
     - name: OTEL_EXPORTER_OTLP_ENDPOINT
-      value: "https://otlp-gateway-prod-us-east-0.grafana.net"
+      value: "https://otlp-gateway-prod-us-east-0.grafana.net/otlp"
   volumes:
     - name: hostfs
       hostPath:
@@ -37,12 +35,6 @@ spec:
           disk: {}
           filesystem: {}
           network: {}
-      otlp:
-        protocols:
-          grpc:
-            endpoint: 0.0.0.0:4317
-          http:
-            endpoint: 0.0.0.0:4318
     processors:
       memory_limiter:
         check_interval: 1s
@@ -88,20 +80,15 @@ spec:
           - sources:
               # This rule will use the IP from the incoming connection from which the resource is received, and find the matching pod, based on the 'pod.status.podIP' of the observed pods
               - from: connection
-
     exporters:
-      otlphttp:
+      otlp/metrics:
         endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT}
         headers:
-          Authentication: ${OTEL_EXPORTER_OTLP_HEADERS}
-        tls:
-          insecure: true
-      # NOTE: Prior to v0.86.0 use `logging` instead of `debug`.
+          Authorization: "Basic ${OTLP_EXPORTER_OTLP_TOKEN_B64}"
       debug: {}
-
     service:
       pipelines:
         traces:
           receivers: [otlp]
           processors: [memory_limiter, batch]
-          exporters: [debug, otlphttp]
+          exporters: [debug, otlp/metrics]
