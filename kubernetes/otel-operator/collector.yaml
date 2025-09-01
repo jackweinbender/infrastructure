@@ -82,7 +82,7 @@ spec:
               - from: connection
     exporters:
       otlphttp:
-        endpoint: "${OTEL_EXPORTER_OTLP_ENDPOINT}:4318"
+        endpoint: "${OTEL_EXPORTER_OTLP_ENDPOINT}"
         headers:
           Authorization: "Basic ${OTLP_EXPORTER_OTLP_TOKEN_B64}"
       debug: {}
