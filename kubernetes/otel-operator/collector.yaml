@@ -90,8 +90,8 @@ spec:
               - from: connection
 
     exporters:
-      otlp:
-
+      otlphttp:
+        insecure: true
       # NOTE: Prior to v0.86.0 use `logging` instead of `debug`.
       debug: {}
 
@@ -100,4 +100,4 @@ spec:
         traces:
           receivers: [otlp]
           processors: [memory_limiter, batch]
-          exporters: [debug]
+          exporters: [debug, otlphttp]
