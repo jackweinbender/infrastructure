@@ -89,14 +89,6 @@ spec:
     service:
       pipelines:
         metrics:
-          receivers: [hostmetrics]
+          receivers: []
           processors: [k8sattributes]
           exporters: [otlphttp]
-        traces:
-          receivers: [hostmetrics]
-          processors: [memory_limiter, batch]
-          exporters: [debug]
-        logs:
-          receivers: [hostmetrics]
-          processors: [memory_limiter, batch]
-          exporters: [debug]
