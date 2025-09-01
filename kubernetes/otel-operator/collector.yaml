@@ -88,7 +88,7 @@ spec:
       debug: {}
     service:
       pipelines:
-        traces:
+        metrics:
           receivers: [hostmetrics]
-          processors: [memory_limiter, batch, k8sattributes]
-          exporters: [debug, otlp/metrics]
+          processors: [k8sattributes]
+          exporters: [otlp/metrics]
