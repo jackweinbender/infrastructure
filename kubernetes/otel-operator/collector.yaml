@@ -92,7 +92,8 @@ spec:
     exporters:
       otlphttp:
         endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT}
-        headers: ${OTEL_EXPORTER_OTLP_HEADERS}
+        headers:
+          Authentication: ${OTEL_EXPORTER_OTLP_HEADERS}
         tls:
           insecure: true
       # NOTE: Prior to v0.86.0 use `logging` instead of `debug`.
