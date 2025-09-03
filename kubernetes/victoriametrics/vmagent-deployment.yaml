@@ -28,7 +28,11 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
+            - name: remotewrite-data
+              mountPath: /vmagent-remotewrite-data
       volumes:
         - name: config
           configMap:
             name: vmagent-config
+        - name: remotewrite-data
+          emptyDir: {}
