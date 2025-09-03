@@ -4,11 +4,6 @@ metadata:
   name: vmagent-config
   labels:
     app: vmagent
-  namespace: victoriametrics
-  # Use the correct namespace if needed
-  # If deploying in another namespace, update accordingly
-  # This matches the ArgoCD app spec
-  #
 data:
   vmagent-config.yaml: |
     global:

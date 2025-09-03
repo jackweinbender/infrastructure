@@ -4,7 +4,8 @@ kind: Kustomization
 resources:
   - vm-deployment.yaml
   - vm-service.yaml
+  - vm-httproute.yaml
   - vmagent-deployment.yaml
   - vmagent-service.yaml
   - vmagent-configmap.yaml
-  - vm-httproute.yaml
+  - vmagent-httproute.yaml
