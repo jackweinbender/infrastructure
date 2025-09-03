@@ -5,7 +5,5 @@ metadata:
   namespace: envoy-gateway-system
   annotations:
     metallb.io/address-pool: envoy-gateway-pool
-  prometheus.io/scrape: "true"
-  prometheus.io/port: "9901"
 spec:
   type: LoadBalancer
