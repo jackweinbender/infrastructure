@@ -18,7 +18,7 @@ spec:
       backendRefs:
         - kind: Service
           name: vmagent
-          namespace: vmagent
+          namespace: victoriametrics
           port: 8428
           group: ""
           weight: 1
