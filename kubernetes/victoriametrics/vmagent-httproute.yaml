@@ -19,6 +19,6 @@ spec:
         - kind: Service
           name: vmagent
           namespace: victoriametrics
-          port: 8428
+          port: 8429
           group: ""
           weight: 1
