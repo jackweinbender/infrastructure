@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vmagent
+  labels:
+    app: vmagent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vmagent
+  template:
+    metadata:
+      labels:
+        app: vmagent
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101000
+        runAsGroup: 110000
+        fsGroup: 110000
+      containers:
+        - name: vmagent
+          image: victoriametrics/vmagent:latest
+          args:
+            - "-promscrape.config=/config/vmagent-config.yaml"
+            - "-remoteWrite.url=http://victoriametrics:8428/api/v1/write"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          configMap:
+            name: vmagent-config
