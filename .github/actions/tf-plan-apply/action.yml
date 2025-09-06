@@ -28,20 +28,15 @@ runs:
       # runs here, cuz we can't run `op inject` like we do locally
       env:
         OP_SERVICE_ACCOUNT_TOKEN: ${{ inputs.op_token }}
-        TS_OAUTH_CLIENT_ID: "op://network/TailscaleOAuth/client-id"
-        TS_OAUTH_CLIENT_SECRET: "op://network/TailscaleOAuth/client-secret"
-        TF_VAR_tailscale_auth_key: "op://network/TailscaleAWSUserdata/credential"
-        TF_VAR_tailscale_api_key: "op://network/jug5ho4woduhynu3pilr33kpji/credential"
-        TF_VAR_virtual_environment_endpoint: "op://network/tnyuufxc75mep7hfhymhqrv6c4/url"
-        TF_VAR_virtual_environment_password: "op://network/tnyuufxc75mep7hfhymhqrv6c4/password"
-        TF_VAR_virtual_environment_username: "op://network/tnyuufxc75mep7hfhymhqrv6c4/username"
+        TS_OAUTH_CLIENT_ID: "op://network/a6esruz5rke4ht2z2epbzes5oy/client-id"
+        TS_OAUTH_CLIENT_SECRET: "op://network/a6esruz5rke4ht2z2epbzes5oy/client-secret"
     - name: Tailscale
       uses: tailscale/github-action@v2
       with:
         oauth-client-id: $TS_OAUTH_CLIENT_ID
         oauth-secret: $TS_OAUTH_CLIENT_SECRET
         tags: tag:ci
-        version: 1.76.1
+        version: 1.86.4
     - uses: hashicorp/setup-terraform@v2
     # We always run init.
     - name: Terraform init
