@@ -6,13 +6,8 @@ This is a monorepo containing infrastructure-as-code for a home lab environment.
 
 ### `/terraform/` - Infrastructure Provisioning
 
-- **AWS**: EC2 instances, VPC, S3 buckets, and other AWS resources
+- **AWS**: AWS resources
 - **Management**: Terraform backend state management
-
-### `/ansible/` - Configuration Management
-
-- **Roles**: `core`, `ingress`, `onepassword`, `tailscale`
-- **Playbooks**: Bootstrap scripts and inventory management
 
 ### `/kubernetes/` - Container Orchestration
 
@@ -28,12 +23,6 @@ This is a monorepo containing infrastructure-as-code for a home lab environment.
 - Use consistent naming conventions with hyphens (e.g., `aws-instance-name`)
 - Always include `tags` with `Project = "infrastructure/component"`
 - Keep sensitive values in `terraform.tfvars` (gitignored)
-
-### Ansible
-
-- Prefix role variables with role name (e.g., `ingress_enabled_sites`)
-- Use `ansible.builtin` modules when available
-- Store sensitive data in Ansible Vault
 
 ### Kubernetes
 
