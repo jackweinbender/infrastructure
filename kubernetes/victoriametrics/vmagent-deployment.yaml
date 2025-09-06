@@ -25,7 +25,8 @@ spec:
           args:
             - "-promscrape.config=/config/vmagent-config.yaml"
             - "-remoteWrite.url=https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push"
-            - "-remoteWrite.bearerTokenFile=/etc/secrets/token"
+            - "-remoteWrite.basicAuth.username=$(GRAFANA_CLOUD_USERNAME)"
+            - "-remoteWrite.basicAuth.passwordFile=/etc/secrets/token"
 
           volumeMounts:
             - name: config
