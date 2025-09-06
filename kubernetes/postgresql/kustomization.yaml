@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   - secret.yaml
-  - backup-secrets.yaml
   - postgresql-deployment.yaml
   - postgresql-service.yaml
 
