@@ -7,8 +7,6 @@ This is a monorepo containing infrastructure-as-code for a home lab environment.
 ### `/terraform/` - Infrastructure Provisioning
 
 - **AWS**: EC2 instances, VPC, S3 buckets, and other AWS resources
-- **Proxmox**: Virtual machine management for on-premises infrastructure
-- **Tailscale**: VPN mesh network configuration
 - **Management**: Terraform backend state management
 
 ### `/ansible/` - Configuration Management
@@ -87,7 +85,7 @@ metadata:
 
 - **One secret per Kubernetes Secret**: The operator limitation requires one sensitive value per secret
 - **Minimize secrets**: Only truly sensitive data (passwords, tokens) should use secrets
-- **Use ConfigMaps**: Non-sensitive configuration should be stored in ConfigMaps
+- **Use ConfigMaps**: Non-sensitive configuration should be stored in ConfigMaps, preferably using configMapGenerator for large configs.
 - **Naming convention**: Use descriptive names like `{service}-{purpose}` (e.g., `postgresql-password`)
 - **1Password references**: Use format `op://vault-name/item-name/field-name`
 
@@ -190,8 +188,6 @@ metadata:
 **Best Practices:**
 
 - Always use `Force=true,Replace=true` for secrets managed by k8s-secrets-sync operator
-- Use sync hooks for resources with complex dependencies
-- Test resource-specific policies in non-production first
 - Keep the application-level sync policy simple and consistent
 
 ## Security Considerations
@@ -210,7 +206,7 @@ Sensitive data is managed via custom `k8s-secrets-sync` operator + 1Password:
 - **Target OS**: Debian-based systems (Ubuntu/Debian)
 - **Container Runtime**: Docker/containerd
 - **Kubernetes Distribution**: MicroK8s (single-node)
-- **DNS**: Internal `.weinbender.io` domain
+- **DNS**: Internal `*.k8s.weinbender.io` domain for all services exposed via the cluster gateway
 - **Storage**: ZFS pool → NFS → Ubuntu VM → hostPath volumes
 - **Secrets**: Custom k8s-secrets-sync operator with 1Password
 - **Monitoring**: Basic logging via systemd/journald
