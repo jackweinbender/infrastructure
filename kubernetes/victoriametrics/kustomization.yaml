@@ -8,6 +8,7 @@ resources:
   - vmagent-deployment.yaml
   - vmagent-service.yaml
   - vmagent-httproute.yaml
+  - secrets.yaml
 
 configMapGenerator:
   - name: vmagent-config
