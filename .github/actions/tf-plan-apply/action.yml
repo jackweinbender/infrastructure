@@ -36,7 +36,7 @@ runs:
         oauth-client-id: $TS_OAUTH_CLIENT_ID
         oauth-secret: $TS_OAUTH_CLIENT_SECRET
         tags: tag:ci
-        version: .76.1
+        version: 1.76.1
     - uses: hashicorp/setup-terraform@v2
     # We always run init.
     - name: Terraform init
