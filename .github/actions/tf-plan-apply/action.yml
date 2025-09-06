@@ -28,8 +28,8 @@ runs:
       # runs here, cuz we can't run `op inject` like we do locally
       env:
         OP_SERVICE_ACCOUNT_TOKEN: ${{ inputs.op_token }}
-        TS_OAUTH_CLIENT_ID: "op://network/a6esruz5rke4ht2z2epbzes5oy/client-id"
-        TS_OAUTH_CLIENT_SECRET: "op://network/a6esruz5rke4ht2z2epbzes5oy/client-secret"
+        TS_OAUTH_CLIENT_ID: "op://network/tailscale-oauth-github-actions/client-id"
+        TS_OAUTH_CLIENT_SECRET: "op://network/tailscale-oauth-github-actions/client-secret"
     - name: Tailscale
       uses: tailscale/github-action@v2
       with:
