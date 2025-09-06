@@ -1,7 +1,0 @@
-# Secure sudoers file
-Defaults    env_reset
-Defaults    mail_badpass
-Defaults    secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-
-# Allow members of group sudo to execute any command without a password
-%sudo   ALL=(ALL:ALL) NOPASSWD: ALL

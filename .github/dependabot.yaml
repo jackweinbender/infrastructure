@@ -5,18 +5,6 @@ updates:
     schedule:
       interval: "weekly"
   - package-ecosystem: "terraform"
-    directory: "/terraform/primary"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "terraform"
-    directory: "/terraform/proxmox"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "terraform"
-    directory: "/terraform/tailscale"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "pip"
-    directory: "/ansible"
+    directory: "/terraform/aws"
     schedule:
       interval: "weekly"

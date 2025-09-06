@@ -1,3 +1,0 @@
----
-# Default variables for the onepassword role
-onepassword_vault_name: "default-vault"

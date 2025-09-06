@@ -1,6 +1,0 @@
-- name: Install core packages
-  ansible.builtin.package:
-    state: present
-    name:
-      - sudo
-      - rsync

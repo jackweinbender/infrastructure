@@ -1,7 +1,0 @@
-- name: Install certbot
-  ansible.builtin.apt:
-    name:
-      - python3-certbot
-      - python3-certbot-dns-cloudflare
-    state: present
-    cache_valid_time: 3600
