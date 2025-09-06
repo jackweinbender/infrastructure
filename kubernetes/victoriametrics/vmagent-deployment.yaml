@@ -25,11 +25,23 @@ spec:
           args:
             - "-promscrape.config=/config/vmagent-config.yaml"
             - "-remoteWrite.url=http://victoriametrics:8428/api/v1/write"
+            - "-remoteWrite.url=https://prometheus-blocks-prod-us-central1.grafana.net/api/prom/push"
+            - "-remoteWrite.basicAuth.username=$(GRAFANA_CLOUD_USERNAME)"
+            - "-remoteWrite.basicAuth.password=$(GRAFANA_CLOUD_API_TOKEN)"
+
           volumeMounts:
             - name: config
               mountPath: /config
             - name: remotewrite-data
               mountPath: /vmagent-remotewrite-data
+          env:
+            - name: GRAFANA_CLOUD_USERNAME
+              value: "933879"
+            - name: GRAFANA_CLOUD_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-cloud-token
+                  key: token
       volumes:
         - name: config
           configMap:
