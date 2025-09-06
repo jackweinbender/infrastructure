@@ -93,14 +93,3 @@ resource "aws_iam_user_policy" "k8s_postgres_backup" {
     ]
   })
 }
-
-# Output the bucket name and user details for reference
-output "k8s_postgres_backup_bucket" {
-  value       = aws_s3_bucket.k8s_postgres_backups.bucket
-  description = "S3 bucket name for PostgreSQL backups"
-}
-
-output "k8s_postgres_backup_user" {
-  value       = aws_iam_user.k8s_postgres_backup.name
-  description = "IAM user for PostgreSQL backup service"
-}
