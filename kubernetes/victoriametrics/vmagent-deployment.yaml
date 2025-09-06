@@ -40,7 +40,7 @@ spec:
             - name: GRAFANA_CLOUD_API_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: grafana-cloud-token
+                  name: prom-write-token
                   key: token
       volumes:
         - name: config
