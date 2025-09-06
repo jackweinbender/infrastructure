@@ -11,9 +11,9 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    chart: signoz
-    repoURL: https://charts.signoz.io
-    targetRevision: 0.79.0
+    path: kubernetes/signoz
+    repoURL: git@github.com:jackweinbender/infrastructure.git
+    targetRevision: HEAD
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
