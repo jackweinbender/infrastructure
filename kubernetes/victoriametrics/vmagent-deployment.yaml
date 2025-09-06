@@ -24,6 +24,7 @@ spec:
           image: victoriametrics/vmagent:latest
           args:
             - "-promscrape.config=/config/vmagent-config.yaml"
+            - "-remoteWrite.url=http://victoriametrics:8428/api/v1/write"
 
           volumeMounts:
             - name: config
