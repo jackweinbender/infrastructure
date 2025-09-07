@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: signoz
+  name: grafana
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: signoz
+    namespace: grafana
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: kubernetes/signoz
+    path: kubernetes/grafana-alloy
     repoURL: git@github.com:jackweinbender/infrastructure.git
     targetRevision: HEAD
   syncPolicy:
