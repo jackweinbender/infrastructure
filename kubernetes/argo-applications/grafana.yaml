@@ -11,7 +11,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: kubernetes/grafana-alloy
+    path: kubernetes/monitoring
     repoURL: git@github.com:jackweinbender/infrastructure.git
     targetRevision: HEAD
   syncPolicy:
