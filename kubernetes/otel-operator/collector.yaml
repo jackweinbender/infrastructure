@@ -3,6 +3,7 @@ kind: OpenTelemetryCollector
 metadata:
   name: simplest
 spec:
+  serviceAccount: otel-collector
   env:
     - name: GRAFANA_CLOUD_API_KEY
       valueFrom:
