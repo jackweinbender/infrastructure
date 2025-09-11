@@ -20,73 +20,48 @@ spec:
       prometheus/node-exporter:
         config:
           scrape_configs:
-            - job_name: "node-exporter"
+            - job_name: "integrations/node_exporter"
               scrape_interval: 60s
               kubernetes_sd_configs:
-                - role: node
+                - role: pod
               relabel_configs:
+                - source_labels:
+                    [__meta_kubernetes_pod_label_app_kubernetes_io_name]
+                  action: keep
+                  regex: prometheus-node-exporter.*
+                - source_labels: [__meta_kubernetes_pod_node_name]
+                  target_label: instance
+                - source_labels: [__meta_kubernetes_namespace]
+                  target_label: namespace
                 - action: replace
                   source_labels: [__address__]
                   regex: "(.*):10250"
                   replacement: "$1:9100"
                   target_label: __address__
+              metric_relabel_configs:
+                - source_labels: [__name__]
+                  action: keep
+                  regex: node_cpu.*|node_exporter_build_info|node_filesystem.*|node_memory.*|node_network_receive_bytes_total|node_network_receive_drop_total|node_network_transmit_bytes_total|node_network_transmit_drop_total|process_cpu_seconds_total|process_resident_memory_bytes
       prometheus/ksm:
         config:
           scrape_configs:
-            - job_name: "kube-state-metrics"
+            - job_name: "integrations/kubernetes/kube-state-metrics"
               scrape_interval: 120s
+              kubernetes_sd_configs:
+                - role: pod
+              relabel_configs:
+                - source_labels:
+                    [__meta_kubernetes_pod_label_app_kubernetes_io_name]
+                  action: keep
+                  regex: kube-state-metrics
+              metric_relabel_configs:
+                - source_labels: [__name__]
+                  action: keep
+                  regex: kube_configmap_info|kube_configmap_metadata_resource_version|kube_daemonset.*|kube_deployment_metadata_generation|kube_deployment_spec_replicas|kube_deployment_status_condition|kube_deployment_status_observed_generation|kube_deployment_status_replicas_available|kube_deployment_status_replicas_updated|kube_horizontalpodautoscaler_spec_max_replicas|kube_horizontalpodautoscaler_spec_min_replicas|kube_horizontalpodautoscaler_status_current_replicas|kube_horizontalpodautoscaler_status_desired_replicas|kube_job.*|kube_namespace_status_phase|kube_node.*|kube_persistentvolume_status_phase|kube_persistentvolumeclaim_access_mode|kube_persistentvolumeclaim_info|kube_persistentvolumeclaim_labels|kube_persistentvolumeclaim_resource_requests_storage_bytes|kube_persistentvolumeclaim_status_phase|kube_pod_container_info|kube_pod_container_resource_limits|kube_pod_container_resource_requests|kube_pod_container_status_last_terminated_reason|kube_pod_container_status_restarts_total|kube_pod_container_status_waiting_reason|kube_pod_info|kube_pod_owner|kube_pod_spec_volumes_persistentvolumeclaims_info|kube_pod_start_time|kube_pod_status_phase|kube_pod_status_reason|kube_replicaset.*|kube_resourcequota|kube_secret_metadata_resource_version|kube_statefulset.*
               static_configs:
                 - targets:
                     ["kube-state-metrics.kube-system.svc.cluster.local:8080"]
     processors:
-      attributes/add_cluster:
-        actions:
-          - key: k8s.cluster.name
-            value: homelab
-            action: upsert
-      filter/ksm:
-        metrics:
-          include:
-            match_type: strict
-            metric_names:
-              - kube_pod_status_phase
-              - kube_pod_status_ready
-              - kube_pod_status_scheduled
-              - kube_deployment_status_replicas
-              - kube_deployment_status_replicas_available
-              - kube_node_status_condition
-              - kube_node_status_capacity_cpu_cores
-              - kube_node_status_capacity_memory_bytes
-              - kube_node_status_allocatable_cpu_cores
-              - kube_node_status_allocatable_memory_bytes
-
-      filter/node_exporter:
-        metrics:
-          include:
-            match_type: strict
-            metric_names:
-              # Basic node health and resource usage
-              - node_cpu_seconds_total
-              - node_memory_MemAvailable_bytes
-              - node_memory_MemTotal_bytes
-              - node_memory_MemFree_bytes
-              - node_memory_Buffers_bytes
-              - node_memory_Cached_bytes
-              - node_load1
-              - node_load5
-              - node_load15
-              - node_filesystem_size_bytes
-              - node_filesystem_free_bytes
-              - node_filesystem_avail_bytes
-              - node_filesystem_readonly
-              - node_network_receive_bytes_total
-              - node_network_transmit_bytes_total
-              - node_network_receive_errs_total
-              - node_network_transmit_errs_total
-              - node_disk_read_bytes_total
-              - node_disk_written_bytes_total
-              - node_disk_reads_completed_total
-              - node_disk_writes_completed_total
       memory_limiter:
         check_interval: 1s
         limit_percentage: 75
@@ -113,9 +88,6 @@ spec:
         metrics:
           receivers: [otlp, prometheus/node-exporter, prometheus/ksm]
           processors:
-            - filter/node_exporter
-            - filter/ksm
-            - attributes/add_cluster
             - memory_limiter
             - batch
           exporters: [debug, otlphttp/grafana]
