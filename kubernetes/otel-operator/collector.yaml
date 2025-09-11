@@ -70,6 +70,14 @@ spec:
       batch:
         send_batch_size: 10000
         timeout: 10s
+      attributes/add_cluster:
+        actions:
+          - key: k8s.cluster.name
+            value: homelab
+            action: upsert
+          - key: cluster
+            value: homelab
+            action: upsert
 
     exporters:
       debug: {}
@@ -89,6 +97,7 @@ spec:
         metrics:
           receivers: [otlp, prometheus/node-exporter, prometheus/ksm]
           processors:
+            - attributes/add_cluster
             - memory_limiter
             - batch
           exporters: [debug, otlphttp/grafana]
