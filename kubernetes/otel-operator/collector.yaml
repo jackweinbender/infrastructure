@@ -49,11 +49,12 @@ spec:
             - job_name: "kube-state-metrics"
               scrape_interval: 120s
               static_configs:
-                - targets: ["kube-state-metrics.kube-system.svc.cluster.local:8080"]
+                - targets:
+                    ["kube-state-metrics.kube-system.svc.cluster.local:8080"]
               metric_relabel_configs:
                 # Only keep a core set of ksm metrics (pod, deployment, node status)
                 - source_labels: [__name__]
-                  regex: 'kube_pod_status_phase|kube_pod_status_ready|kube_pod_status_scheduled|kube_deployment_status_replicas|kube_deployment_status_replicas_available|kube_node_status_condition|kube_node_status_capacity_cpu_cores|kube_node_status_capacity_memory_bytes|kube_node_status_allocatable_cpu_cores|kube_node_status_allocatable_memory_bytes'
+                  regex: "kube_pod_status_phase|kube_pod_status_ready|kube_pod_status_scheduled|kube_deployment_status_replicas|kube_deployment_status_replicas_available|kube_node_status_condition|kube_node_status_capacity_cpu_cores|kube_node_status_capacity_memory_bytes|kube_node_status_allocatable_cpu_cores|kube_node_status_allocatable_memory_bytes"
                   action: keep
                 # Drop everything else
                 - source_labels: [__name__]
