@@ -26,15 +26,23 @@ spec:
           memory: {}
           network: {}
           load: {}
-      kubeletstats:
-        collection_interval: 60s
-        auth_type: serviceAccount
-        endpoint: "https://${KUBERNETES_NODE_NAME}:10250"
-        insecure_skip_verify: true
-        metric_groups:
-          - node
-          - pod
-          - container
+      prometheus/kubelet:
+        config:
+          scrape_configs:
+            - job_name: "kubelet"
+              scheme: https
+              tls_config:
+                insecure_skip_verify: true
+              bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+              kubernetes_sd_configs:
+                - role: node
+              relabel_configs:
+                - action: labelmap
+                  regex: __meta_kubernetes_node_label_(.+)
+              metrics_path: /metrics
+              # Kubelet metrics are usually on port 10250
+              # If your cluster uses a different port, update here
+              # This assumes the collector runs as a DaemonSet or has access to all nodes
     processors:
       memory_limiter:
         check_interval: 1s
@@ -60,6 +68,6 @@ spec:
           processors: [memory_limiter, batch]
           exporters: [debug]
         metrics:
-          receivers: [otlp, hostmetrics, kubeletstats]
+          receivers: [otlp, hostmetrics, prometheus/kubelet]
           processors: [memory_limiter, batch]
           exporters: [debug, otlphttp/grafana]
