@@ -30,21 +30,6 @@ spec:
                   regex: "(.*):10250"
                   replacement: "$1:9100"
                   target_label: __address__
-      prometheus/kubelet:
-        config:
-          scrape_configs:
-            - job_name: "kubelet"
-              scrape_interval: 60s
-              scheme: https
-              tls_config:
-                insecure_skip_verify: true
-              bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-              kubernetes_sd_configs:
-                - role: node
-              relabel_configs:
-                - action: labelmap
-                  regex: __meta_kubernetes_node_label_(.+)
-              metrics_path: /metrics
       prometheus/ksm:
         config:
           scrape_configs:
@@ -69,56 +54,34 @@ spec:
               - kube_node_status_capacity_memory_bytes
               - kube_node_status_allocatable_cpu_cores
               - kube_node_status_allocatable_memory_bytes
-      filter/kubelet:
+
+      filter/node_exporter:
         metrics:
           include:
             match_type: strict
             metric_names:
-              - kubelet_running_pod_count
-              - kubelet_runtime_operations_total
-              - kubelet_runtime_operations_errors_total
-              - kubelet_docker_operations_total
-              - kubelet_docker_operations_errors_total
-              - kubelet_docker_operations_latency_microseconds
-              - kubelet_docker_operations_latency_microseconds_count
-              - kubelet_docker_operations_latency_microseconds_sum
-              - kubelet_pleg_relist_duration_seconds
-              - kubelet_pleg_relist_interval_seconds
-              - kubelet_pleg_relist_interval_seconds_count
-              - kubelet_pleg_relist_interval_seconds_sum
-              - kubelet_pleg_relist_duration_seconds_count
-              - kubelet_pleg_relist_duration_seconds_sum
-              - kubelet_pod_start_duration_seconds
-              - kubelet_pod_worker_duration_seconds
-              - kubelet_pod_worker_duration_seconds_count
-              - kubelet_pod_worker_duration_seconds_sum
-              - kubelet_pod_start_duration_seconds_count
-              - kubelet_pod_start_duration_seconds_sum
-              - kubelet_cgroup_manager_duration_seconds
-              - kubelet_cgroup_manager_duration_seconds_count
-              - kubelet_cgroup_manager_duration_seconds_sum
-              - kubelet_containers_per_pod_count
-              - kubelet_containers_per_pod_count_count
-              - kubelet_containers_per_pod_count_sum
-              - kubelet_evictions
-              - kubelet_eviction_stats_age_seconds
-              - kubelet_eviction_stats_age_seconds_count
-              - kubelet_eviction_stats_age_seconds_sum
-              - kubelet_node_config_error
-              - kubelet_node_config_success
-              - kubelet_node_config_active
-              - kubelet_node_config_assigned
-              - kubelet_node_config_last_known_good
-              - kubelet_node_config_error_count
-              - kubelet_node_config_success_count
-              - kubelet_node_config_active_count
-              - kubelet_node_config_assigned_count
-              - kubelet_node_config_last_known_good_count
-              - kubelet_node_config_error_sum
-              - kubelet_node_config_success_sum
-              - kubelet_node_config_active_sum
-              - kubelet_node_config_assigned_sum
-              - kubelet_node_config_last_known_good_sum
+              # Basic node health and resource usage
+              - node_cpu_seconds_total
+              - node_memory_MemAvailable_bytes
+              - node_memory_MemTotal_bytes
+              - node_memory_MemFree_bytes
+              - node_memory_Buffers_bytes
+              - node_memory_Cached_bytes
+              - node_load1
+              - node_load5
+              - node_load15
+              - node_filesystem_size_bytes
+              - node_filesystem_free_bytes
+              - node_filesystem_avail_bytes
+              - node_filesystem_readonly
+              - node_network_receive_bytes_total
+              - node_network_transmit_bytes_total
+              - node_network_receive_errs_total
+              - node_network_transmit_errs_total
+              - node_disk_read_bytes_total
+              - node_disk_written_bytes_total
+              - node_disk_reads_completed_total
+              - node_disk_writes_completed_total
       memory_limiter:
         check_interval: 1s
         limit_percentage: 75
@@ -143,8 +106,10 @@ spec:
           processors: [memory_limiter, batch]
           exporters: [debug]
         metrics:
-          receivers:
-            [otlp, prometheus/node-exporter, prometheus/kubelet, prometheus/ksm]
-          #processors: [filter/kubelet, filter/ksm, memory_limiter, batch]
-          processors: [memory_limiter, batch]
+          receivers: [otlp, prometheus/node-exporter, prometheus/ksm]
+          processors:
+            - filter/node_exporter
+            - filter/ksm
+            - memory_limiter
+            - batch
           exporters: [debug, otlphttp/grafana]
