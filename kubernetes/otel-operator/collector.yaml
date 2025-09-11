@@ -51,10 +51,6 @@ spec:
           processors: [memory_limiter, batch]
           exporters: [debug]
         metrics:
-          receivers: [otlp]
+          receivers: [otlp, hostmetrics]
           processors: [memory_limiter, batch]
-          exporters: [debug, otlphttp/grafana]
-        hostmetrics:
-          receivers: [hostmetrics]
-          processors: [batch]
           exporters: [debug, otlphttp/grafana]
