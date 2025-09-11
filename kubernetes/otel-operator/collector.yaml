@@ -18,7 +18,7 @@ spec:
           http:
             endpoint: 0.0.0.0:4318
       hostmetrics:
-        collection_interval: 30s
+        collection_interval: 60s
         scrapers:
           cpu: {}
           disk: {}
@@ -30,6 +30,7 @@ spec:
         config:
           scrape_configs:
             - job_name: "kubelet"
+              scrape_interval: 60s
               scheme: https
               tls_config:
                 insecure_skip_verify: true
@@ -40,9 +41,11 @@ spec:
                 - action: labelmap
                   regex: __meta_kubernetes_node_label_(.+)
               metrics_path: /metrics
-              # Kubelet metrics are usually on port 10250
-              # If your cluster uses a different port, update here
-              # This assumes the collector runs as a DaemonSet or has access to all nodes
+              metric_relabel_configs:
+                # Drop high-cardinality metrics (example: container_fs_inodes_free)
+                - source_labels: [__name__]
+                  regex: "container_fs_inodes_free|container_fs_inodes_total|container_fs_usage_bytes|container_fs_limit_bytes|container_fs_reads_bytes_total|container_fs_writes_bytes_total|container_fs_reads_total|container_fs_writes_total|container_network_receive_bytes_total|container_network_transmit_bytes_total|container_network_receive_packets_total|container_network_transmit_packets_total|container_network_receive_errors_total|container_network_transmit_errors_total"
+                  action: drop
     processors:
       memory_limiter:
         check_interval: 1s
