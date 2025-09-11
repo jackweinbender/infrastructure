@@ -26,6 +26,15 @@ spec:
           memory: {}
           network: {}
           load: {}
+      kubeletstats:
+        collection_interval: 60s
+        auth_type: serviceAccount
+        endpoint: "https://${KUBERNETES_NODE_NAME}:10250"
+        insecure_skip_verify: true
+        metric_groups:
+          - node
+          - pod
+          - container
     processors:
       memory_limiter:
         check_interval: 1s
@@ -51,6 +60,6 @@ spec:
           processors: [memory_limiter, batch]
           exporters: [debug]
         metrics:
-          receivers: [otlp, hostmetrics]
+          receivers: [otlp, hostmetrics, kubeletstats]
           processors: [memory_limiter, batch]
           exporters: [debug, otlphttp/grafana]
