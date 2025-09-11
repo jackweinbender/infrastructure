@@ -3,6 +3,12 @@ kind: OpenTelemetryCollector
 metadata:
   name: simplest
 spec:
+  env:
+    - name: GRAFANA_CLOUD_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: grafana-token
+          key: token
   config:
     receivers:
       otlp:
@@ -23,6 +29,13 @@ spec:
     exporters:
       # NOTE: Prior to v0.86.0 use `logging` instead of `debug`.
       debug: {}
+      otlp/grafana:
+        endpoint: "https://otlp-gateway-prod-us-east-0.grafana.net/otlp"
+        headers:
+          # Uses the API key from the environment variable
+          authorization: "Basic ${GRAFANA_CLOUD_API_KEY}"
+        tls:
+          insecure: false
 
     service:
       pipelines:
@@ -30,3 +43,7 @@ spec:
           receivers: [otlp]
           processors: [memory_limiter, batch]
           exporters: [debug]
+        metrics:
+          receivers: [otlp]
+          processors: [memory_limiter, batch]
+          exporters: [debug, otlp/grafana]
