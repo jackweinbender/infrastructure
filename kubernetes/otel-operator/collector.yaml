@@ -145,5 +145,6 @@ spec:
         metrics:
           receivers:
             [otlp, prometheus/node-exporter, prometheus/kubelet, prometheus/ksm]
-          processors: [filter/kubelet, filter/ksm, memory_limiter, batch]
+          #processors: [filter/kubelet, filter/ksm, memory_limiter, batch]
+          processors: [memory_limiter, batch]
           exporters: [debug, otlphttp/grafana]
