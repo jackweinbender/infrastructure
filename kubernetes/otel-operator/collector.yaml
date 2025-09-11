@@ -17,6 +17,15 @@ spec:
             endpoint: 0.0.0.0:4317
           http:
             endpoint: 0.0.0.0:4318
+      hostmetrics:
+        collection_interval: 30s
+        scrapers:
+          cpu:
+          disk:
+          filesystem:
+          memory:
+          network:
+          load:
     processors:
       memory_limiter:
         check_interval: 1s
@@ -44,4 +53,8 @@ spec:
         metrics:
           receivers: [otlp]
           processors: [memory_limiter, batch]
+          exporters: [debug, otlphttp/grafana]
+        hostmetrics:
+          receivers: [hostmetrics]
+          processors: [batch]
           exporters: [debug, otlphttp/grafana]
