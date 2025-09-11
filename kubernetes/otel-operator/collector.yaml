@@ -17,15 +17,13 @@ spec:
             endpoint: 0.0.0.0:4317
           http:
             endpoint: 0.0.0.0:4318
-      hostmetrics:
-        collection_interval: 60s
-        scrapers:
-          cpu: {}
-          disk: {}
-          filesystem: {}
-          memory: {}
-          network: {}
-          load: {}
+      prometheus/node-exporter:
+        config:
+          scrape_configs:
+            - job_name: "node-exporter"
+              scrape_interval: 60s
+              static_configs:
+                - targets: ["localhost:9100"]
       prometheus/kubelet:
         config:
           scrape_configs:
@@ -115,34 +113,6 @@ spec:
               - kubelet_node_config_active_sum
               - kubelet_node_config_assigned_sum
               - kubelet_node_config_last_known_good_sum
-      filter/hostmetrics:
-        metrics:
-          include:
-            match_type: strict
-            metric_names:
-              - system.cpu.utilization
-              - system.memory.usage
-              - system.memory.utilization
-              - system.disk.io
-              - system.disk.operations
-              - system.disk.time
-              - system.disk.pending_operations
-              - system.disk.merged
-              - system.disk.weighted_io_time
-              - system.disk.capacity
-              - system.disk.free
-              - system.disk.used
-              - system.disk.utilization
-              - system.filesystem.usage
-              - system.filesystem.utilization
-              - system.network.io
-              - system.network.packets
-              - system.network.errors
-              - system.network.dropped
-              - system.network.connections
-              - system.load.1
-              - system.load.5
-              - system.load.15
       memory_limiter:
         check_interval: 1s
         limit_percentage: 75
@@ -167,13 +137,7 @@ spec:
           processors: [memory_limiter, batch]
           exporters: [debug]
         metrics:
-          receivers: [otlp, hostmetrics, prometheus/kubelet, prometheus/ksm]
-          processors:
-            [
-              filter/hostmetrics,
-              filter/kubelet,
-              filter/ksm,
-              memory_limiter,
-              batch,
-            ]
+          receivers:
+            [otlp, prometheus/node-exporter, prometheus/kubelet, prometheus/ksm]
+          processors: [filter/kubelet, filter/ksm, memory_limiter, batch]
           exporters: [debug, otlphttp/grafana]
