@@ -30,11 +30,12 @@ spec:
       debug: {}
       otlp/grafana:
         endpoint: "otlp-gateway-prod-us-east-0.grafana.net:443"
-        protocol: http/protobuf
         headers:
           authorization: "Basic ${GRAFANA_CLOUD_API_KEY}"
         tls:
           insecure: false
+        protocols:
+          http:
 
     service:
       pipelines:
