@@ -22,7 +22,10 @@ spec:
         scrapers:
           cpu: {}
           disk: {}
+          filesystem: {}
           memory: {}
+          network: {}
+          load: {}
       prometheus/kubelet:
         config:
           scrape_configs:
@@ -38,11 +41,6 @@ spec:
                 - action: labelmap
                   regex: __meta_kubernetes_node_label_(.+)
               metrics_path: /metrics
-              metric_relabel_configs:
-                # Drop even more high-cardinality metrics
-                - source_labels: [__name__]
-                  regex: "container_.+|kubelet_volume_stats_.+|kube_pod_container_.+|kube_pod_status_.+|kube_pod_info|kube_pod_labels|kube_node_status_.+|kube_node_info|kube_node_labels|kube_node_spec_.+|kube_node_status_.+|kube_deployment_status_.+|kube_deployment_spec_.+|kube_deployment_labels|kube_deployment_info|kube_namespace_labels|kube_namespace_status_.+|kube_namespace_info|kube_service_info|kube_service_labels|kube_service_spec_.+|kube_service_status_.+|kube_endpoint_.+|kube_replicaset_.+|kube_statefulset_.+|kube_daemonset_.+|kube_job_.+|kube_cronjob_.+|kube_replicationcontroller_.+|kube_secret_.+|kube_configmap_.+|kube_ingress_.+|kube_persistentvolume_.+|kube_persistentvolumeclaim_.+|kube_storageclass_.+|kube_horizontalpodautoscaler_.+|kube_certificate_.+|kube_controllerrevision_.+|kube_runtimeclass_.+|kube_priorityclass_.+|kube_resourcequota_.+|kube_limitrange_.+|kube_poddisruptionbudget_.+|kube_pod_owner|kube_pod_restart_policy|kube_pod_start_time|kube_pod_completion_time|kube_pod_deletion_timestamp|kube_pod_status_phase|kube_pod_status_ready|kube_pod_status_scheduled|kube_pod_status_unschedulable|kube_pod_status_initialized|kube_pod_status_reason|kube_pod_status_reason_unschedulable|kube_pod_status_reason_evicted|kube_pod_status_reason_failed|kube_pod_status_reason_oomkilled|kube_pod_status_reason_nodeaffinity|kube_pod_status_reason_podaffinity|kube_pod_status_reason_podantiaffinity|kube_pod_status_reason_tainttoleration|kube_pod_status_reason_toleration|kube_pod_status_reason_nodeunschedulable|kube_pod_status_reason_nodeaffinityunsatisfiable|kube_pod_status_reason_podaffinityunsatisfiable|kube_pod_status_reason_podantiaffinityunsatisfiable|kube_pod_status_reason_tainttolerationunsatisfiable|kube_pod_status_reason_tolerationunsatisfiable|kube_pod_status_reason_nodeunschedulableunsatisfiable|kube_pod_status_reason_nodeaffinityunsatisfiableunsatisfiable|kube_pod_status_reason_podaffinityunsatisfiableunsatisfiable|kube_pod_status_reason_podantiaffinityunsatisfiableunsatisfiable|kube_pod_status_reason_tainttolerationunsatisfiableunsatisfiable|kube_pod_status_reason_tolerationunsatisfiableunsatisfiable|kube_pod_status_reason_nodeunschedulableunsatisfiableunsatisfiable|kube_pod_status_reason_nodeaffinityunsatisfiableunsatisfiableunsatisfiable|kube_pod_status_reason_podaffinityunsatisfiableunsatisfiableunsatisfiable|kube_pod_status_reason_podantiaffinityunsatisfiableunsatisfiableunsatisfiable|kube_pod_status_reason_tainttolerationunsatisfiableunsatisfiableunsatisfiable|kube_pod_status_reason_tolerationunsatisfiableunsatisfiableunsatisfiable|kube_pod_status_reason_nodeunschedulableunsatisfiableunsatisfiableunsatisfiable"
-                  action: drop
       prometheus/ksm:
         config:
           scrape_configs:
@@ -51,16 +49,100 @@ spec:
               static_configs:
                 - targets:
                     ["kube-state-metrics.kube-system.svc.cluster.local:8080"]
-              metric_relabel_configs:
-                # Only keep a core set of ksm metrics (pod, deployment, node status)
-                - source_labels: [__name__]
-                  regex: "kube_pod_status_phase|kube_pod_status_ready|kube_pod_status_scheduled|kube_deployment_status_replicas|kube_deployment_status_replicas_available|kube_node_status_condition|kube_node_status_capacity_cpu_cores|kube_node_status_capacity_memory_bytes|kube_node_status_allocatable_cpu_cores|kube_node_status_allocatable_memory_bytes"
-                  action: keep
-                # Drop everything else
-                - source_labels: [__name__]
-                  regex: .*
-                  action: drop
     processors:
+      filter/ksm:
+        metrics:
+          include:
+            match_type: strict
+            metric_names:
+              - kube_pod_status_phase
+              - kube_pod_status_ready
+              - kube_pod_status_scheduled
+              - kube_deployment_status_replicas
+              - kube_deployment_status_replicas_available
+              - kube_node_status_condition
+              - kube_node_status_capacity_cpu_cores
+              - kube_node_status_capacity_memory_bytes
+              - kube_node_status_allocatable_cpu_cores
+              - kube_node_status_allocatable_memory_bytes
+      filter/kubelet:
+        metrics:
+          include:
+            match_type: strict
+            metric_names:
+              - kubelet_running_pod_count
+              - kubelet_runtime_operations_total
+              - kubelet_runtime_operations_errors_total
+              - kubelet_docker_operations_total
+              - kubelet_docker_operations_errors_total
+              - kubelet_docker_operations_latency_microseconds
+              - kubelet_docker_operations_latency_microseconds_count
+              - kubelet_docker_operations_latency_microseconds_sum
+              - kubelet_pleg_relist_duration_seconds
+              - kubelet_pleg_relist_interval_seconds
+              - kubelet_pleg_relist_interval_seconds_count
+              - kubelet_pleg_relist_interval_seconds_sum
+              - kubelet_pleg_relist_duration_seconds_count
+              - kubelet_pleg_relist_duration_seconds_sum
+              - kubelet_pod_start_duration_seconds
+              - kubelet_pod_worker_duration_seconds
+              - kubelet_pod_worker_duration_seconds_count
+              - kubelet_pod_worker_duration_seconds_sum
+              - kubelet_pod_start_duration_seconds_count
+              - kubelet_pod_start_duration_seconds_sum
+              - kubelet_cgroup_manager_duration_seconds
+              - kubelet_cgroup_manager_duration_seconds_count
+              - kubelet_cgroup_manager_duration_seconds_sum
+              - kubelet_containers_per_pod_count
+              - kubelet_containers_per_pod_count_count
+              - kubelet_containers_per_pod_count_sum
+              - kubelet_evictions
+              - kubelet_eviction_stats_age_seconds
+              - kubelet_eviction_stats_age_seconds_count
+              - kubelet_eviction_stats_age_seconds_sum
+              - kubelet_node_config_error
+              - kubelet_node_config_success
+              - kubelet_node_config_active
+              - kubelet_node_config_assigned
+              - kubelet_node_config_last_known_good
+              - kubelet_node_config_error_count
+              - kubelet_node_config_success_count
+              - kubelet_node_config_active_count
+              - kubelet_node_config_assigned_count
+              - kubelet_node_config_last_known_good_count
+              - kubelet_node_config_error_sum
+              - kubelet_node_config_success_sum
+              - kubelet_node_config_active_sum
+              - kubelet_node_config_assigned_sum
+              - kubelet_node_config_last_known_good_sum
+      filter/hostmetrics:
+        metrics:
+          include:
+            match_type: strict
+            metric_names:
+              - system.cpu.utilization
+              - system.memory.usage
+              - system.memory.utilization
+              - system.disk.io
+              - system.disk.operations
+              - system.disk.time
+              - system.disk.pending_operations
+              - system.disk.merged
+              - system.disk.weighted_io_time
+              - system.disk.capacity
+              - system.disk.free
+              - system.disk.used
+              - system.disk.utilization
+              - system.filesystem.usage
+              - system.filesystem.utilization
+              - system.network.io
+              - system.network.packets
+              - system.network.errors
+              - system.network.dropped
+              - system.network.connections
+              - system.load.1
+              - system.load.5
+              - system.load.15
       memory_limiter:
         check_interval: 1s
         limit_percentage: 75
@@ -86,5 +168,12 @@ spec:
           exporters: [debug]
         metrics:
           receivers: [otlp, hostmetrics, prometheus/kubelet, prometheus/ksm]
-          processors: [memory_limiter, batch]
+          processors:
+            [
+              filter/hostmetrics,
+              filter/kubelet,
+              filter/ksm,
+              memory_limiter,
+              batch,
+            ]
           exporters: [debug, otlphttp/grafana]
