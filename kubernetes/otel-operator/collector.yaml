@@ -39,6 +39,11 @@ spec:
                 - targets:
                     ["kube-state-metrics.kube-system.svc.cluster.local:8080"]
     processors:
+      attributes/add_cluster:
+        actions:
+          - key: k8s.cluster.name
+            value: homelab
+            action: upsert
       filter/ksm:
         metrics:
           include:
@@ -110,6 +115,7 @@ spec:
           processors:
             - filter/node_exporter
             - filter/ksm
+            - attributes/add_cluster
             - memory_limiter
             - batch
           exporters: [debug, otlphttp/grafana]
