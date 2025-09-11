@@ -3,7 +3,6 @@ kind: OpenTelemetryCollector
 metadata:
   name: simplest
 spec:
-  revisionHistoryLimit: 0
   env:
     - name: GRAFANA_CLOUD_API_KEY
       valueFrom:
