@@ -22,10 +22,7 @@ spec:
         scrapers:
           cpu: {}
           disk: {}
-          filesystem: {}
           memory: {}
-          network: {}
-          load: {}
       prometheus/kubelet:
         config:
           scrape_configs:
