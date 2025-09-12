@@ -16,7 +16,11 @@ spec:
     logsCollection:
       enabled: true
   config:
-    receivers: {}
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+          http:
     processors:
       resource/clusterName:
         attributes:
@@ -33,7 +37,7 @@ spec:
     service:
       pipelines:
         logs:
-          receivers: []
+          receivers: [otlp]
           processors:
             - resource/clusterName
             - memory_limiter
