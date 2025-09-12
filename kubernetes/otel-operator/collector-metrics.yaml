@@ -19,9 +19,6 @@ spec:
       value: "933879"
     - name: PROMETHEUS_URL
       value: "https://prometheus-prod-13-prod-us-east-0.grafana.net"
-  presets:
-    kubernetesEvents:
-      enabled: true
   config:
     receivers:
       otlp:
