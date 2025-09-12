@@ -37,7 +37,7 @@ spec:
     service:
       pipelines:
         logs:
-          receivers: [otlp]
+          receivers: [filelog]
           processors:
             - resource/clusterName
           exporters:
