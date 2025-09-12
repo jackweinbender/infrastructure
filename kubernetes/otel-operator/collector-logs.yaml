@@ -31,9 +31,9 @@ spec:
     service:
       pipelines:
         logs:
+          receivers: []
           processors:
             - resource/clusterName
-            - resource/k8sEvents
             - memory_limiter
             - batch
           exporters:
