@@ -4,7 +4,7 @@ metadata:
   name: logs-collector
 spec:
   serviceAccount: otel-collector
-  type: daemonset
+  mode: daemonset
   env:
     - name: GRAFANA_CLOUD_API_BEARER_TOKEN
       valueFrom:
