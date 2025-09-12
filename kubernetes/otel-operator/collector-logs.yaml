@@ -12,15 +12,15 @@ spec:
           name: grafana-bearer-token
           key: token
   image: otel/opentelemetry-collector-contrib
-  presets:
-    logsCollection:
-      enabled: true
   config:
     receivers:
-      otlp:
-        protocols:
-          grpc:
-          http:
+      filelog:
+        include_file_path: true
+        include:
+          - /var/log/pods/*/*/*.log
+        operators:
+          - id: container-parser
+            type: container
     processors:
       resource/clusterName:
         attributes:
