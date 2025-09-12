@@ -15,6 +15,7 @@ spec:
     logsCollection:
       enabled: true
   config:
+    receivers: {}
     processors:
       resource/clusterName:
         attributes:
