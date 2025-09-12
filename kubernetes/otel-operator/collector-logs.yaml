@@ -40,7 +40,5 @@ spec:
           receivers: [otlp]
           processors:
             - resource/clusterName
-            - memory_limiter
-            - batch
           exporters:
             - otlphttp/grafana
