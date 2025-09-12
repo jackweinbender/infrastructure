@@ -1,7 +1,7 @@
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
-  name: simplest
+  name: metrics-collector
 spec:
   serviceAccount: otel-collector
   env:
@@ -19,6 +19,9 @@ spec:
       value: "933879"
     - name: PROMETHEUS_URL
       value: "https://prometheus-prod-13-prod-us-east-0.grafana.net"
+  presets:
+    kubernetesEvents:
+      enabled: true
   config:
     receivers:
       otlp:
@@ -114,7 +117,14 @@ spec:
           - key: cluster
             value: homelab
             action: upsert
-
+      resource/k8sEvents:
+        attributes:
+          - action: insert
+            key: k8s.cluster.name
+            value: homelab
+          - action: upsert
+            key: service.name
+            value: "integrations/kubernetes/eventhandler"
     exporters:
       debug: {}
       otlphttp/grafana:
