@@ -3,7 +3,8 @@ kind: Kustomization
 
 resources:
   - https://github.com/open-telemetry/opentelemetry-operator/releases/latest/download/opentelemetry-operator.yaml
-  - collector.yaml
+  - collector-metrics.yaml
+  - collector-logs.yaml
   - node_exporter.yaml
   - secrets.yaml
   - rbac.yaml
