@@ -123,12 +123,11 @@ spec:
           authorization: "Basic ${GRAFANA_CLOUD_API_BEARER_TOKEN}"
         tls:
           insecure: false
-      exporters:
-    prometheusremotewrite/grafanaCloudMetrics:
-      external_labels:
-        cluster: "homelab"
-        k8s.cluster.name: "homelab"
-      endpoint: "https://${PROMETHEUS_USERNAME}:${GRAFANA_CLOUD_API_TOKEN}@${PROMETHEUS_URL}/api/prom/push"
+      prometheusremotewrite/grafanaCloudMetrics:
+        external_labels:
+          cluster: "homelab"
+          k8s.cluster.name: "homelab"
+        endpoint: "https://${PROMETHEUS_USERNAME}:${GRAFANA_CLOUD_API_TOKEN}@${PROMETHEUS_URL}/api/prom/push"
     service:
       pipelines:
         traces:
