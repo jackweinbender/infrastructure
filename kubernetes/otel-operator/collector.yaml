@@ -140,4 +140,4 @@ spec:
             - attributes/add_cluster
             - memory_limiter
             - batch
-          exporters: [debug, prometheusremotewrite/grafanaCloudMetrics]
+          exporters: [debug, otlphttp/grafana]
