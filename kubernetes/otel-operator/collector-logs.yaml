@@ -12,6 +12,15 @@ spec:
           name: grafana-bearer-token
           key: token
   image: otel/opentelemetry-collector-contrib
+  volumeMounts:
+    - name: varlogpods
+      mountPath: /var/log/pods
+      readOnly: true
+  volumes:
+    - name: varlogpods
+      hostPath:
+        path: /var/log/pods
+        type: Directory
   config:
     receivers:
       filelog:
