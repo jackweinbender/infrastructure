@@ -11,6 +11,9 @@ spec:
         secretKeyRef:
           name: grafana-bearer-token
           key: token
+  image:
+    repository: "otel/opentelemetry-collector-contrib"
+    tag: latest
   presets:
     logsCollection:
       enabled: true
