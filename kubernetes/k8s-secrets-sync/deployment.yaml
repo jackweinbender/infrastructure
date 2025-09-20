@@ -16,7 +16,7 @@ spec:
       serviceAccountName: k8s-secrets-sync-sa
       containers:
         - name: k8s-secrets-sync
-          image: ghcr.io/jackweinbender/k8s-secrets-sync:latest
+          image: ghcr.io/jackweinbender/k8s-secret-sync:latest
           env:
             - name: OP_SERVICE_ACCOUNT_TOKEN
               valueFrom:
