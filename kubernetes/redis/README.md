@@ -15,7 +15,7 @@ This directory contains the shared Redis deployment for the homelab infrastructu
 **Password Synchronization Flow:**
 
 1. **1Password**: Stores all user passwords in centralized vaults
-2. **k8s-secrets-sync**: Syncs passwords to **both** Redis namespace and application namespaces
+2. **k8s-secret-sync**: Syncs passwords to **both** Redis namespace and application namespaces
 3. **Redis Init Container**: Reads passwords from Redis namespace and builds ACL file
 4. **Applications**: Read the **same passwords** from their namespace to authenticate
 
@@ -48,7 +48,7 @@ This directory contains the shared Redis deployment for the homelab infrastructu
 
 ## Secrets Management
 
-All Redis passwords are managed via 1Password using the `k8s-secrets-sync` operator:
+All Redis passwords are managed via 1Password using the `k8s-secret-sync` operator:
 
 ### Required 1Password Entries
 
@@ -108,9 +108,9 @@ metadata:
   name: redis-myapp-user
   namespace: redis # Redis namespace
   annotations:
-    "k8s-secrets-sync.weinbender.io/provider": "op"
-    "k8s-secrets-sync.weinbender.io/secret-key": "password"
-    "k8s-secrets-sync.weinbender.io/ref": "op://microk8s/redis-users/myapp-password"
+    "k8s-secret-sync.weinbender.io/provider": "op"
+    "k8s-secret-sync.weinbender.io/secret-key": "password"
+    "k8s-secret-sync.weinbender.io/ref": "op://microk8s/redis-users/myapp-password"
 type: Opaque
 ```
 
@@ -123,9 +123,9 @@ metadata:
   name: myapp-redis-auth
   namespace: myapp # Your app's namespace
   annotations:
-    "k8s-secrets-sync.weinbender.io/provider": "op"
-    "k8s-secrets-sync.weinbender.io/secret-key": "password"
-    "k8s-secrets-sync.weinbender.io/ref": "op://microk8s/redis-users/myapp-password"
+    "k8s-secret-sync.weinbender.io/provider": "op"
+    "k8s-secret-sync.weinbender.io/secret-key": "password"
+    "k8s-secret-sync.weinbender.io/ref": "op://microk8s/redis-users/myapp-password"
 type: Opaque
 ```
 
