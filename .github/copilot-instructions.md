@@ -56,9 +56,9 @@ Sensitive data is managed by the custom [`k8s-secrets-sync`](https://github.com/
 ```yaml
 metadata:
   annotations:
-    "k8s-secrets-sync.weinbender.io/provider": "op"
+    "k8s-secrets-sync.weinbender.io/provider-name": "op"
     "k8s-secrets-sync.weinbender.io/secret-key": "password"
-    "k8s-secrets-sync.weinbender.io/ref": "op://vault/item/field"
+    "k8s-secrets-sync.weinbender.io/provider-ref": "op://vault/item/field"
 ```
 
 **Best practices:**
@@ -78,9 +78,9 @@ kind: Secret
 metadata:
   name: app-database-password
   annotations:
-    "k8s-secrets-sync.weinbender.io/provider": "op"
+    "k8s-secrets-sync.weinbender.io/provider-name": "op"
     "k8s-secrets-sync.weinbender.io/secret-key": "password"
-    "k8s-secrets-sync.weinbender.io/ref": "op://microk8s/app-db/password"
+    "k8s-secrets-sync.weinbender.io/provider-ref": "op://microk8s/app-db/password"
 ---
 # ConfigMap (non-sensitive)
 apiVersion: v1
@@ -130,9 +130,9 @@ Override app-level sync policy with annotations as needed:
 metadata:
   annotations:
     argocd.argoproj.io/sync-options: "Force=true,Replace=true"
-    "k8s-secrets-sync.weinbender.io/provider": "op"
+    "k8s-secrets-sync.weinbender.io/provider-name-name": "op"
+    "k8s-secrets-sync.weinbender.io/provider-name-ref": "op://vault/item/field"
     "k8s-secrets-sync.weinbender.io/secret-key": "password"
-    "k8s-secrets-sync.weinbender.io/ref": "op://vault/item/field"
 ```
 
 **Other common options:**

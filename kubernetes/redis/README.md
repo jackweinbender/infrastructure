@@ -108,9 +108,9 @@ metadata:
   name: redis-myapp-user
   namespace: redis # Redis namespace
   annotations:
-    "k8s-secret-sync.weinbender.io/provider": "op"
+    "k8s-secret-sync.weinbender.io/provider-name": "op"
     "k8s-secret-sync.weinbender.io/secret-key": "password"
-    "k8s-secret-sync.weinbender.io/ref": "op://microk8s/redis-users/myapp-password"
+    "k8s-secret-sync.weinbender.io/provider-ref": "op://microk8s/redis-users/myapp-password"
 type: Opaque
 ```
 
@@ -123,9 +123,9 @@ metadata:
   name: myapp-redis-auth
   namespace: myapp # Your app's namespace
   annotations:
-    "k8s-secret-sync.weinbender.io/provider": "op"
+    "k8s-secret-sync.weinbender.io/provider-name": "op"
     "k8s-secret-sync.weinbender.io/secret-key": "password"
-    "k8s-secret-sync.weinbender.io/ref": "op://microk8s/redis-users/myapp-password"
+    "k8s-secret-sync.weinbender.io/provider-ref": "op://microk8s/redis-users/myapp-password"
 type: Opaque
 ```
 
