@@ -1,0 +1,16 @@
+resource "google_cloud_run_v2_service" "remindme" {
+  name                = "remind-me"
+  location            = "us-central1"
+  deletion_protection = false
+  ingress             = "INGRESS_TRAFFIC_ALL"
+
+  scaling {
+    max_instance_count = 1
+  }
+
+  template {
+    containers {
+      image = "us-docker.pkg.dev/cloudrun/container/hello"
+    }
+  }
+}

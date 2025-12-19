@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        component: [mgmt, aws]
+        component: [mgmt, aws, gcp-remind-me]
     steps:
       - uses: actions/checkout@v3
       - name: Auth with AWS
@@ -24,6 +24,11 @@ jobs:
           aws-region: "us-east-1"
           role-to-assume: arn:aws:iam::325498355308:role/GithubActionsRole
           role-session-name: GithubActionsRole
+      - name: Auth with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
       - uses: hashicorp/setup-terraform@v2
         name: Plan on ${{ matrix.component }}
       # We always run init.
