@@ -1,7 +1,8 @@
 locals {
   enabled_apis = [
-    "run.googleapis.com",
-    "iamcredentials.googleapis.com"
+    "iamcredentials.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
+    "iam.googleapis.com"
   ]
 }
 
