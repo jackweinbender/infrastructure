@@ -10,6 +10,7 @@ on:
           - "mgmt"
           - "aws"
           - "gcp-remind-me"
+          - "gcp-weinbender-io"
         default: "aws"
       apply:
         description: "Apply Terraform"
