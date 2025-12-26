@@ -5,7 +5,7 @@ metadata:
   namespace: cert-manager
   annotations:
     argocd.argoproj.io/sync-options: "Force=true,Replace=true"
-    k8s-secret-sync.weinbender.io/provider: "op"
-    k8s-secret-sync.weinbender.io/secret-key: "api-token"
-    k8s-secret-sync.weinbender.io/ref: "op://microk8s/cloudflare-auth-weinbenderio/credential"
+    "k8s-secret-sync.weinbender.io/provider-name": "op"
+    "k8s-secret-sync.weinbender.io/secret-key": "api-token"
+    "k8s-secret-sync.weinbender.io/provider-ref": "op://microk8s/cloudflare-auth-weinbenderio/credential"
 type: Opaque
