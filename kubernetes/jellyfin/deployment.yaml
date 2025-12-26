@@ -16,6 +16,7 @@ spec:
       securityContext:
         # these settings ensure that Jellyfin runs with the correct user and group IDs
         # which are necessary for file permissions on the host system
+        runAsNonRoot: true
         runAsUser: 101000
         runAsGroup: 110000
         fsGroup: 110000
@@ -24,7 +25,9 @@ spec:
           image: jellyfin/jellyfin:latest
           ports:
             - containerPort: 8096
+              name: http
             - containerPort: 8920
+              name: https
           volumeMounts:
             - name: jellyfin-config
               mountPath: /config
@@ -32,13 +35,28 @@ spec:
               mountPath: /cache
             - name: jellyfin-media
               mountPath: /media
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8096
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8096
+            initialDelaySeconds: 10
+            periodSeconds: 10
       volumes:
         - name: jellyfin-config
           hostPath:
             path: /home/nas/shared/pvcs/jellyfin-config
+            type: DirectoryOrCreate
         - name: jellyfin-cache
           hostPath:
             path: /home/nas/shared/pvcs/jellyfin-cache
+            type: DirectoryOrCreate
         - name: jellyfin-media
           hostPath:
             path: /home/nas/media
+            type: DirectoryOrCreate

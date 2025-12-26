@@ -12,6 +12,8 @@ resources:
   - service-ml.yaml
   - httproute.yaml
 
-commonLabels:
-  app.kubernetes.io/name: immich
-  app.kubernetes.io/part-of: immich
+labels:
+  - pairs:
+      app.kubernetes.io/name: immich
+      app.kubernetes.io/part-of: immich
+    includeSelectors: false
