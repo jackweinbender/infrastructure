@@ -10,3 +10,9 @@ patches:
     target:
       kind: Deployment
       name: operator
+  - path: patch-secrets.yaml
+    # Patch to replace the operator-oauth secret
+    # used by the operator deployment, We don't want it.
+    target:
+      kind: Secret
+      name: operator-oauth
