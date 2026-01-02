@@ -4,6 +4,10 @@ kind: Kustomization
 resources:
   - https://raw.githubusercontent.com/tailscale/tailscale/refs/tags/v1.92.4/cmd/k8s-operator/deploy/manifests/operator.yaml
   - secrets.yaml
+  - envoy-proxy.yaml
+  - envoy-gateway-class.yaml
+  - envoy-gateway.yaml
+  - cluster-wildcard-cert.yaml
 
 patches:
   - path: patch-deployment.yaml

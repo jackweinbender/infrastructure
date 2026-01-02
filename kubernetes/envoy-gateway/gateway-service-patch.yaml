@@ -5,7 +5,5 @@ metadata:
   namespace: envoy-gateway-system
   annotations:
     metallb.io/address-pool: envoy-gateway-pool
-    tailscale.com/expose: "true"
-    tailscale.com/hostname: "k8s.weinbender.io"
 spec:
   type: LoadBalancer
