@@ -9,6 +9,9 @@ metadata:
 spec:
   gatewayClassName: tailscale
   listeners:
+    - name: http
+      port: 80
+      protocol: HTTP
     - name: https
       protocol: HTTPS
       port: 443

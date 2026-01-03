@@ -5,6 +5,7 @@ resources:
   - https://github.com/envoyproxy/gateway/releases/download/v1.6.0/install.yaml
   - gateway-class.yaml
   - gateway.yaml
+  - gateway-httproute-default.yaml
 
 patches:
   - path: gateway-service-patch.yaml
