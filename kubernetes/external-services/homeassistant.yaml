@@ -3,12 +3,25 @@ kind: Service
 metadata:
   name: homeassistant
 spec:
-  type: ExternalName
-  externalName: homeassistant.weinbender.io
   ports:
     - name: http
-      port: 8123
       protocol: TCP
+      port: 8123
+      targetPort: 8123
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: homeassistant-endpointslice
+  labels:
+    kubernetes.io/service-name: homeassistant
+addressType: IPv4
+endpoints:
+  - addresses:
+      - "192.168.1.194"
+ports:
+  - name: http
+    port: 8123
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
