@@ -1,27 +1,13 @@
-apiVersion: v1
-kind: Service
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
 metadata:
   name: homeassistant
+  namespace: external-services
 spec:
-  ports:
-    - name: http
-      protocol: TCP
-      port: 8123
-      targetPort: 8123
----
-apiVersion: discovery.k8s.io/v1
-kind: EndpointSlice
-metadata:
-  name: homeassistant-endpointslice
-  labels:
-    kubernetes.io/service-name: homeassistant
-addressType: IPv4
-endpoints:
-  - addresses:
-      - "192.168.1.194"
-ports:
-  - name: http
-    port: 8123
+  endpoints:
+    - fqdn:
+        hostname: 192.168.1.194
+        port: 8123
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -37,11 +23,11 @@ spec:
       group: gateway.networking.k8s.io
   rules:
     - backendRefs:
-        - kind: Service
+        - kind: Backend
           name: homeassistant
           namespace: external-services
           port: 8123
-          group: ""
+          group: gateway.envoyproxy.io
           weight: 1
       matches:
         - path:

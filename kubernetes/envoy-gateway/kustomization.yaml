@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - https://github.com/envoyproxy/gateway/releases/download/v1.6.0/install.yaml
+  - envoygateway-config.yaml
   - gateway-class.yaml
   - gateway.yaml
   - gateway-httproute-default.yaml
