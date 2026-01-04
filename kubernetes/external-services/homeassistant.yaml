@@ -1,12 +1,14 @@
-apiVersion: gateway.envoyproxy.io/v1alpha1
-kind: Backend
+apiVersion: v1
+kind: Service
 metadata:
-  name: homeassistant-backend
+  name: homeassistant
 spec:
-  endpoints:
-    - fqdn:
-        hostname: homeassistant.weinbender.io
-        port: 8123
+  type: ExternalName
+  externalName: homeassistant.weinbender.io
+  ports:
+    - name: http
+      port: 8123
+      protocol: TCP
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -22,11 +24,11 @@ spec:
       group: gateway.networking.k8s.io
   rules:
     - backendRefs:
-        - kind: Backend
-          name: homeassistant-backend
+        - kind: Service
+          name: homeassistant
           namespace: external-services
           port: 8123
-          group: gateway.envoyproxy.io
+          group: ""
           weight: 1
       matches:
         - path:
