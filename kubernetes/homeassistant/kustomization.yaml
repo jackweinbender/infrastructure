@@ -9,7 +9,7 @@ resources:
   - httproute.yaml
 
 configMapGenerator:
-  - name: config
+  - name: static-config
     files:
       - config/configuration.yaml
       - config/modules/automations.yaml

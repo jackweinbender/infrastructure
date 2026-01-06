@@ -25,22 +25,22 @@ spec:
           ports:
             - containerPort: 8123
           volumeMounts:
-            - name: data
+            - name: persistent-config
               mountPath: /config
             # Overlay static config files from ConfigMap using subPath
-            - name: config
+            - name: static-config
               mountPath: /config/configuration.yaml
               subPath: configuration.yaml
               readOnly: true
-            - name: config
+            - name: static-config
               mountPath: /config/modules
               subPath: modules
               readOnly: true
       volumes:
-        - name: data
+        - name: persistent-config
           hostPath:
             path: /home/nas/shared/pvcs/homeassistant
             type: DirectoryOrCreate
-        - name: config
+        - name: static-config
           configMap:
-            name: config
+            name: static-config
