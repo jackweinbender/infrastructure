@@ -12,4 +12,5 @@ configMapGenerator:
   - name: config
     files:
       - config/configuration.yaml
-      - config/modules/*.yaml
+      - config/modules/automations.yaml
+      - config/modules/scripts.yaml
