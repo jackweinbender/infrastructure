@@ -11,4 +11,5 @@ resources:
 configMapGenerator:
   - name: config
     files:
-      - config/
+      - config/configuration.yaml
+      - config/modules/*.yaml
