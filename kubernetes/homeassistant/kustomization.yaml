@@ -5,4 +5,5 @@ namespace: homeassistant
 
 resources:
   - service.yaml
+  - deployment.yaml
   - httproute.yaml
