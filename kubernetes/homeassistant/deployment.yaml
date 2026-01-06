@@ -32,9 +32,6 @@ spec:
               mountPath: /config/modules
               subPath: modules
               readOnly: true
-            - name: dbus
-              mountPath: /run/dbus
-              readOnly: true
       volumes:
         - name: data
           hostPath:
@@ -43,7 +40,3 @@ spec:
         - name: config
           configMap:
             name: config
-        - name: dbus
-          hostPath:
-            path: /run/dbus
-            type: Directory
