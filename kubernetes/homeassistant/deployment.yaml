@@ -13,8 +13,12 @@ spec:
         app: homeassistant
     spec:
       securityContext:
-        runAsNonRoot: false
-        runAsUser: 0
+        # these settings ensure that homeassistant runs with the correct user and group IDs
+        # which are necessary for file permissions on the host system
+        runAsNonRoot: true
+        runAsUser: 101000
+        runAsGroup: 110000
+        fsGroup: 110000
       containers:
         - name: homeassistant
           image: ghcr.io/home-assistant/home-assistant:stable

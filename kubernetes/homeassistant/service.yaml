@@ -8,6 +8,6 @@ spec:
   ports:
     - name: http
       port: 8123
-      targetPort: 2283
+      targetPort: 8123
       protocol: TCP
   type: ClusterIP
