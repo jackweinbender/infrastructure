@@ -15,8 +15,7 @@ spec:
       securityContext:
         # these settings ensure that homeassistant runs with the correct user and group IDs
         # which are necessary for file permissions on the host system
-        runAsUser: 101000
-        runAsGroup: 110000
+        runAsUser: 0
         fsGroup: 110000
       containers:
         - name: homeassistant
