@@ -3,5 +3,8 @@ default_config:
 http:
   use_x_forwarded_for: true
   trusted_proxies:
-    - 192.168.1.78
-    - 192.168.146.97
+    - 192.168.1.78 # piscale reverse proxy
+    - 192.168.146.97 # TS envoyproxy IP
+    # Kubernetes pod network. We don't know the exact IP that the
+    # gateway will use, so we allow the entire pod network range.
+    - 10.1.0.0/16
