@@ -23,3 +23,30 @@ spec:
           image: ghcr.io/home-assistant/home-assistant:stable
           ports:
             - containerPort: 8123
+          volumeMounts:
+            - name: data
+              mountPath: /config
+            # Overlay static config files from ConfigMap using subPath
+            - name: config
+              mountPath: /config/configuration.yaml
+              subPath: configuration.yaml
+              readOnly: true
+            - name: config
+              mountPath: /config/modules
+              subPath: modules
+              readOnly: true
+            - name: dbus
+              mountPath: /run/dbus
+              readOnly: true
+      volumes:
+        - name: data
+          hostPath:
+            path: /home/nas/shared/pvcs/homeassistant
+            type: DirectoryOrCreate
+        - name: config
+          configMap:
+            name: config
+        - name: dbus
+          hostPath:
+            path: /run/dbus
+            type: Directory
