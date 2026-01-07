@@ -13,5 +13,3 @@ configMapGenerator:
   - name: static-config
     files:
       - config/configuration.yaml
-      - config/modules/automations.yaml
-      - config/modules/scripts.yaml

@@ -27,14 +27,10 @@ spec:
           volumeMounts:
             - name: persistent-config
               mountPath: /config
-            # Overlay static config files from ConfigMap using subPath
+            # Overlay static config files from ConfigMaps
             - name: static-config
               mountPath: /config/configuration.yaml
               subPath: configuration.yaml
-              readOnly: true
-            - name: static-config
-              mountPath: /config/modules
-              subPath: modules
               readOnly: true
       volumes:
         - name: persistent-config

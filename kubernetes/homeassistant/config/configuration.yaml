@@ -8,3 +8,7 @@ http:
     # Kubernetes pod network. We don't know the exact IP that the
     # gateway will use, so we allow the entire pod network range.
     - 10.1.0.0/16
+
+# Load declarative configs from static directory (mounted from ConfigMap)
+automation: !include static/automations.yaml
+script: !include static/scripts.yaml
