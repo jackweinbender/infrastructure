@@ -28,19 +28,19 @@ spec:
             - name: persistent-config
               mountPath: /config
             # Overlay static config files from ConfigMap using subPath
-            - name: static-config
-              mountPath: /config/configuration.yaml
-              subPath: configuration.yaml
-              readOnly: true
-            - name: static-config
-              mountPath: /config/modules
-              subPath: modules
-              readOnly: true
+            # - name: static-config
+            #   mountPath: /config/configuration.yaml
+            #   subPath: configuration.yaml
+            #   readOnly: true
+            # - name: static-config
+            #   mountPath: /config/modules
+            #   subPath: modules
+            #   readOnly: true
       volumes:
         - name: persistent-config
           hostPath:
             path: /home/nas/shared/pvcs/homeassistant
             type: DirectoryOrCreate
-        - name: static-config
-          configMap:
-            name: static-config
+        # - name: static-config
+        #   configMap:
+        #     name: static-config
