@@ -6,6 +6,9 @@ metadata:
 spec:
   addresses:
     - 192.168.155.0-192.168.155.255
+    # The final /24 of the 192.168.16.1/20 www network VLAN
+    # DHCP is disabled on these addresses on the router
+    - 192.168.31.0-192.168.31.254
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
