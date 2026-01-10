@@ -11,18 +11,6 @@ spec:
     - 192.168.15.0-192.168.15.255
 ---
 apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
-  name: vlan-www-pool
-  namespace: metallb-system
-spec:
-  avoidBuggyIPs: true
-  addresses:
-    # The final /24 of the 192.168.16.1/20 www network VLAN
-    # DHCP is disabled on these addresses on the router
-    - 192.168.31.0-192.168.31.255
----
-apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
   name: metallb
