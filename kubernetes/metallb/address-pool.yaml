@@ -1,12 +1,14 @@
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: envoy-gateway-pool
+  name: vlan-default-pool
   namespace: metallb-system
 spec:
   avoidBuggyIPs: true
   addresses:
-    - 192.168.155.0-192.168.155.255
+    # The final /24 of the 192.168.0.0/20 DEFAULT network VLAN
+    # DHCP is disabled on these addresses on the router
+    - 192.168.15.0-192.168.15.255
 ---
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
