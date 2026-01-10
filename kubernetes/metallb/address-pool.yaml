@@ -4,6 +4,7 @@ metadata:
   name: envoy-gateway-pool
   namespace: metallb-system
 spec:
+  avoidBuggyIPs: true
   addresses:
     - 192.168.155.0-192.168.155.255
 ---
@@ -13,10 +14,11 @@ metadata:
   name: vlan-www-pool
   namespace: metallb-system
 spec:
+  avoidBuggyIPs: true
   addresses:
     # The final /24 of the 192.168.16.1/20 www network VLAN
     # DHCP is disabled on these addresses on the router
-    - 192.168.31.0-192.168.31.254
+    - 192.168.31.0-192.168.31.255
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
