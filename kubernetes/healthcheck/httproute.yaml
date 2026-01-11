@@ -4,7 +4,7 @@ metadata:
   name: healthcheck
 spec:
   hostnames:
-    - health.k8s.weinbender.io
+    - healthcheck.k8s.weinbender.io
   parentRefs:
     - kind: Gateway
       name: cluster-gateway
@@ -28,7 +28,7 @@ metadata:
   name: healthcheck-ts
 spec:
   hostnames:
-    - health.ts.weinbender.io
+    - healthcheck.ts.weinbender.io
   parentRefs:
     - name: tailnet-gateway
       namespace: tailscale
