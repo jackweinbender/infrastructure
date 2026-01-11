@@ -8,9 +8,6 @@ metadata:
 spec:
   gatewayClassName: envoy-gateway-class
   listeners:
-    - name: http
-      port: 80
-      protocol: HTTP
     - name: https
       protocol: HTTPS
       hostname: "*.k8s.weinbender.io"
