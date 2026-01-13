@@ -9,7 +9,7 @@ spec:
   destination:
     namespace: healthcheck
     server: https://kubernetes.default.svc
-  project: default
+  project: tools
   source:
     path: kubernetes/manifests/tools/health
     repoURL: git@github.com:jackweinbender/infrastructure.git

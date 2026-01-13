@@ -9,7 +9,7 @@ spec:
   destination:
     namespace: kube-system
     server: https://kubernetes.default.svc
-  project: default
+  project: monitoring
   source:
     path: kubernetes/manifests/monitoring/kube-state-metrics
     repoURL: git@github.com:jackweinbender/infrastructure.git

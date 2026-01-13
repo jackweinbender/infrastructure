@@ -9,7 +9,7 @@ spec:
   destination:
     namespace: envoy-gateway-system
     server: https://kubernetes.default.svc
-  project: default
+  project: system
   source:
     path: kubernetes/manifests/system/envoy-gateway
     repoURL: git@github.com:jackweinbender/infrastructure.git

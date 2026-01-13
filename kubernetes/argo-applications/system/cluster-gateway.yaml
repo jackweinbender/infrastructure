@@ -9,7 +9,7 @@ spec:
   destination:
     namespace: cluster-gateway
     server: https://kubernetes.default.svc
-  project: default
+  project: system
   source:
     path: kubernetes/manifests/system/cluster-gateway
     repoURL: git@github.com:jackweinbender/infrastructure.git

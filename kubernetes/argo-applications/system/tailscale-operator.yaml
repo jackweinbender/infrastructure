@@ -9,7 +9,7 @@ spec:
   destination:
     namespace: tailscale
     server: https://kubernetes.default.svc
-  project: default
+  project: system
   source:
     path: kubernetes/manifests/system/tailscale-operator
     repoURL: git@github.com:jackweinbender/infrastructure.git

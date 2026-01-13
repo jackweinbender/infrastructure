@@ -9,7 +9,7 @@
 #   destination:
 #     namespace: victoriametrics
 #     server: https://kubernetes.default.svc
-#   project: default
+#   project: monitoring
 #   source:
 #     path: kubernetes/manifests/monitoring/victoriametrics
 #     repoURL: git@github.com:jackweinbender/infrastructure.git

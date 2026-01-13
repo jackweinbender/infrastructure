@@ -9,7 +9,7 @@ spec:
   destination:
     namespace: immich
     server: https://kubernetes.default.svc
-  project: default
+  project: apps
   source:
     path: kubernetes/manifests/apps/immich
     repoURL: git@github.com:jackweinbender/infrastructure.git

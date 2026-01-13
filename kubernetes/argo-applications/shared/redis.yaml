@@ -9,7 +9,7 @@ spec:
   destination:
     namespace: redis
     server: https://kubernetes.default.svc
-  project: default
+  project: shared
   source:
     path: kubernetes/manifests/shared/redis
     repoURL: git@github.com:jackweinbender/infrastructure.git

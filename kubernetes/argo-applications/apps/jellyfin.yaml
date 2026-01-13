@@ -9,7 +9,7 @@ spec:
   destination:
     namespace: jellyfin
     server: https://kubernetes.default.svc
-  project: default
+  project: apps
   source:
     path: kubernetes/manifests/apps/jellyfin
     repoURL: git@github.com:jackweinbender/infrastructure.git

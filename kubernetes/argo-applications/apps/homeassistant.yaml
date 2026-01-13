@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: k8s-secret-sync
+  name: homeassistant
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: argocd
+    namespace: homeassistant
     server: https://kubernetes.default.svc
-  project: tools
+  project: apps
   source:
-    path: kubernetes/manifests/tools/k8s-secret-sync
+    path: kubernetes/manifests/apps/homeassistant
     repoURL: git@github.com:jackweinbender/infrastructure.git
     targetRevision: HEAD
   syncPolicy:

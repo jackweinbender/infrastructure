@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homeassistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homeassistant
+  template:
+    metadata:
+      labels:
+        app: homeassistant
+    spec:
+      securityContext:
+        # these settings ensure that homeassistant runs with the correct user and group IDs
+        # which are necessary for file permissions on the host system
+        runAsNonRoot: true
+        runAsUser: 101000
+        runAsGroup: 110000
+        fsGroup: 110000
+      containers:
+        - name: homeassistant
+          image: ghcr.io/home-assistant/home-assistant:stable
+          ports:
+            - containerPort: 8123
+          volumeMounts:
+            - name: ha-config
+              mountPath: /config
+      volumes:
+        - name: ha-config
+          hostPath:
+            path: /home/nas/shared/pvcs/homeassistant/config
+            type: DirectoryOrCreate
