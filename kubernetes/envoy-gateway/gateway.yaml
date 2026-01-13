@@ -5,6 +5,8 @@ metadata:
   namespace: envoy-gateway-system
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt"
+    # Request the specific VLAN 4 IP from MetalLB
+    metallb.io/loadBalancerIPs: "192.168.31.2"
 spec:
   gatewayClassName: envoy-gateway-class
   listeners:
