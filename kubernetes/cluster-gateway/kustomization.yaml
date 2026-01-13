@@ -3,5 +3,4 @@ kind: Kustomization
 
 resources:
   - gateway-cluster.yaml
-  - gateway-httproute-default.yaml
   - k8s-wildcard-cert.yaml
