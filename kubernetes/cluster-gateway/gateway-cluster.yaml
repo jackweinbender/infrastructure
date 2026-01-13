@@ -4,9 +4,11 @@ metadata:
   name: cluster-gateway
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt"
-    metallb.io/loadBalancerIPs: "192.168.15.1"
 spec:
   gatewayClassName: envoy-gateway-class
+  addresses:
+    - value: 192.168.15.1
+      type: IPAddress
   listeners:
     - name: http
       protocol: HTTP
