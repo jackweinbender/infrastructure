@@ -5,11 +5,13 @@ metadata:
   namespace: envoy-gateway-system
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt"
-    # Request the specific VLAN 4 IP from MetalLB
-    metallb.io/loadBalancerIPs: "192.168.31.2"
+    metallb.io/loadBalancerIPs: "192.168.15.1"
 spec:
   gatewayClassName: envoy-gateway-class
   listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
     - name: https
       protocol: HTTPS
       hostname: "*.k8s.weinbender.io"
@@ -21,5 +23,5 @@ spec:
         mode: Terminate
         certificateRefs:
           - kind: Secret
-            name: envoy-wildcard-tls
+            name: gateway-wildcard-tls
             group: ""

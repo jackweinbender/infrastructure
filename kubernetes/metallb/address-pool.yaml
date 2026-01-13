@@ -18,28 +18,3 @@ metadata:
 spec:
   ipAddressPools:
     - metallb-native-pool
-  interfaces:
-    - ens18
----
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
-  name: metallb-vlan4-pool
-  namespace: metallb-system
-spec:
-  avoidBuggyIPs: true
-  addresses:
-    # The final /24 of the 192.168.16.0/20 WWW network VLAN
-    # DHCP is disabled on these addresses on the router
-    - 192.168.31.0-192.168.31.255
----
-apiVersion: metallb.io/v1beta1
-kind: L2Advertisement
-metadata:
-  name: metallb-vlan4-l2adv
-  namespace: metallb-system
-spec:
-  ipAddressPools:
-    - metallb-vlan4-pool
-  interfaces:
-    - ens19

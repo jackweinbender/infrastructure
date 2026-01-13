@@ -8,28 +8,3 @@ spec:
     - fqdn:
         hostname: homeassistant.weinbender.io
         port: 8123
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: homeassistant-ext
-spec:
-  hostnames:
-    - homeassistant.ts.weinbender.io
-  parentRefs:
-    - name: tailnet-gateway
-      namespace: tailscale
-      kind: Gateway
-      group: gateway.networking.k8s.io
-  rules:
-    - backendRefs:
-        - kind: Backend
-          name: homeassistant
-          namespace: external-services
-          port: 8123
-          group: gateway.envoyproxy.io
-          weight: 1
-      matches:
-        - path:
-            type: PathPrefix
-            value: /

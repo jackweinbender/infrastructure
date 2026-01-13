@@ -5,4 +5,3 @@ resources:
   - https://github.com/cert-manager/cert-manager/releases/download/v1.19.1/cert-manager.yaml
   - cloudflare-api-token.yaml
   - cluster-issuer-letsencrypt.yaml
-  - cluster-wildcard-cert.yaml
