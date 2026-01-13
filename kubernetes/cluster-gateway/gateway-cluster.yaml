@@ -2,7 +2,6 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: cluster-gateway
-  namespace: envoy-gateway-system
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt"
     metallb.io/loadBalancerIPs: "192.168.15.1"
