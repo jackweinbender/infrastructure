@@ -7,7 +7,7 @@ spec:
     - argocd.k8s.weinbender.io
   parentRefs:
     - name: cluster-gateway
-      namespace: envoy-gateway-system
+      namespace: cluster-gateway
       kind: Gateway
       group: gateway.networking.k8s.io
   rules:
