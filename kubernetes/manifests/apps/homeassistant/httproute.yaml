@@ -8,7 +8,7 @@ spec:
   parentRefs:
     - kind: Gateway
       name: cluster-gateway
-      namespace: envoy-gateway-system
+      namespace: cluster-gateway
       group: gateway.networking.k8s.io
   rules:
     - matches:
