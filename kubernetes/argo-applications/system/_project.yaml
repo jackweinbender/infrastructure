@@ -13,5 +13,5 @@ spec:
     - namespace: "*"
       server: https://kubernetes.default.svc
   clusterResourceWhitelist:
-    - group: apiextensions.k8s.io
-      kind: CustomResourceDefinition
+    - group: "*"
+      kind: "*"
