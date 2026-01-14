@@ -20,7 +20,7 @@ spec:
         fsGroup: 110000
       containers:
         - name: immich-machine-learning
-          image: ghcr.io/immich-app/immich-machine-learning:release
+          image: ghcr.io/immich-app/immich-machine-learning:latest
           ports:
             - containerPort: 3003
               name: http

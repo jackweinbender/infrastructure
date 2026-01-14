@@ -12,6 +12,12 @@ resources:
   - service-ml.yaml
   - httproute.yaml
 
+images:
+  - name: ghcr.io/immich-app/immich-server
+    newTag: v1.144.1
+  - name: ghcr.io/immich-app/immich-machine-learning
+    newTag: v1.144.1
+
 commonLabels:
   app.kubernetes.io/name: immich
   app.kubernetes.io/part-of: immich

@@ -20,7 +20,7 @@ spec:
         fsGroup: 110000
       containers:
         - name: immich-server
-          image: ghcr.io/immich-app/immich-server:release
+          image: ghcr.io/immich-app/immich-server:latest
           ports:
             - containerPort: 2283
               name: http
