@@ -113,6 +113,8 @@ syncPolicy:
     - CreateNamespace=true
     - Validate=true
     - Prune=true
+    - PruneLast=true
+    - ServerSideApply=true
   automated:
     prune: true
     selfHeal: true

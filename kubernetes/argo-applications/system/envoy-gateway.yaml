@@ -20,7 +20,6 @@ spec:
       - Validate=true
       - Prune=true
       - PruneLast=true
-      # Use server-side apply for gateway resources
       - ServerSideApply=true
     automated:
       prune: true
