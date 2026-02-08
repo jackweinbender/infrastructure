@@ -13,7 +13,5 @@ spec:
     - namespace: "*"
       server: https://kubernetes.default.svc
   clusterResourceWhitelist:
-    - group: rbac.authorization.k8s.io
-      kind: ClusterRoleBinding
-    - group: rbac.authorization.k8s.io
-      kind: ClusterRole
+    - group: "*"
+      kind: "*"
