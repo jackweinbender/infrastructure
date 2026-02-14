@@ -5,6 +5,7 @@ resources:
   - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
   - httproute.yaml
   - secrets.yaml
+  - monitor.yaml
 
 patches:
   - target:
