@@ -4,7 +4,7 @@ metadata:
   name: vmalertmanager-httproute
 spec:
   hostnames:
-    - victoriametrics.k8s.weinbender.io
+    - vmalertmanager.k8s.weinbender.io
   parentRefs:
     - name: cluster-gateway
       namespace: cluster-gateway
