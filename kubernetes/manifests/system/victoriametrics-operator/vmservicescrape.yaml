@@ -1,0 +1,72 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: kube-state-metrics
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kube-state-metrics
+  namespaceSelector:
+    matchNames:
+      - kube-system
+  endpoints:
+    - port: http-metrics
+      interval: 30s
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: coredns
+spec:
+  selector:
+    matchLabels:
+      k8s-app: kube-dns
+  namespaceSelector:
+    matchNames:
+      - kube-system
+  endpoints:
+    - port: metrics
+      interval: 30s
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: victoria-metrics-monitor
+spec:
+  discoveryRole: endpoints
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vmagent
+  endpoints:
+    - port: http
+      interval: 30s
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: generic-monitor
+spec:
+  selector:
+    matchLabels:
+      prometheus.io/scrape: "true"
+  endpoints:
+    - port: metrics
+      scheme: http
+      interval: 30s
+      relabelConfigs:
+        # Allow overriding the path via annotation (prometheus.io/path)
+        - action: replace
+          sourceLabels:
+            [__meta_kubernetes_service_annotation_prometheus_io_path]
+          targetLabel: __metrics_path__
+          regex: (.+)
+        # Allow overriding the scrape port via annotation (prometheus.io/port)
+        - action: replace
+          sourceLabels:
+            [
+              __address__,
+              __meta_kubernetes_service_annotation_prometheus_io_port,
+            ]
+          targetLabel: __address__
+          regex: ([^:]+)(?::\d+)?;(\d+)
+          replacement: $1:$2

@@ -1,0 +1,14 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: jellyfin
+  namespace: jellyfin
+spec:
+  selector:
+    matchLabels:
+      app: jellyfin
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 60s
+      # Metrics must be enabled via JELLYFIN_EnableMetrics=true env var or in system.xml

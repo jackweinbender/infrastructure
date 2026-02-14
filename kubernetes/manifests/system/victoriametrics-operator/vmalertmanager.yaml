@@ -1,0 +1,25 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlertmanager
+metadata:
+  name: vmalertmanager
+spec:
+  replicaCount: 1
+  retention: 120h
+  configSecret: vmalertmanager-config
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vmalertmanager-config
+stringData:
+  alertmanager.yaml: |
+    global:
+      resolve_timeout: 5m
+    route:
+      group_by: ['alertname']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 12h
+      receiver: 'blackhole'
+    receivers:
+      - name: 'blackhole'

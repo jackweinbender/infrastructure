@@ -1,0 +1,15 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlert
+metadata:
+  name: vmalert
+spec:
+  selectAllByDefault: true
+  evaluationInterval: 30s
+  datasource:
+    url: "http://vmsingle-victoriametrics.victoriametrics.svc:8428"
+  remoteWrite:
+    url: "http://vmsingle-victoriametrics.victoriametrics.svc:8428/api/v1/write"
+  remoteRead:
+    url: "http://vmsingle-victoriametrics.victoriametrics.svc:8428"
+  notifier:
+    url: "http://vmalertmanager-vmalertmanager.victoriametrics.svc:9093"

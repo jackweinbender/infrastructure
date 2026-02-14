@@ -11,6 +11,7 @@ resources:
   - service-server.yaml
   - service-ml.yaml
   - httproute.yaml
+  - monitor.yaml
 
 images:
   - name: ghcr.io/immich-app/immich-server
