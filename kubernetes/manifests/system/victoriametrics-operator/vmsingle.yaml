@@ -3,4 +3,28 @@ kind: VMSingle
 metadata:
   name: victoriametrics
 spec:
-  retentionPeriod: "1m"
+  # VictoriaMetrics has excellent compression (approx 0.4-0.8 bytes per sample).
+  # 5 years of homelab metrics will not be prohibitive in terms of storage, and allows for long term analysis and capacity planning.
+  retentionPeriod: "5y"
+
+  # Security context for NFS access
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 101000
+    runAsGroup: 110000
+    fsGroup: 110000
+
+  # Use hostPath for persistence (NFS backed) matching repo pattern
+  # We mount to /data-persistence and point the app there to avoid conflicts with default mounts
+  extraArgs:
+    storageDataPath: /data-persistence
+
+  volumes:
+    - name: data
+      hostPath:
+        path: /home/nas/shared/pvcs/victoriametrics
+        type: DirectoryOrCreate
+
+  volumeMounts:
+    - name: data
+      mountPath: /data-persistence
