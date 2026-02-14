@@ -1,0 +1,62 @@
+alloy:
+  configMap:
+    create: false
+    name: alloy-config
+    key: config.alloy
+
+  securityContext:
+    privileged: true
+  
+  mounts:
+    varlog: true
+    dockercontainers: true
+
+  extraEnv:
+    # --------------------------------------------------------
+    # Grafana Cloud: METRICS
+    # --------------------------------------------------------
+    - name: METRICS_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: grafana-metrics-creds
+          key: token
+    
+    # --------------------------------------------------------
+    # Grafana Cloud: LOGS (Loki)
+    # --------------------------------------------------------
+    - name: LOGS_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: grafana-logs-creds
+          key: token
+          
+    # --------------------------------------------------------
+    # Grafana Cloud: OTLP (Traces/Metrics)
+    # --------------------------------------------------------
+    - name: OTLP_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: grafana-otlp-creds
+          key: token
+
+    # --------------------------------------------------------
+    # Grafana Cloud: PROFILES (Pyroscope)
+    # --------------------------------------------------------
+    - name: PROFILES_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: grafana-profiles-creds
+          key: token
+
+    # --------------------------------------------------------
+    # Grafana Cloud: FLEET MANAGEMENT
+    # --------------------------------------------------------
+    - name: FLEET_MGMT_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: grafana-fleet-mgmt-creds
+          key: token
+
+controller:
+  type: daemonset
+  hostPID: true

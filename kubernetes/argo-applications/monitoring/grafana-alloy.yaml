@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: prometheus-operator
+  name: grafana-alloy
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: prometheus
+    namespace: grafana-alloy
     server: https://kubernetes.default.svc
   project: monitoring
   source:
-    path: kubernetes/manifests/monitoring/prometheus-operator
+    path: kubernetes/manifests/monitoring/grafana-alloy
     repoURL: git@github.com:jackweinbender/infrastructure.git
     targetRevision: HEAD
   syncPolicy:
