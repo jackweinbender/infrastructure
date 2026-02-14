@@ -15,16 +15,12 @@ spec:
     fsGroup: 110000
 
   # Use hostPath for persistence (NFS backed) matching repo pattern
-  # We mount to /data-persistence and point the app there to avoid conflicts with default mounts
-  extraArgs:
-    storageDataPath: /data-persistence
-
   volumes:
-    - name: data
+    - name: vm-storage
       hostPath:
         path: /home/nas/shared/pvcs/victoriametrics
         type: DirectoryOrCreate
 
   volumeMounts:
-    - name: data
-      mountPath: /data-persistence
+    - name: vm-storage
+      mountPath: /victoria-metrics-data
