@@ -8,7 +8,7 @@ spec:
   datasource:
     url: "http://vmsingle-victoriametrics.victoriametrics.svc:8428"
   remoteWrite:
-    url: "http://vmsingle-victoriametrics.victoriametrics.svc:8428/api/v1/write"
+    url: "http://vmsingle-victoriametrics.victoriametrics.svc:8428"
   remoteRead:
     url: "http://vmsingle-victoriametrics.victoriametrics.svc:8428"
   notifier:
