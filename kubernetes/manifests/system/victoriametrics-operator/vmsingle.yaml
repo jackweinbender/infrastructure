@@ -16,11 +16,11 @@ spec:
 
   # Use hostPath for persistence (NFS backed) matching repo pattern
   volumes:
-    - name: vm-storage
+    - name: data
       hostPath:
         path: /home/nas/shared/pvcs/victoriametrics
         type: DirectoryOrCreate
 
   volumeMounts:
-    - name: vm-storage
+    - name: data
       mountPath: /victoria-metrics-data
