@@ -60,6 +60,22 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
+        - name: postgres-exporter
+          image: quay.io/prometheuscommunity/postgres-exporter
+          securityContext:
+            runAsUser: 10001
+            readOnlyRootFilesystem: true
+          ports:
+            - containerPort: 9187
+              name: metrics
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-password
+                  key: password
+            - name: DATA_SOURCE_NAME
+              value: "postgresql://postgres:$(POSTGRES_PASSWORD)@localhost:5432/postgres?sslmode=disable"
       volumes:
         - name: postgresql-data
           hostPath:

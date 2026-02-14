@@ -5,6 +5,7 @@ resources:
   - secret.yaml
   - postgresql-deployment.yaml
   - postgresql-service.yaml
+  - monitor.yaml
 
 configMapGenerator:
   - name: postgresql-conf

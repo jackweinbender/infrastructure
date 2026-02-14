@@ -45,3 +45,15 @@ spec:
         - name: jellyfin-media
           hostPath:
             path: /home/nas/media
+      livenessProbe:
+        httpGet:
+          path: /health
+          port: http
+        initialDelaySeconds: 30
+        periodSeconds: 10
+      readinessProbe:
+        httpGet:
+          path: /health
+          port: http
+        initialDelaySeconds: 5
+      periodSeconds: 5

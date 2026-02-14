@@ -8,6 +8,7 @@ resources:
   - secrets.yaml
   - deployment.yaml
   - service.yaml
+  - monitor.yaml
 
 commonLabels:
   app.kubernetes.io/name: redis

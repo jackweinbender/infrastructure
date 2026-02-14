@@ -88,6 +88,20 @@ spec:
                 - "redis-cli -a $ADMIN_PASSWORD ping"
             initialDelaySeconds: 10
             periodSeconds: 5
+        - name: redis-exporter
+          image: oliver006/redis_exporter:latest
+          ports:
+            - containerPort: 9121
+              name: metrics
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-auth
+                  key: password
+          args:
+            - "--redis.addr=redis://localhost:6379"
+            - "--redis.password=$(REDIS_PASSWORD)"
       volumes:
         - name: redis-data
           hostPath:
