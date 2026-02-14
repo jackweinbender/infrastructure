@@ -6,3 +6,4 @@ namespace: victoriametrics
 resources:
   - https://github.com/VictoriaMetrics/operator/releases/download/v0.67.0/install-no-webhook.yaml
   - vm-single.yaml
+  - httproute.yaml
