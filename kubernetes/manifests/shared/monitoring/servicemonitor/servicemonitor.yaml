@@ -2,8 +2,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: servicemonitor
-  labels:
-    prometheus: default
 spec:
   selector:
     # Our default service monitor selects all services; use annotations to control scraping

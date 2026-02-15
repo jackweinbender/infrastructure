@@ -19,9 +19,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   name: default-podmonitor
-  labels:
-    prometheus: system
-    team: sre
 spec:
   namespaceSelector:
     any: true

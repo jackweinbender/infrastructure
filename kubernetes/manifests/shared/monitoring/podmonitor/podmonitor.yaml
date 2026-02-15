@@ -2,8 +2,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   name: podmonitor
-  labels:
-    prometheus: default
 spec:
   selector: {} # Match all pods in the namespace
   podMetricsEndpoints:

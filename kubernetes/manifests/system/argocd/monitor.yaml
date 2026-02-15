@@ -1,5 +1,5 @@
-apiVersion: operator.victoriametrics.com/v1beta1
-kind: VMServiceScrape
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
 metadata:
   name: argocd-metrics
   namespace: argocd
@@ -11,8 +11,8 @@ spec:
     - port: metrics
       interval: 30s
 ---
-apiVersion: operator.victoriametrics.com/v1beta1
-kind: VMServiceScrape
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
 metadata:
   name: argocd-server-metrics
   namespace: argocd
@@ -24,8 +24,8 @@ spec:
     - port: metrics
       interval: 30s
 ---
-apiVersion: operator.victoriametrics.com/v1beta1
-kind: VMServiceScrape
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
 metadata:
   name: argocd-repo-server
   namespace: argocd

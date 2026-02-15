@@ -7,10 +7,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: services-default-sm
-  labels:
-    app.kubernetes.io/name: services-default-sm
-    app.kubernetes.io/part-of: prometheus-operator
-    prometheus: system
 spec:
   namespaceSelector:
     any: true
