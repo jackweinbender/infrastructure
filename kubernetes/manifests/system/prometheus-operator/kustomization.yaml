@@ -5,6 +5,9 @@ namespace: prometheus
 
 resources:
   - https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.89.0/bundle.yaml
+  - default-podmonitor.yaml
+  - default-servicemonitor.yaml
+  - monitor.yaml
   - prometheus-agent.yaml
   - rbac.yaml
   - secrets.yaml

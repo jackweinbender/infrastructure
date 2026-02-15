@@ -4,6 +4,7 @@ namespace: kube-system
 
 resources:
   - deployment.yaml
+  - monitor.yaml
   - rbac.yaml
   - service.yaml
   - serviceaccount.yaml
