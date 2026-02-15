@@ -1,0 +1,27 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: PrometheusAgent
+metadata:
+  name: prometheus-agent
+  namespace: prometheus
+spec:
+  serviceAccountName: prometheus-agent
+  serviceMonitorSelector: {}
+  serviceMonitorNamespaceSelector: {}
+  podMonitorSelector: {}
+  podMonitorNamespaceSelector: {}
+  probeSelector: {}
+  probeNamespaceSelector: {}
+  scrapeConfigSelector: {}
+  scrapeConfigNamespaceSelector: {}
+  externalLabels:
+    cluster: "microk8s"
+  remoteWrite:
+    - url: "https://prometheus-prod-13-prod-us-east-0.grafana.net/api/prom/push"
+      remoteTimeout: 30s
+      basicAuth:
+        username:
+          name: prometheus-grafana-credentials
+          key: username
+        password:
+          name: prometheus-grafana-credentials
+          key: token
