@@ -38,13 +38,13 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: http
+              port: 8096
             initialDelaySeconds: 30
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /health
-              port: http
+              port: 8096
             initialDelaySeconds: 5
             periodSeconds: 5
       volumes:
