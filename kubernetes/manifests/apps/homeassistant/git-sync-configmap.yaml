@@ -41,19 +41,30 @@ data:
 
     git config --global --add safe.directory /config
 
-    if [ -d ".git" ]; then
-      echo "Repo exists, pulling changes..."
-      git fetch origin
-      git reset --hard origin/main
-    elif [ "$(ls -A .)" ]; then
-      echo "Config exists but not a git repo. Initializing..."
-      git init
-      git remote add origin "$REPO_URL"
-      git fetch origin
-      git reset --hard origin/main
-    else
-      echo "Directory empty, cloning..."
-      git clone "$REPO_URL" .
+    MAX_RETRIES=3
+    ATTEMPT=0
+    until [ $ATTEMPT -ge $MAX_RETRIES ]; do
+      ATTEMPT=$((ATTEMPT+1))
+      echo "Git sync attempt $ATTEMPT/$MAX_RETRIES..."
+
+      if [ -d ".git" ]; then
+        echo "Repo exists, pulling changes..."
+        git fetch origin && git reset --hard origin/main && break
+      elif [ "$(ls -A .)" ]; then
+        echo "Config exists but not a git repo. Initializing..."
+        git init && git remote add origin "$REPO_URL" && git fetch origin && git reset --hard origin/main && break
+      else
+        echo "Directory empty, cloning..."
+        git clone "$REPO_URL" . && break
+      fi
+
+      echo "Attempt $ATTEMPT failed. Retrying in $((ATTEMPT * 5))s..."
+      sleep $((ATTEMPT * 5))
+    done
+
+    if [ $ATTEMPT -ge $MAX_RETRIES ] && [ ! -d ".git" ]; then
+      echo "ERROR: git sync failed after $MAX_RETRIES attempts."
+      exit 1
     fi
 
     # Fix ownership so the main container (uid 101000 / gid 110000) can read/write
