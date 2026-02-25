@@ -24,11 +24,13 @@ spec:
           image: alpine/git:latest
           env:
             - name: HOME
-              value: /tmp
+              value: /home/homeassistant
           command: ["/bin/sh", "/usr/local/bin/git-sync.sh"]
           volumeMounts:
             - name: ha-config
               mountPath: /config
+            - name: home-dir
+              mountPath: /home/homeassistant
             - name: ssh-key
               mountPath: /etc/git-secret
               readOnly: true
@@ -39,17 +41,28 @@ spec:
         - name: homeassistant
           image: ghcr.io/home-assistant/home-assistant:stable
           env:
+            - name: HOME
+              value: /home/homeassistant
             - name: GIT_SSH_COMMAND
-              value: "ssh -i /etc/git-secret/id_ed25519 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+              value: "ssh -i /home/homeassistant/.ssh/identity -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+            - name: GIT_AUTHOR_NAME
+              value: "Home Assistant"
+            - name: GIT_AUTHOR_EMAIL
+              value: "homeassistant@local"
+            - name: GIT_COMMITTER_NAME
+              value: "Home Assistant"
+            - name: GIT_COMMITTER_EMAIL
+              value: "homeassistant@local"
           ports:
             - containerPort: 8123
           volumeMounts:
             - name: ha-config
               mountPath: /config
-            - name: ssh-key
-              mountPath: /etc/git-secret
-              readOnly: true
+            - name: home-dir
+              mountPath: /home/homeassistant
       volumes:
+        - name: home-dir
+          emptyDir: {}
         - name: ha-config
           hostPath:
             path: /home/nas/shared/pvcs/homeassistant/config

@@ -12,53 +12,48 @@ data:
     REPO_URL="git@github.com:jackweinbender/ha-config.git"
     TARGET_DIR="/config"
     SSH_KEY_SRC="/etc/git-secret/id_ed25519"
-    SSH_DIR="/tmp/.ssh"
+    # Use home dir for persistent identity file owned by user
+    SSH_DIR="/home/homeassistant/.ssh"
+    IDENTITY_FILE="$SSH_DIR/identity"
 
     echo "Starting git-sync..."
 
+    # Ensure config dir exists
+    mkdir -p "$TARGET_DIR"
+
+    if [ ! -f "$SSH_KEY_SRC" ]; then
+      echo "ERROR: Secret key not found at $SSH_KEY_SRC"
+      exit 1
+    fi
+
     # Configure SSH for git
     mkdir -p "$SSH_DIR"
-    cp "$SSH_KEY_SRC" "$SSH_DIR/id_rsa"
-    chmod 400 "$SSH_DIR/id_rsa"
+    cp "$SSH_KEY_SRC" "$IDENTITY_FILE"
+    chmod 600 "$IDENTITY_FILE"
 
     # Disable strict host checking for automation
     echo "StrictHostKeyChecking no" > "$SSH_DIR/config"
 
     # Configure git to use the key
-    # Added -v for debug
-    export GIT_SSH_COMMAND="ssh -v -i $SSH_DIR/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
-
-    # Debugging Steps
-    echo "=== DEBUG INFO START ==="
-    echo "User: $(whoami)"
-    echo "Target Dir Permissions:"
-    ls -la "$TARGET_DIR" || echo "Could not list target dir"
-    if [ -d "$TARGET_DIR/.git" ]; then
-        echo ".git Permissions:"
-        ls -la "$TARGET_DIR/.git"
-    fi
-
-    # Ownership safety
-    git config --global --add safe.directory "$TARGET_DIR"
-
-    echo "Testing SSH connection..."
-    ssh -T git@github.com -i "$SSH_DIR/id_rsa" -o StrictHostKeyChecking=no || true
-    echo "=== DEBUG INFO END ==="
+    export GIT_SSH_COMMAND="ssh -i $IDENTITY_FILE -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
     cd "$TARGET_DIR"
 
+    git config --global --add safe.directory /config
+
     if [ -d ".git" ]; then
       echo "Repo exists, pulling changes..."
-      git fetch origin && git reset --hard origin/main
+      git fetch origin
+      git reset --hard origin/main
     elif [ "$(ls -A .)" ]; then
       echo "Config exists but not a git repo. Initializing..."
       git init
       git remote add origin "$REPO_URL"
-      git fetch origin && git reset --hard origin/main
+      git fetch origin
+      git reset --hard origin/main
     else
       echo "Directory empty, cloning..."
       git clone "$REPO_URL" .
     fi
 
     echo "Sync complete."
-    exit 0
