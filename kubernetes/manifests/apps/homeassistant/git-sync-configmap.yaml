@@ -49,10 +49,10 @@ data:
 
       if [ -d ".git" ]; then
         echo "Repo exists, pulling changes..."
-        git fetch origin && git reset --hard origin/main && break
+        git fetch origin && git checkout origin/main -- . && break
       elif [ "$(ls -A .)" ]; then
         echo "Config exists but not a git repo. Initializing..."
-        git init && git remote add origin "$REPO_URL" && git fetch origin && git reset --hard origin/main && break
+        git init && git remote add origin "$REPO_URL" && git fetch origin && git checkout origin/main -- . && break
       else
         echo "Directory empty, cloning..."
         git clone "$REPO_URL" . && break
