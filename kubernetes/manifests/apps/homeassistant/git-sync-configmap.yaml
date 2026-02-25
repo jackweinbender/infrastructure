@@ -25,23 +25,40 @@ data:
     echo "StrictHostKeyChecking no" > "$SSH_DIR/config"
 
     # Configure git to use the key
-    export GIT_SSH_COMMAND="ssh -i $SSH_DIR/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+    # Added -v for debug
+    export GIT_SSH_COMMAND="ssh -v -i $SSH_DIR/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+
+    # Debugging Steps
+    echo "=== DEBUG INFO START ==="
+    echo "User: $(whoami)"
+    echo "Target Dir Permissions:"
+    ls -la "$TARGET_DIR" || echo "Could not list target dir"
+    if [ -d "$TARGET_DIR/.git" ]; then
+        echo ".git Permissions:"
+        ls -la "$TARGET_DIR/.git"
+    fi
+
+    # Ownership safety
+    git config --global --add safe.directory "$TARGET_DIR"
+
+    echo "Testing SSH connection..."
+    ssh -T git@github.com -i "$SSH_DIR/id_rsa" -o StrictHostKeyChecking=no || true
+    echo "=== DEBUG INFO END ==="
 
     cd "$TARGET_DIR"
 
     if [ -d ".git" ]; then
       echo "Repo exists, pulling changes..."
-      git fetch origin
-      git reset --hard origin/main
+      git fetch origin && git reset --hard origin/main
     elif [ "$(ls -A .)" ]; then
       echo "Config exists but not a git repo. Initializing..."
       git init
       git remote add origin "$REPO_URL"
-      git fetch origin
-      git reset --hard origin/main
+      git fetch origin && git reset --hard origin/main
     else
       echo "Directory empty, cloning..."
       git clone "$REPO_URL" .
     fi
 
     echo "Sync complete."
+    exit 0
