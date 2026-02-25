@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: git-sync-script
+  namespace: homeassistant
+data:
+  git-sync.sh: |
+    #!/bin/sh
+    set -e
+
+    # Configuration
+    REPO_URL="git@github.com:jackweinbender/ha-config.git"
+    TARGET_DIR="/config"
+    SSH_KEY_SRC="/etc/git-secret/id_ed25519"
+    SSH_DIR="/tmp/.ssh"
+
+    echo "Starting git-sync..."
+
+    # Configure SSH for git
+    mkdir -p "$SSH_DIR"
+    cp "$SSH_KEY_SRC" "$SSH_DIR/id_rsa"
+    chmod 400 "$SSH_DIR/id_rsa"
+
+    # Disable strict host checking for automation
+    echo "StrictHostKeyChecking no" > "$SSH_DIR/config"
+
+    # Configure git to use the key
+    export GIT_SSH_COMMAND="ssh -i $SSH_DIR/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+
+    cd "$TARGET_DIR"
+
+    if [ -d ".git" ]; then
+      echo "Repo exists, pulling changes..."
+      git fetch origin
+      git reset --hard origin/main
+    elif [ "$(ls -A .)" ]; then
+      echo "Config exists but not a git repo. Initializing..."
+      git init
+      git remote add origin "$REPO_URL"
+      git fetch origin
+      git reset --hard origin/main
+    else
+      echo "Directory empty, cloning..."
+      git clone "$REPO_URL" .
+    fi
+
+    echo "Sync complete."

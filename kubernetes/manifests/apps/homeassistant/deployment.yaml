@@ -19,6 +19,22 @@ spec:
         runAsUser: 101000
         runAsGroup: 110000
         fsGroup: 110000
+      initContainers:
+        - name: git-sync
+          image: alpine/git:latest
+          env:
+            - name: HOME
+              value: /tmp
+          command: ["/bin/sh", "/usr/local/bin/git-sync.sh"]
+          volumeMounts:
+            - name: ha-config
+              mountPath: /config
+            - name: ssh-key
+              mountPath: /etc/git-secret
+              readOnly: true
+            - name: git-sync-script
+              mountPath: /usr/local/bin/git-sync.sh
+              subPath: git-sync.sh
       containers:
         - name: homeassistant
           image: ghcr.io/home-assistant/home-assistant:stable
@@ -32,3 +48,11 @@ spec:
           hostPath:
             path: /home/nas/shared/pvcs/homeassistant/config
             type: DirectoryOrCreate
+        - name: ssh-key
+          secret:
+            secretName: github-pull-key
+            defaultMode: 0400
+        - name: git-sync-script
+          configMap:
+            name: git-sync-script
+            defaultMode: 0755

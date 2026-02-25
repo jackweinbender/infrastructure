@@ -8,3 +8,5 @@ resources:
   - deployment.yaml
   - httproute.yaml
   - monitor.yaml
+  - secrets.yaml
+  - git-sync-configmap.yaml
