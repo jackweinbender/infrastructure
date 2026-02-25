@@ -22,9 +22,14 @@ spec:
       initContainers:
         - name: git-sync
           image: alpine/git:latest
+          # Run as root so OpenSSH can resolve a valid user entry.
+          # The script chowns /config and /home/homeassistant to 101000:110000.
+          securityContext:
+            runAsUser: 0
+            runAsNonRoot: false
           env:
             - name: HOME
-              value: /home/homeassistant
+              value: /root
           command: ["/bin/sh", "/usr/local/bin/git-sync.sh"]
           volumeMounts:
             - name: ha-config

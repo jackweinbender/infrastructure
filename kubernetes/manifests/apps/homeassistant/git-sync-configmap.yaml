@@ -56,4 +56,8 @@ data:
       git clone "$REPO_URL" .
     fi
 
+    # Fix ownership so the main container (uid 101000 / gid 110000) can read/write
+    chown -R 101000:110000 "$TARGET_DIR"
+    chown -R 101000:110000 "$SSH_DIR"
+
     echo "Sync complete."
