@@ -57,7 +57,7 @@ spec:
         - name: ssh-key
           secret:
             secretName: github-pull-key
-            defaultMode: 0400
+            defaultMode: 0440
         - name: git-sync-script
           configMap:
             name: git-sync-script
