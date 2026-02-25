@@ -38,11 +38,17 @@ spec:
       containers:
         - name: homeassistant
           image: ghcr.io/home-assistant/home-assistant:stable
+          env:
+            - name: GIT_SSH_COMMAND
+              value: "ssh -i /etc/git-secret/id_ed25519 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
           ports:
             - containerPort: 8123
           volumeMounts:
             - name: ha-config
               mountPath: /config
+            - name: ssh-key
+              mountPath: /etc/git-secret
+              readOnly: true
       volumes:
         - name: ha-config
           hostPath:
