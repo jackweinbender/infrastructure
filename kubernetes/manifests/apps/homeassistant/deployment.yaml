@@ -20,6 +20,23 @@ spec:
         runAsGroup: 110000
         fsGroup: 110000
       initContainers:
+        - name: setup-passwd
+          image: ghcr.io/home-assistant/home-assistant:stable
+          # Runs as root to copy /etc/passwd from the HA image to the shared home-dir volume,
+          # then appends the homeassistant user entry so SSH can resolve uid 101000.
+          securityContext:
+            runAsUser: 0
+            runAsNonRoot: false
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              cp /etc/passwd /home/homeassistant/passwd
+              if ! grep -q '^homeassistant:' /home/homeassistant/passwd; then
+                echo 'homeassistant:x:101000:110000:Home Assistant:/home/homeassistant:/bin/sh' >> /home/homeassistant/passwd
+              fi
+          volumeMounts:
+            - name: home-dir
+              mountPath: /home/homeassistant
         - name: git-sync
           image: alpine/git:latest
           # Run as root so OpenSSH can resolve a valid user entry.
@@ -65,6 +82,10 @@ spec:
               mountPath: /config
             - name: home-dir
               mountPath: /home/homeassistant
+            - name: home-dir
+              mountPath: /etc/passwd
+              subPath: passwd
+              readOnly: true
       volumes:
         - name: home-dir
           emptyDir: {}
