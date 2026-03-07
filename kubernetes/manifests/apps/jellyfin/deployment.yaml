@@ -40,7 +40,7 @@ spec:
               path: /health
               port: 8096
             failureThreshold: 30
-            periodSeconds: 5
+            periodSeconds: 10
       volumes:
         - name: jellyfin-config
           hostPath:
