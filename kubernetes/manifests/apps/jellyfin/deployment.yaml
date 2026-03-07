@@ -35,12 +35,6 @@ spec:
               mountPath: /cache
             - name: jellyfin-media
               mountPath: /media
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8096
-            initialDelaySeconds: 30
-            periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /health
