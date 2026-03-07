@@ -35,11 +35,11 @@ spec:
               mountPath: /cache
             - name: jellyfin-media
               mountPath: /media
-          readinessProbe:
+          startupProbe:
             httpGet:
               path: /health
               port: 8096
-            initialDelaySeconds: 15
+            failureThreshold: 30
             periodSeconds: 5
       volumes:
         - name: jellyfin-config
