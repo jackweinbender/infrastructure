@@ -1,8 +1,18 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
+metadata:
+  name: jellyfin
+  namespace: external-services
+spec:
+  endpoints:
+    - fqdn:
+        hostname: jellyfin.weinbender.io
+        port: 8096
+---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
   name: jellyfin
-  namespace: jellyfin
 spec:
   hostnames:
     - jellyfin.k8s.weinbender.io
@@ -17,9 +27,9 @@ spec:
             type: PathPrefix
             value: "/"
       backendRefs:
-        - kind: Service
+        - kind: Backend
           name: jellyfin
-          namespace: jellyfin
+          namespace: external-services
           port: 8096
           group: ""
           weight: 1
