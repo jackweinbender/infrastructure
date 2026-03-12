@@ -6,7 +6,7 @@ metadata:
 spec:
   endpoints:
     - fqdn:
-        hostname: jellyfin.weinbender.io
+        hostname: jellyfin.lxc.weinbender.io
         port: 8096
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1
