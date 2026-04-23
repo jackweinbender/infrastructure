@@ -1,5 +1,12 @@
-data "aws_route53_zone" "weinbender_io" {
-  name = "weinbender.io"
+resource "aws_route53_zone" "labs" {
+  name = "labs.weinbender.io"
+  tags = {
+    Project = "infrastructure/aws"
+  }
+}
+
+output "labs_nameservers" {
+  value = aws_route53_zone.labs.name_servers
 }
 
 resource "aws_s3_bucket" "labs" {
@@ -48,7 +55,7 @@ resource "aws_route53_record" "labs_cert_validation" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = data.aws_route53_zone.weinbender_io.zone_id
+  zone_id         = aws_route53_zone.labs.zone_id
 }
 
 resource "aws_acm_certificate_validation" "labs" {
@@ -126,7 +133,7 @@ resource "aws_s3_bucket_policy" "labs" {
 }
 
 resource "aws_route53_record" "labs_a" {
-  zone_id = data.aws_route53_zone.weinbender_io.zone_id
+  zone_id = aws_route53_zone.labs.zone_id
   name    = "labs.weinbender.io"
   type    = "A"
   alias {
@@ -137,7 +144,7 @@ resource "aws_route53_record" "labs_a" {
 }
 
 resource "aws_route53_record" "labs_aaaa" {
-  zone_id = data.aws_route53_zone.weinbender_io.zone_id
+  zone_id = aws_route53_zone.labs.zone_id
   name    = "labs.weinbender.io"
   type    = "AAAA"
   alias {
